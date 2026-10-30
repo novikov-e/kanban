@@ -1,0 +1,22 @@
+{
+	"name": "Angular Devcontainer with AI",
+	"build": {
+		"dockerfile": "Dockerfile"
+	},
+	"forwardPorts": [4200],
+	"portsAttributes": {
+		"4200": {
+			"label": "Angular Application",
+			"onAutoForward": "notify"
+		}
+	},
+	"customizations": {
+		"vscode": {
+			"extensions": ["Angular.ng-template", "esbenp.prettier-vscode"],
+			"settings": {
+				"editor.defaultFormatter": "esbenp.prettier-vscode",
+				"editor.formatOnSave": true
+			}
+		}
+	}
+}

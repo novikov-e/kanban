@@ -1,0 +1,35 @@
+<div class="column">
+    <div class="border_container min-height-38" [style.border-color]="colors[1].firstColor">
+        <div class="title-and-buttons" [style.border-color]="colors[1].firstColor">
+            <div class="text_grow">
+        <textarea class="transparent_text_input column-task-list-title" #columnName
+                  [value]="column.name" matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize"
+                  appFocus cdkAutosizeMinRows="1" [style.color]="colors[1].firstColor"
+                  (change)="renameColumn(columnName.value)"
+                  (keydown)="keyPressed(columnName, $event, columnName.value)">
+        </textarea>
+            </div>
+
+            <div class="buttons_container">
+                <button class="custom_icon_button" appButtonHover
+                        [elementRef]="newTaskListIcon._elementRef" [color]="colors[1]" (click)="newTaskList()">
+                    <mat-icon class="button_icon" #newTaskListIcon [style.color]="colors[1].firstColor">assignment_add
+                    </mat-icon>
+                </button>
+
+                <button class="custom_icon_button" appButtonHover
+                        [elementRef]="removeColumnIcon._elementRef" [color]="colors[1]" (click)="deleteColumn()">
+                    <mat-icon #removeColumnIcon [style.color]="colors[1].firstColor">remove_circle_outline</mat-icon>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="column-drop-list" id="{{column.id}}" cdkDropList [cdkDropListData]="column.taskLists"
+         [cdkDropListConnectedTo]="taskListDropLists" (cdkDropListDropped)="moveTaskList($event)">
+        <div cdkDrag *ngFor="let taskList of column.taskLists">
+            <div *cdkDragPlaceholder></div>
+            <app-task-list [taskList]="taskList" [taskDropLists]="taskDropLists"
+                           [colors]="colors" [columnComponent]="this"></app-task-list>
+        </div>
+    </div>
+</div>

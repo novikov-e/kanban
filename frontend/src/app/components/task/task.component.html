@@ -1,0 +1,32 @@
+<div class="title-and-buttons mt-2">
+  <div class="buttons_container">
+    <div class="custom_checkbox">
+      <div *ngIf="task.state" (click)="changeTaskState()">
+        <mat-icon class="custom_checkbox_size" [style.color]="color.firstColor">check_circle</mat-icon>
+      </div>
+
+      <div *ngIf="!task.state" (click)="changeTaskState()">
+        <mat-icon class="custom_checkbox_focused custom_checkbox_size" [style.color]="color.firstColor">circle</mat-icon>
+      </div>
+
+      <div *ngIf="!task.state">
+        <mat-icon class="custom_checkbox_size" [style.color]="color.firstColor">radio_button_unchecked</mat-icon>
+      </div>
+    </div>
+  </div>
+
+  <div class="text_grow">
+    <textarea class="transparent_text_input" matInput cdkTextareaAutosize appFocus
+              #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1"
+              #taskName [style.color]="color.firstColor" [value]="task.name" (change)="renameTask(taskName.value)"
+              (keydown)="keyPressed(taskName, $event, taskName.value)">
+    </textarea>
+  </div>
+
+  <div class="buttons_container">
+    <button class="custom_icon_button" appButtonHover
+            [elementRef]="removeTaskIcon._elementRef" [color]="color" (click)="deleteTask()">
+      <mat-icon #removeTaskIcon [style.color]="color.firstColor">remove_circle_outline</mat-icon>
+    </button>
+  </div>
+</div>

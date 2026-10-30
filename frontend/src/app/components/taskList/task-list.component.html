@@ -1,0 +1,74 @@
+<div class="border_container" [style.border-color]="colors[taskList.color].firstColor">
+  <div class="title-and-buttons">
+    <div class="text_grow">
+      <textarea class="transparent_text_input column-task-list-title" #taskListName
+                matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1"
+                [value]="taskList.name" [style.color]="colors[taskList.color].firstColor"
+                (change)="renameTaskList(taskListName.value)"
+                appFocus (keydown)="keyPressed(taskListName, $event, taskListName.value)">
+      </textarea>
+    </div>
+
+    <div class="buttons_container">
+      <button class="custom_icon_button" appButtonHover
+              [elementRef]="addTaskIcon._elementRef" [color]="colors[taskList.color]" (click)="newTask()">
+        <mat-icon #addTaskIcon [style.color]="colors[taskList.color].firstColor">add_circle_outline</mat-icon>
+      </button>
+
+      <button class="custom_icon_button" appButtonHover
+              [elementRef]="colorIcon._elementRef" [color]="colors[taskList.color]" [cdkMenuTriggerFor]="menu">
+        <mat-icon #colorIcon [style.color]="colors[taskList.color].firstColor">circle</mat-icon>
+      </button>
+
+      <ng-template #menu>
+        <div class="colors-menu" [style.border-color]="colors[1].firstColor"
+             [style.background-color]="colors[0].firstColor" cdkMenu>
+          <button class="custom_icon_button">
+            <mat-icon cdkMenuItem [style.color]="colors[1].firstColor" (click)="changeTaskListColor(1)">circle</mat-icon>
+          </button>
+
+          <button class="custom_icon_button">
+            <mat-icon cdkMenuItem [style.color]="colors[2].firstColor" (click)="changeTaskListColor(2)">circle</mat-icon>
+          </button>
+
+          <button class="custom_icon_button">
+            <mat-icon cdkMenuItem [style.color]="colors[3].firstColor" (click)="changeTaskListColor(3)">circle</mat-icon>
+          </button>
+
+          <button class="custom_icon_button">
+            <mat-icon cdkMenuItem [style.color]="colors[4].firstColor" (click)="changeTaskListColor(4)">circle</mat-icon>
+          </button>
+
+          <button class="custom_icon_button">
+            <mat-icon cdkMenuItem [style.color]="colors[5].firstColor" (click)="changeTaskListColor(5)">circle</mat-icon>
+          </button>
+
+          <button class="custom_icon_button">
+            <mat-icon cdkMenuItem [style.color]="colors[6].firstColor" (click)="changeTaskListColor(6)">circle</mat-icon>
+          </button>
+
+          <button class="custom_icon_button">
+            <mat-icon cdkMenuItem [style.color]="colors[7].firstColor" (click)="changeTaskListColor(7)">circle</mat-icon>
+          </button>
+
+          <button class="custom_icon_button">
+            <mat-icon cdkMenuItem [style.color]="colors[8].firstColor" (click)="changeTaskListColor(8)">circle</mat-icon>
+          </button>
+        </div>
+      </ng-template>
+
+      <button class="custom_icon_button" appButtonHover
+              [elementRef]="removeTaskListIcon._elementRef" [color]="colors[taskList.color]" (click)="deleteTaskList()">
+        <mat-icon #removeTaskListIcon [style.color]="colors[taskList.color].firstColor">remove_circle_outline</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <div cdkDropList id="{{taskList.id}}" [cdkDropListData]="taskList.tasks" class="task_drag_list"
+       [cdkDropListConnectedTo]="taskDropLists" (cdkDropListDropped)="moveTask($event)">
+    <div cdkDrag *ngFor="let task of taskList.tasks">
+      <div *cdkDragPlaceholder></div>
+      <app-task [task]="task" [color]="colors[taskList.color]" [taskListComponent]="this"></app-task>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,25 @@
+# Секреты и локальное окружение
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.ruff_cache/
+.pytest_cache/
+
+# Node / Angular
+node_modules/
+frontend/.angular/
+frontend/dist/
+
+# Java (backend-old)
+backend-old/build/
+backend-old/.gradle/
+
+# OS / IDE
+.DS_Store
+.idea/

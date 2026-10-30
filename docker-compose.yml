@@ -1,0 +1,35 @@
+services:
+  postgresql:
+    image: postgres:18.3
+    container_name: postgresql
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:5432:5432"
+    environment:
+      POSTGRES_USER: kanban_user
+      POSTGRES_PASSWORD: kanban_password
+      POSTGRES_DB: kanban_db
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      # Защищенный том для хранения самих данных
+      - postgresql:/var/lib/postgresql/data
+    # networks:
+    #   - database
+    security_opt:
+      - no-new-privileges:true
+    deploy:
+      resources:
+        reservations:
+          cpus: '0.5'
+          memory: 1G
+        limits:
+          cpus: '0.5' 
+          memory: 1G
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20m"
+        max-file: "3"
+
+volumes:
+  postgresql:

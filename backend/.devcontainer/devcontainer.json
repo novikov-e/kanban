@@ -1,0 +1,21 @@
+{
+  "name": "Kanban: Backend",
+  "image": "mcr.microsoft.com/devcontainers/python:3.12",
+  "runArgs": [
+    "--name",
+    "kanban_backend"
+  ],
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "ms-python.debugpy",
+        "charliermarsh.ruff",
+        "astral-sh.ty"
+      ]
+    }
+  },
+  "postCreateCommand": "pip3 install --no-cache-dir -r requirements.txt",
+  "remoteUser": "vscode"
+}

@@ -1,0 +1,9 @@
+<div class="columns" id="{{project.id}}" cdkDropList [cdkDropListData]="project.columns"
+     [cdkDropListConnectedTo]="columnDropLists" cdkDropListOrientation="horizontal"
+     (cdkDropListDropped)="moveColumn($event)">
+    <div class="nothing" cdkDrag *ngFor="let column of project.columns">
+        <div class="" *cdkDragPlaceholder></div>
+        <app-column [column]="column" [taskListDropLists]="taskListDropLists" [projectComponent]="this"
+                    [taskDropLists]="taskDropLists" [colors]="colors"></app-column>
+    </div>
+</div>

@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
+    <title>{{title}}</title>
+</head>
+<body [style.background-color]="colors[0].firstColor">
+
+<div class="header" [style.border-color]="colors[1].firstColor">
+    <div class="buttons_container ml-5">
+        <button class="text_button" appTextButton [matIcon]="menuIcon._elementRef"
+                [text]="menuButton" [color]="colors[1]"
+                (click)="drawer.toggle()">
+            <mat-icon #menuIcon [style.color]="colors[1].firstColor">menu</mat-icon>
+            <div class="text_in_header_button" #menuButton
+                 [style.color]="colors[1].firstColor">Меню
+            </div>
+        </button>
+    </div>
+
+    <div *ngIf="project!=null" class="gr">
+        <input type="text" class="transparent_text_input column-task-list-title text_align_center font-size-17"
+               #projectName [value]="project.name" matInput appSelect
+               [style.color]="colors[1].firstColor" (change)="renameProject(project.id, projectName.value)">
+    </div>
+
+    <div *ngIf="project!=null" class="buttons_container mr-5">
+        <button class="text_button" appTextButton [matIcon]="newColumnIcon._elementRef"
+                [text]="newColumnButton" [color]="colors[1]" (click)="newColumn()">
+            <mat-icon #newColumnIcon [style.color]="colors[1].firstColor">add_circle_outline</mat-icon>
+            <div class="text_in_header_button" #newColumnButton
+                 [style.color]="colors[1].firstColor">Добавить колонку
+            </div>
+        </button>
+
+        <button class="text_button" appTextButton [matIcon]="exitIcon._elementRef"
+                [text]="exitButton" [color]="colors[1]" (click)="closeProject()">
+            <mat-icon #exitIcon [style.color]="colors[1].firstColor">logout</mat-icon>
+            <div class="text_in_header_button" #exitButton
+                 [style.color]="colors[1].firstColor">Выйти из проекта
+            </div>
+        </button>
+
+        <button class="text_button" appTextButton [matIcon]="deleteProjectIcon._elementRef"
+                [text]="deleteProjectButton" [color]="colors[2]"
+                (click)="deleteProject(project.id, project.position)">
+            <mat-icon #deleteProjectIcon [style.color]="colors[2].firstColor">remove_circle_outline</mat-icon>
+            <div class="text_in_header_button" #deleteProjectButton
+                 [style.color]="colors[2].firstColor">Удалить проект
+            </div>
+        </button>
+    </div>
+</div>
+
+
+<div class="workspace_container">
+    <mat-drawer-container class="background_transparent" autosize>
+        <mat-drawer class="background_transparent pl-1" #drawer mode="side">
+            <div class="user_details" [style.border-color]="colors[1].firstColor">
+                <button class="text_button m-5" appTextButton [matIcon]="createProjectIcon._elementRef"
+                        [text]="textButton" [color]="colors[1]" (click)="newProject()">
+                    <mat-icon #createProjectIcon [style.color]="colors[1].firstColor">add_circle_outline</mat-icon>
+                    <div class="text_in_button" #textButton [style.color]="colors[1].firstColor">Создать проект
+                    </div>
+                </button>
+
+                <div class="list_projects" cdkDropList
+                     (cdkDropListDropped)="moveProject($event)" cdkDropListOrientation="vertical">
+                    <div class="project_item" *ngFor="let proj of user.projects" cdkDrag>
+                        <div class="example-custom-placeholder" *cdkDragPlaceholder></div>
+                        <button class="text_button m-5" appTextButton [matIcon]="dashboardIcon._elementRef"
+                                [text]="dashboardButton" [color]="colors[1]" (click)="openProject(proj.id)">
+                            <mat-icon #dashboardIcon [style.color]="colors[1].firstColor">dashboard</mat-icon>
+                            <div class="text_in_button" #dashboardButton
+                                 [style.color]="colors[1].firstColor">{{proj.name}}</div>
+                        </button>
+                    </div>
+                </div>
+
+                <button class="text_button m-5" appTextButton
+                        [matIcon]="settingsIcon._elementRef" [text]="settingsButtonText" [color]="colors[1]">
+                    <mat-icon #settingsIcon [style.color]="colors[1].firstColor">settings</mat-icon>
+                    <div class="text_in_button" #settingsButtonText [style.color]="colors[1].firstColor">Настройки
+                    </div>
+                </button>
+
+                <button class="text_button m-5" *ngIf="!user.darkTheme" appTextButton
+                        [matIcon]="darkModeIcon._elementRef"
+                        [text]="darkThemeButtonText" [color]="colors[1]" (click)="changeTheme()">
+                    <mat-icon #darkModeIcon [style.color]="colors[1].firstColor">dark_mode</mat-icon>
+                    <div class="text_in_button" #darkThemeButtonText [style.color]="colors[1].firstColor">Тёмная
+                        тема
+                    </div>
+                </button>
+
+                <button class="text_button m-5" *ngIf="user.darkTheme" appTextButton
+                        [matIcon]="lightModeIcon._elementRef"
+                        [text]="lightThemeButtonText" [color]="colors[1]" (click)="changeTheme()">
+                    <mat-icon #lightModeIcon [style.color]="colors[1].firstColor">light_mode</mat-icon>
+                    <div #lightThemeButtonText [style.color]="colors[1].firstColor" class="text_in_button">Светлая
+                        тема
+                    </div>
+                </button>
+            </div>
+        </mat-drawer>
+        <app-project *ngIf="project!=null" [project]="project" [colors]="colors"
+                     [taskDropLists]="taskDropLists" [taskListDropLists]="taskListDropLists"
+                     [columnDropLists]="columnDropLists" [appComponent]="this"></app-project>
+    </mat-drawer-container>
+</div>
+</body>
+</html>
