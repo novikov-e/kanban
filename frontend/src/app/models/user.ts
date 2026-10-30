@@ -1,4 +1,4 @@
-import {Project} from "./project";
+import {Board} from "./board";
 
 export class User {
   id: string
@@ -9,6 +9,6 @@ export class User {
   image: string
   email: string
   darkTheme: boolean
-  lastProject: string | null
-  projects: Project[]
+  lastBoard: string | null
+  boards: Board[]
 }

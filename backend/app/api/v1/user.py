@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db.database import get_db
-from app.schemas.user import LastProjectUpdate, ThemeUpdate, UserResponse
+from app.schemas.user import LastBoardUpdate, ThemeUpdate, UserResponse
 from app.services import user_service
 
 router = APIRouter(prefix="/api/v1/user", tags=["User"])
@@ -26,7 +26,7 @@ async def update_dark_theme(theme_dto: ThemeUpdate, db: AsyncSession = Depends(g
     return {"status": "success"}
 
 
-@router.post("/last_project")
-async def update_last_project(last_project_dto: LastProjectUpdate, db: AsyncSession = Depends(get_db)):
-    await user_service.update_last_project(db, last_project_dto.user_id, last_project_dto.project_id)
+@router.post("/last_board")
+async def update_last_board(dto: LastBoardUpdate, db: AsyncSession = Depends(get_db)):
+    await user_service.update_last_board(db, dto.user_id, dto.board_id)
     return {"status": "success"}

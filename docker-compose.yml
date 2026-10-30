@@ -1,3 +1,9 @@
+# Значения можно переопределить в файле .env рядом с docker-compose.yml
+x-db-env: &db-env
+  POSTGRES_USER: ${POSTGRES_USER:-kanban_user}
+  POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-kanban_password}
+  POSTGRES_DB: ${POSTGRES_DB:-kanban_db}
+
 services:
   postgresql:
     image: postgres:18.3
@@ -6,15 +12,17 @@ services:
     ports:
       - "127.0.0.1:5432:5432"
     environment:
-      POSTGRES_USER: kanban_user
-      POSTGRES_PASSWORD: kanban_password
-      POSTGRES_DB: kanban_db
+      <<: *db-env
       PGDATA: /var/lib/postgresql/data/pgdata
     volumes:
-      # Защищенный том для хранения самих данных
       - postgresql:/var/lib/postgresql/data
-    # networks:
-    #   - database
+    networks:
+      - kanban
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
     security_opt:
       - no-new-privileges:true
     deploy:
@@ -30,6 +38,44 @@ services:
       options:
         max-size: "20m"
         max-file: "3"
+
+  backend:
+    build: ./backend
+    restart: unless-stopped
+    environment:
+      <<: *db-env
+      POSTGRES_HOST: postgresql
+      POSTGRES_PORT: "5432"
+    depends_on:
+      postgresql:
+        condition: service_healthy
+    networks:
+      - kanban
+    security_opt:
+      - no-new-privileges:true
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20m"
+        max-file: "3"
+
+  frontend:
+    build: ./frontend
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8080:80"
+    depends_on:
+      - backend
+    networks:
+      - kanban
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20m"
+        max-file: "3"
+
+networks:
+  kanban:
 
 volumes:
   postgresql:

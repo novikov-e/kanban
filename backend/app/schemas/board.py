@@ -5,7 +5,7 @@ from pydantic import BaseModel, ConfigDict, Field
 from app.schemas.column import ColumnResponse
 
 
-# Элемент списка проектов пользователя (без вложенных колонок)
+# Элемент списка досок пользователя (без вложенных колонок)
 class BoardShortResponse(BaseModel):
     id: UUID = Field(validation_alias="board_id")
     name: str = Field(validation_alias="board_name")

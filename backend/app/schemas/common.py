@@ -2,7 +2,7 @@ from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, Field
 
-# Общие DTO запросов для всех уровней иерархии (project -> column -> task_list -> task).
+# Общие DTO запросов для всех уровней иерархии (board -> column -> task -> subtask).
 # Позиции и родители, которые фронтенд присылает "до" операции, сервер не использует:
 # актуальный порядок всегда берётся из БД.
 

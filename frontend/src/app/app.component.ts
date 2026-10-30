@@ -1,12 +1,12 @@
 import {Component, OnInit} from '@angular/core';
-import {Project} from "./models/project";
+import {Board} from "./models/board";
 import {UserService} from "./services/user.service";
 import {CdkDragDrop, moveItemInArray} from "@angular/cdk/drag-drop";
 import {User} from "./models/user";
 import {Colors} from "./models/colors";
 import {lightTheme} from "./data/light-theme";
 import {darkTheme} from "./data/dark-theme";
-import {ProjectService} from "./services/project.service";
+import {BoardService} from "./services/board.service";
 import {Column} from "./models/column";
 import {Observable} from "rxjs";
 import {ErrorService} from "./services/error.service";
@@ -22,14 +22,14 @@ export class AppComponent implements OnInit {
 
   title: string = "stack check"
   user: User
-  project: Project | null
+  board: Board | null
   colors: Colors[] = lightTheme
   columnDropLists: string[] = []
-  taskListDropLists: string[] = []
   taskDropLists: string[] = []
+  subtaskDropLists: string[] = []
 
   constructor(private userService: UserService,
-              private projectService: ProjectService,
+              private boardService: BoardService,
               public errorService: ErrorService,
               private _snackBar: MatSnackBar) {
     this.errorService.error$.subscribe({next: (message) => {
@@ -45,69 +45,69 @@ export class AppComponent implements OnInit {
       if (data.darkTheme) {
         this.colors = darkTheme
       }
-      if (data.lastProject != null) {
-        this.openProject(data.lastProject)
+      if (data.lastBoard != null) {
+        this.openBoard(data.lastBoard)
       }
     })
   }
 
-  newProject() {
-    let project: Observable<Project> = this.projectService.createProject(this.user.id, this.user.projects.length)
-    project.subscribe(data => {
-      this.user.projects.push(data)
-      this.project = data
-      this.user.lastProject = data.id
-      this.userService.lastProject(this.user.id, data.id)
+  newBoard() {
+    let board: Observable<Board> = this.boardService.createBoard(this.user.id, this.user.boards.length)
+    board.subscribe(data => {
+      this.user.boards.push(data)
+      this.board = data
+      this.user.lastBoard = data.id
+      this.userService.lastBoard(this.user.id, data.id)
     })
   }
 
-  openProject(id: string) {
-    if (this.project?.id != id) {
-      this.project = null
-      this.projectService.getProjectById(id).subscribe(data => this.project = data)
-      this.user.lastProject = id
-      this.userService.lastProject(this.user.id, id)
+  openBoard(id: string) {
+    if (this.board?.id != id) {
+      this.board = null
+      this.boardService.getBoardById(id).subscribe(data => this.board = data)
+      this.user.lastBoard = id
+      this.userService.lastBoard(this.user.id, id)
     }
   }
 
-  closeProject() {
-    this.project = null
-    this.user.lastProject = null
-    this.userService.lastProject(this.user.id, null)
+  closeBoard() {
+    this.board = null
+    this.user.lastBoard = null
+    this.userService.lastBoard(this.user.id, null)
     this.columnDropLists = []
   }
 
-  renameProject(projectId: string, projectName: string) {
-    for (let i = 0; i < this.user.projects.length; i++) {
-      if (this.user.projects[i].id == projectId) {
-        this.user.projects[i].name = projectName
+  renameBoard(boardId: string, boardName: string) {
+    for (let i = 0; i < this.user.boards.length; i++) {
+      if (this.user.boards[i].id == boardId) {
+        this.user.boards[i].name = boardName
       }
     }
-    this.projectService.renameProject(projectId, projectName)
+    this.boardService.renameBoard(boardId, boardName)
   }
 
-  moveProject(event: CdkDragDrop<Project[]>) {
-    this.projectService.moveProject(this.user.projects[event.previousIndex].id,
+  moveBoard(event: CdkDragDrop<Board[]>) {
+    this.boardService.moveBoard(this.user.boards[event.previousIndex].id,
       this.user.id, event.previousIndex, this.user.id, event.currentIndex)
-    moveItemInArray(this.user.projects, event.previousIndex, event.currentIndex);
+    moveItemInArray(this.user.boards, event.previousIndex, event.currentIndex);
   }
 
-  deleteProject(projectId: string, projectPosition: number) {
-    if (this.project?.id == projectId) {
-      this.project = null
-      this.user.lastProject = null
-      this.userService.lastProject(this.user.id, null)
+  deleteBoard(boardId: string, boardPosition: number) {
+    if (this.board?.id == boardId) {
+      this.board = null
+      this.user.lastBoard = null
+      this.userService.lastBoard(this.user.id, null)
     }
-    this.projectService.deleteProject(this.user.id, projectId, projectPosition)
-    for (let i = 0; i < this.user.projects.length; i++) {
-      if (this.user.projects[i].id == projectId) {
-        this.user.projects.splice(i, 1)
+    this.boardService.deleteBoard(this.user.id, boardId, boardPosition)
+    for (let i = 0; i < this.user.boards.length; i++) {
+      if (this.user.boards[i].id == boardId) {
+        this.user.boards.splice(i, 1)
       }
     }
   }
 
   newColumn() {
-    this.project?.columns.push(new Column("", "", this.project?.columns.length))
+    this.board?.columns.push(new Column("", "", this.board?.columns.length))
   }
 
   changeTheme() {

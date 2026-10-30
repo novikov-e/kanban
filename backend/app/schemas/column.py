@@ -9,5 +9,5 @@ class ColumnResponse(BaseModel):
     id: UUID = Field(validation_alias="column_id")
     name: str = Field(validation_alias="column_name")
     position: int = Field(validation_alias="column_position")
-    task_lists: list[TaskResponse] = Field(default=[], validation_alias="tasks", serialization_alias="taskLists")
+    tasks: list[TaskResponse] = []
     model_config = ConfigDict(from_attributes=True)

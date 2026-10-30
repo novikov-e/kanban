@@ -6,12 +6,11 @@ from app.schemas.common import CreateObjectWithNameDto, DeleteObjectDto, MoveDto
 from app.schemas.task import ChangeColorDto, TaskResponse
 from app.services import task_service
 
-router = APIRouter(prefix="/api/v1/task_list",
-                   tags=["Task (formerly TaskList)"])
+router = APIRouter(prefix="/api/v1/task", tags=["Task"])
 
 
 def _not_found() -> HTTPException:
-    return HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Task list not found")
+    return HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Task not found")
 
 
 @router.post("/create", status_code=status.HTTP_201_CREATED, response_model=TaskResponse)

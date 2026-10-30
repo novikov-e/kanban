@@ -1,6 +1,6 @@
 import {Column} from "./column";
 
-export class Project {
+export class Board {
   id: string
   name: string
   position: number

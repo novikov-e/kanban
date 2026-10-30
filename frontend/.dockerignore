@@ -1,2 +1,5 @@
 .angular
 node_modules
+dist
+.devcontainer
+Dockerfile

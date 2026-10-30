@@ -2,7 +2,7 @@
     <div class="border_container min-height-38" [style.border-color]="colors[1].firstColor">
         <div class="title-and-buttons" [style.border-color]="colors[1].firstColor">
             <div class="text_grow">
-        <textarea class="transparent_text_input column-task-list-title" #columnName
+        <textarea class="transparent_text_input column-task-title" #columnName
                   [value]="column.name" matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize"
                   appFocus cdkAutosizeMinRows="1" [style.color]="colors[1].firstColor"
                   (change)="renameColumn(columnName.value)"
@@ -12,8 +12,8 @@
 
             <div class="buttons_container">
                 <button class="custom_icon_button" appButtonHover
-                        [elementRef]="newTaskListIcon._elementRef" [color]="colors[1]" (click)="newTaskList()">
-                    <mat-icon class="button_icon" #newTaskListIcon [style.color]="colors[1].firstColor">assignment_add
+                        [elementRef]="newTaskIcon._elementRef" [color]="colors[1]" (click)="newTask()">
+                    <mat-icon class="button_icon" #newTaskIcon [style.color]="colors[1].firstColor">assignment_add
                     </mat-icon>
                 </button>
 
@@ -24,12 +24,12 @@
             </div>
         </div>
     </div>
-    <div class="column-drop-list" id="{{column.id}}" cdkDropList [cdkDropListData]="column.taskLists"
-         [cdkDropListConnectedTo]="taskListDropLists" (cdkDropListDropped)="moveTaskList($event)">
-        <div cdkDrag *ngFor="let taskList of column.taskLists">
+    <div class="column-drop-list" id="{{column.id}}" cdkDropList [cdkDropListData]="column.tasks"
+         [cdkDropListConnectedTo]="taskDropLists" (cdkDropListDropped)="moveTask($event)">
+        <div cdkDrag *ngFor="let task of column.tasks">
             <div *cdkDragPlaceholder></div>
-            <app-task-list [taskList]="taskList" [taskDropLists]="taskDropLists"
-                           [colors]="colors" [columnComponent]="this"></app-task-list>
+            <app-task [task]="task" [subtaskDropLists]="subtaskDropLists"
+                      [colors]="colors" [columnComponent]="this"></app-task>
         </div>
     </div>
 </div>

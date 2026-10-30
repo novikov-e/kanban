@@ -54,7 +54,7 @@ body {
 }
 
 /* Список проектов */
-.list_projects {
+.list_boards {
     flex: 1;
     width: 100%;
     border-bottom: 1px solid silver;
@@ -62,7 +62,7 @@ body {
     overflow-y: auto;
 }
 
-.project_item {
+.board_item {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -84,18 +84,18 @@ body {
     overflow-x: auto;
 }
 
-.columns::-webkit-scrollbar, .list_projects::-webkit-scrollbar {
+.columns::-webkit-scrollbar, .list_boards::-webkit-scrollbar {
     width: 10px;
     background-color: transparent;
 }
 
-.columns::-webkit-scrollbar-thumb, .list_projects::-webkit-scrollbar-thumb {
+.columns::-webkit-scrollbar-thumb, .list_boards::-webkit-scrollbar-thumb {
     border: 2px solid #bcbcbc;
     border-radius: 10px;
     background-color: transparent;
 }
 
-.columns::-webkit-scrollbar-track, .list_projects::-webkit-scrollbar-track {
+.columns::-webkit-scrollbar-track, .list_boards::-webkit-scrollbar-track {
     border-radius: 10px;
     background-color: transparent;
 }
@@ -249,7 +249,7 @@ body {
     height: 100%;
 }
 
-.column-task-list-title {
+.column-task-title {
     margin-left: 6px;
     font-size: 15px;
     font-weight: bold;
@@ -272,7 +272,7 @@ body {
     margin-right: 5px;
 }
 
-.task_drag_list {
+.subtask_drag_list {
     min-height: 1px;
 }
 

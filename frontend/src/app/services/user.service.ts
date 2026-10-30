@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpErrorResponse, HttpHeaders} from "@angular/common/http";
+import {HttpClient, HttpErrorResponse} from "@angular/common/http";
 import {catchError, Observable, throwError} from "rxjs";
-import {Project} from "../models/project";
 import {User} from "../models/user";
 import {ErrorService} from "./error.service";
 import {url} from "../data/url";
@@ -22,9 +21,9 @@ export class UserService {
     this.http.post(`${url}/user/theme`, data).pipe(catchError(this.errorHandler.bind(this))).subscribe()
   }
 
-  lastProject(userId: string, projectId: string | null): void {
-    const data = {userId: userId, projectId: projectId}
-    this.http.post(`${url}/user/last_project`, data).pipe(catchError(this.errorHandler.bind(this))).subscribe()
+  lastBoard(userId: string, boardId: string | null): void {
+    const data = {userId: userId, boardId: boardId}
+    this.http.post(`${url}/user/last_board`, data).pipe(catchError(this.errorHandler.bind(this))).subscribe()
   }
 
   private errorHandler(error: HttpErrorResponse) {

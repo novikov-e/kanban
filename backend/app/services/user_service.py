@@ -30,9 +30,9 @@ async def update_theme(session: AsyncSession, user_id: UUID, dark_theme: bool) -
     await session.commit()
 
 
-async def update_last_project(session: AsyncSession, user_id: UUID, project_id: UUID | None) -> None:
+async def update_last_board(session: AsyncSession, user_id: UUID, board_id: UUID | None) -> None:
     stmt = update(User).where(User.id == user_id).values(
-        last_project=project_id)
+        last_board=board_id)
     await session.execute(stmt)
     await session.commit()
 

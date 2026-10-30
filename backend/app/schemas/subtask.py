@@ -4,13 +4,11 @@ from pydantic import BaseModel, ConfigDict, Field
 
 
 class ChangeStateDto(BaseModel):
-    # Фронтенд присылает taskId, но в новой БД это subtask_id
-    subtask_id: UUID = Field(alias="taskId")
+    subtask_id: UUID = Field(alias="subtaskId")
     state: bool
     model_config = ConfigDict(populate_by_name=True)
 
 
-# На фронтенде подзадача называется Task
 class SubtaskResponse(BaseModel):
     id: UUID = Field(validation_alias="subtask_id")
     name: str = Field(validation_alias="subtask_name")
