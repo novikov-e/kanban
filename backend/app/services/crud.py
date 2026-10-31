@@ -1,29 +1,38 @@
 from typing import Any
 from uuid import UUID
 
-from sqlalchemy import select, update
+from sqlalchemy import ColumnElement, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import InstrumentedAttribute
 from sqlalchemy.orm.attributes import set_committed_value
 
+from app.core.errors import NotFoundError
 from app.db.database import Base
-from app.services.errors import NotFoundError
 
 
 async def ensure_exists(
-    session: AsyncSession, id_column: InstrumentedAttribute[Any], object_id: UUID, entity: str
+    session: AsyncSession,
+    id_column: InstrumentedAttribute[Any],
+    object_id: UUID,
+    entity: str,
+    owned: ColumnElement[bool],
 ) -> None:
     model = id_column.class_
-    stmt = select(id_column).where(id_column == object_id, model.deleted_at.is_(None))
+    stmt = select(id_column).where(id_column == object_id, model.deleted_at.is_(None), owned)
     if (await session.execute(stmt)).scalar_one_or_none() is None:
         raise NotFoundError(entity)
 
 
 async def update_by_id(
-    session: AsyncSession, id_column: InstrumentedAttribute[Any], object_id: UUID, entity: str, **values: Any
+    session: AsyncSession,
+    id_column: InstrumentedAttribute[Any],
+    object_id: UUID,
+    entity: str,
+    owned: ColumnElement[bool],
+    **values: Any,
 ) -> None:
     model = id_column.class_
-    stmt = update(model).where(id_column == object_id, model.deleted_at.is_(None)).values(**values)
+    stmt = update(model).where(id_column == object_id, model.deleted_at.is_(None), owned).values(**values)
     result = await session.execute(stmt)
     if result.rowcount == 0:
         raise NotFoundError(entity)

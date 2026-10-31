@@ -44,6 +44,8 @@ nginx во фронтенд-контейнере раздаёт сборку Ang
   (`provideZoneChangeDetection()`), а компоненты объявлены с `ChangeDetectionStrategy.Eager`.
 - Дочерний компонент не знает о родителе: данные приходят через `@Input`, удаление — через `@Output() deleted`.
 - Ошибки HTTP обрабатывает `interceptors/http-error.interceptor.ts` (снекбар), сервисы их не перехватывают.
+- Access-токен хранится только в памяти (`AuthService`); `auth.interceptor.ts` подставляет его и при 401
+  один раз обновляет токен через cookie и повторяет запрос.
 - Несохранённый элемент имеет `id === UNSAVED_ID`; проверка — `isSaved()` из `models/entity.ts`.
 
 ## Соглашения бэкенда
@@ -56,4 +58,8 @@ nginx во фронтенд-контейнере раздаёт сборку Ang
 - Удаление мягкое (`deleted_at`). Каскад на дочерние сущности делают триггеры БД из начальной миграции,
   поэтому все выборки фильтруют `deleted_at IS NULL`.
 - Временные метки ставятся на стороне БД (`func.now()`), колонки — `timestamptz`.
-- Авторизации пока нет: API работает от имени `DEFAULT_USER_EMAIL` из `core/config.py`.
+- Авторизация — JWT: access-токен (15 мин) в заголовке `Authorization: Bearer`, refresh-токен (30 дней)
+  в httpOnly cookie с путём `/api/v1/auth`, с ротацией и отзывом через таблицу `refresh_tokens`.
+  Пароли хешируются Argon2 (`core/security.py`).
+- Пользователь берётся только из токена (`CurrentUserId`), никогда из тела запроса. Все запросы фильтруются
+  условиями из `services/ownership.py`; чужой объект — 404.

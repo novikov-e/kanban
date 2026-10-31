@@ -1,9 +1,10 @@
 import {CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray} from '@angular/cdk/drag-drop'
-import {ChangeDetectionStrategy, Component, inject, OnInit} from '@angular/core'
+import {ChangeDetectionStrategy, Component, inject, OnInit, signal} from '@angular/core'
 import {MatIcon} from '@angular/material/icon'
 import {MatInput} from '@angular/material/input'
 import {MatDrawer, MatDrawerContainer} from '@angular/material/sidenav'
 import {BoardComponent} from './components/board/board.component'
+import {LoginComponent} from './components/login/login.component'
 import {darkTheme} from './data/dark-theme'
 import {lightTheme} from './data/light-theme'
 import {SelectDirective} from './directives/select.directive'
@@ -13,6 +14,7 @@ import {Colors} from './models/colors'
 import {Column} from './models/column'
 import {UNSAVED_ID} from './models/entity'
 import {User} from './models/user'
+import {AuthService} from './services/auth.service'
 import {BoardService} from './services/board.service'
 import {UserService} from './services/user.service'
 
@@ -31,19 +33,30 @@ import {UserService} from './services/user.service'
     CdkDropList,
     CdkDrag,
     BoardComponent,
+    LoginComponent,
   ],
 })
 export class AppComponent implements OnInit {
   private userService = inject(UserService)
   private boardService = inject(BoardService)
+  protected readonly auth = inject(AuthService)
+  protected readonly sessionChecked = signal(false)
 
   user: User
   board: Board | null = null
   colors: Colors[] = lightTheme
 
   ngOnInit(): void {
+    this.auth.refresh().subscribe({
+      next: () => this.loadUser(),
+      error: () => this.sessionChecked.set(true),
+    })
+  }
+
+  loadUser() {
     this.userService.getUser().subscribe(user => {
       this.user = user
+      this.sessionChecked.set(true)
       this.colors = user.darkTheme ? darkTheme : lightTheme
       if (user.lastBoard !== null) {
         this.openBoard(user.lastBoard)
@@ -51,8 +64,14 @@ export class AppComponent implements OnInit {
     })
   }
 
+  logout() {
+    this.auth.logout().subscribe()
+    this.board = null
+    this.colors = lightTheme
+  }
+
   createBoard() {
-    this.boardService.create(this.user.id).subscribe(board => {
+    this.boardService.create().subscribe(board => {
       this.user.boards.push(board)
       this.board = board
       this.rememberLastBoard(board.id)
@@ -82,7 +101,7 @@ export class AppComponent implements OnInit {
   }
 
   onBoardDrop(event: CdkDragDrop<Board[]>) {
-    this.boardService.move(event.item.data.id, this.user.id, event.currentIndex)
+    this.boardService.move(event.item.data.id, event.currentIndex)
     moveItemInArray(this.user.boards, event.previousIndex, event.currentIndex)
   }
 
@@ -101,11 +120,11 @@ export class AppComponent implements OnInit {
   toggleTheme() {
     this.user.darkTheme = !this.user.darkTheme
     this.colors = this.user.darkTheme ? darkTheme : lightTheme
-    this.userService.setDarkTheme(this.user.id, this.user.darkTheme)
+    this.userService.setDarkTheme(this.user.darkTheme)
   }
 
   private rememberLastBoard(boardId: string | null) {
     this.user.lastBoard = boardId
-    this.userService.setLastBoard(this.user.id, boardId)
+    this.userService.setLastBoard(boardId)
   }
 }

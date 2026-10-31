@@ -31,12 +31,32 @@ describe('AppComponent', () => {
 
   afterEach(() => httpMock.verify())
 
-  it('loads the user and lists their boards in the menu', () => {
+  function startWithSession(sessionUser: User) {
+    const fixture = TestBed.createComponent(AppComponent)
+    fixture.detectChanges()
+    httpMock.expectOne({method: 'POST', url: '/api/v1/auth/refresh'}).flush({accessToken: 'access-token'})
+    const userRequest = httpMock.expectOne({method: 'GET', url: '/api/v1/user'})
+    expect(userRequest.request.headers.get('Authorization')).toBe('Bearer access-token')
+    userRequest.flush(sessionUser)
+    fixture.detectChanges()
+    return fixture
+  }
+
+  it('shows the login form when there is no session', () => {
     const fixture = TestBed.createComponent(AppComponent)
     fixture.detectChanges()
 
-    httpMock.expectOne({method: 'GET', url: '/api/v1/user'}).flush(user)
+    httpMock
+      .expectOne('/api/v1/auth/refresh')
+      .flush({detail: 'Refresh token is missing'}, {status: 401, statusText: 'Unauthorized'})
     fixture.detectChanges()
+
+    expect(fixture.nativeElement.querySelector('app-login form')).not.toBeNull()
+    expect(fixture.nativeElement.querySelector('.app')).toBeNull()
+  })
+
+  it('restores the session and lists the boards in the menu', () => {
+    const fixture = startWithSession(user)
 
     const menu = fixture.nativeElement.querySelector('.list_boards') as HTMLElement
     expect(menu.textContent).toContain('Первая доска')
@@ -44,15 +64,12 @@ describe('AppComponent', () => {
   })
 
   it('opens the last board of the user', () => {
-    const fixture = TestBed.createComponent(AppComponent)
-    fixture.detectChanges()
-
-    httpMock.expectOne('/api/v1/user').flush({...user, lastBoard: 'board-2'})
+    const fixture = startWithSession({...user, lastBoard: 'board-2'})
 
     const boardRequest = httpMock.expectOne(req => req.url === '/api/v1/board')
     expect(boardRequest.request.params.get('id')).toBe('board-2')
     const lastBoardRequest = httpMock.expectOne({method: 'POST', url: '/api/v1/user/last_board'})
-    expect(lastBoardRequest.request.body).toEqual({userId: 'user-1', boardId: 'board-2'})
+    expect(lastBoardRequest.request.body).toEqual({boardId: 'board-2'})
 
     boardRequest.flush(new Board('board-2', 'Вторая доска', 1))
     lastBoardRequest.flush({status: 'success'})

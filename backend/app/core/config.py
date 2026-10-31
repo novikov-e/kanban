@@ -1,3 +1,4 @@
+from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -13,8 +14,11 @@ class Settings(BaseSettings):
 
     CORS_ORIGINS: list[str] = ["http://localhost:4200", "http://127.0.0.1:4200"]
 
-    # Авторизации пока нет: API работает от имени этого пользователя
-    DEFAULT_USER_EMAIL: str = "noved256@gmail.com"
+    JWT_SECRET: str = Field(min_length=32)
+    JWT_ALGORITHM: str = "HS256"
+    ACCESS_TOKEN_TTL_MINUTES: int = 15
+    REFRESH_TOKEN_TTL_DAYS: int = 30
+    REFRESH_COOKIE_SECURE: bool = True
 
     @property
     def database_url(self) -> str:

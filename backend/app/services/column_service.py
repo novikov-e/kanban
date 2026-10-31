@@ -4,6 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models import Board, Column
 from app.services import crud, ordering
+from app.services.ownership import board_owned_by, column_owned_by
 
 COLUMN_ORDER = ordering.OrderedChildren(
     entity="Column",
@@ -11,11 +12,12 @@ COLUMN_ORDER = ordering.OrderedChildren(
     parent_id=Column.board_id,
     position=Column.column_position,
     deleted_at=Column.deleted_at,
+    owned_by=column_owned_by,
 )
 
 
-async def create_column(session: AsyncSession, board_id: UUID, name: str) -> Column:
-    await crud.ensure_exists(session, Board.board_id, board_id, "Board")
+async def create_column(session: AsyncSession, user_id: UUID, board_id: UUID, name: str) -> Column:
+    await crud.ensure_exists(session, Board.board_id, board_id, "Board", board_owned_by(user_id))
     column = Column(
         board_id=board_id,
         column_name=name,
@@ -24,14 +26,14 @@ async def create_column(session: AsyncSession, board_id: UUID, name: str) -> Col
     return await crud.insert(session, column, empty_collections=("tasks",))
 
 
-async def rename_column(session: AsyncSession, column_id: UUID, name: str) -> None:
-    await crud.update_by_id(session, Column.column_id, column_id, "Column", column_name=name)
+async def rename_column(session: AsyncSession, user_id: UUID, column_id: UUID, name: str) -> None:
+    await crud.update_by_id(session, Column.column_id, column_id, "Column", column_owned_by(user_id), column_name=name)
 
 
-async def move_column(session: AsyncSession, column_id: UUID, board_id: UUID, position: int) -> None:
-    await crud.ensure_exists(session, Board.board_id, board_id, "Board")
-    await ordering.move(session, COLUMN_ORDER, column_id, board_id, position)
+async def move_column(session: AsyncSession, user_id: UUID, column_id: UUID, board_id: UUID, position: int) -> None:
+    await crud.ensure_exists(session, Board.board_id, board_id, "Board", board_owned_by(user_id))
+    await ordering.move(session, COLUMN_ORDER, user_id, column_id, board_id, position)
 
 
-async def delete_column(session: AsyncSession, column_id: UUID) -> None:
-    await ordering.soft_delete(session, COLUMN_ORDER, column_id)
+async def delete_column(session: AsyncSession, user_id: UUID, column_id: UUID) -> None:
+    await ordering.soft_delete(session, COLUMN_ORDER, user_id, column_id)

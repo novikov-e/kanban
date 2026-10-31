@@ -9,12 +9,10 @@ from app.schemas.common import ApiRequest
 
 
 class ThemeUpdateRequest(ApiRequest):
-    id: UUID = Field(description="Идентификатор пользователя")
     dark_theme: bool = Field(description="Включить тёмную тему")
 
 
 class LastBoardUpdateRequest(ApiRequest):
-    user_id: UUID = Field(description="Идентификатор пользователя")
     board_id: UUID | None = Field(description="Доска, открываемая при следующем входе; null — доска закрыта")
 
 

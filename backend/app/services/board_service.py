@@ -4,9 +4,10 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
-from app.models import Board, Column, Subtask, Task, User
+from app.core.errors import NotFoundError
+from app.models import Board, Column, Subtask, Task
 from app.services import crud, ordering
-from app.services.errors import NotFoundError
+from app.services.ownership import board_owned_by
 
 DEFAULT_BOARD_NAME = "Новый проект"
 
@@ -16,11 +17,11 @@ BOARD_ORDER = ordering.OrderedChildren(
     parent_id=Board.user_id,
     position=Board.board_position,
     deleted_at=Board.deleted_at,
+    owned_by=board_owned_by,
 )
 
 
 async def create_board(session: AsyncSession, user_id: UUID) -> Board:
-    await crud.ensure_exists(session, User.id, user_id, "User")
     board = Board(
         user_id=user_id,
         board_name=DEFAULT_BOARD_NAME,
@@ -29,10 +30,10 @@ async def create_board(session: AsyncSession, user_id: UUID) -> Board:
     return await crud.insert(session, board, empty_collections=("columns",))
 
 
-async def get_board(session: AsyncSession, board_id: UUID) -> Board:
+async def get_board(session: AsyncSession, user_id: UUID, board_id: UUID) -> Board:
     stmt = (
         select(Board)
-        .where(Board.board_id == board_id, Board.deleted_at.is_(None))
+        .where(Board.board_id == board_id, Board.deleted_at.is_(None), board_owned_by(user_id))
         .options(
             selectinload(Board.columns.and_(Column.deleted_at.is_(None)))
             .selectinload(Column.tasks.and_(Task.deleted_at.is_(None)))
@@ -45,14 +46,13 @@ async def get_board(session: AsyncSession, board_id: UUID) -> Board:
     return board
 
 
-async def rename_board(session: AsyncSession, board_id: UUID, name: str) -> None:
-    await crud.update_by_id(session, Board.board_id, board_id, "Board", board_name=name)
+async def rename_board(session: AsyncSession, user_id: UUID, board_id: UUID, name: str) -> None:
+    await crud.update_by_id(session, Board.board_id, board_id, "Board", board_owned_by(user_id), board_name=name)
 
 
-async def move_board(session: AsyncSession, board_id: UUID, user_id: UUID, position: int) -> None:
-    await crud.ensure_exists(session, User.id, user_id, "User")
-    await ordering.move(session, BOARD_ORDER, board_id, user_id, position)
+async def move_board(session: AsyncSession, user_id: UUID, board_id: UUID, position: int) -> None:
+    await ordering.move(session, BOARD_ORDER, user_id, board_id, user_id, position)
 
 
-async def delete_board(session: AsyncSession, board_id: UUID) -> None:
-    await ordering.soft_delete(session, BOARD_ORDER, board_id)
+async def delete_board(session: AsyncSession, user_id: UUID, board_id: UUID) -> None:
+    await ordering.soft_delete(session, BOARD_ORDER, user_id, board_id)

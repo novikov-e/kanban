@@ -46,6 +46,8 @@ services:
       <<: *db-env
       POSTGRES_HOST: postgresql
       POSTGRES_PORT: "5432"
+      JWT_SECRET: ${JWT_SECRET:?Задайте JWT_SECRET в .env рядом с docker-compose.yml}
+      REFRESH_COOKIE_SECURE: ${REFRESH_COOKIE_SECURE:-true}
     depends_on:
       postgresql:
         condition: service_healthy

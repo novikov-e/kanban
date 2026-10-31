@@ -1,0 +1,32 @@
+<form class="login" [formGroup]="form" (ngSubmit)="submit()">
+  <h1 class="login-title">{{ registering() ? 'Регистрация' : 'Вход' }}</h1>
+
+  <label class="login-field">
+    Email
+    <input type="email" formControlName="email" autocomplete="email" required />
+  </label>
+
+  <label class="login-field">
+    Пароль
+    <input
+      type="password"
+      formControlName="password"
+      [attr.autocomplete]="registering() ? 'new-password' : 'current-password'"
+      required
+    />
+    @if (registering()) {
+      <span class="login-hint">Не короче {{ minPasswordLength }} символов</span>
+    }
+  </label>
+
+  @if (error(); as message) {
+    <p class="login-error" role="alert">{{ message }}</p>
+  }
+
+  <button type="submit" class="login-submit" [disabled]="form.invalid">
+    {{ registering() ? 'Зарегистрироваться' : 'Войти' }}
+  </button>
+  <button type="button" class="login-switch" (click)="toggleMode()">
+    {{ registering() ? 'У меня уже есть аккаунт' : 'Создать аккаунт' }}
+  </button>
+</form>

@@ -12,17 +12,16 @@ export class BoardService {
     return this.http.get<Board>(`${API_URL}/board`, {params: {id: boardId}})
   }
 
-  create(userId: string): Observable<Board> {
-    return this.http.post<Board>(`${API_URL}/board/create`, {parentObjectId: userId})
+  create(): Observable<Board> {
+    return this.http.post<Board>(`${API_URL}/board/create`, null)
   }
 
   rename(boardId: string, name: string): void {
     this.http.post(`${API_URL}/board/rename`, {objectId: boardId, name}).subscribe()
   }
 
-  move(boardId: string, userId: string, position: number): void {
-    const body = {movedObjectId: boardId, currentParentObject: userId, currentPosition: position}
-    this.http.post(`${API_URL}/board/move`, body).subscribe()
+  move(boardId: string, position: number): void {
+    this.http.post(`${API_URL}/board/move`, {movedObjectId: boardId, currentPosition: position}).subscribe()
   }
 
   delete(boardId: string): void {

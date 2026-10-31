@@ -31,6 +31,15 @@ class MoveRequest(ApiRequest):
     )
 
 
+class ReorderRequest(ApiRequest):
+    """Изменение порядка элемента без смены родителя."""
+
+    moved_object_id: UUID = Field(description="Идентификатор перемещаемого элемента")
+    current_position: int = Field(
+        ge=0, description="Новая позиция в списке, с нуля. Значение больше длины списка — вставка в конец"
+    )
+
+
 class DeleteRequest(ApiRequest):
     """Мягкое удаление элемента вместе со всеми дочерними; оставшиеся элементы перенумеровываются."""
 

@@ -12,11 +12,11 @@ export class UserService {
     return this.http.get<User>(`${API_URL}/user`)
   }
 
-  setDarkTheme(userId: string, darkTheme: boolean): void {
-    this.http.post(`${API_URL}/user/theme`, {id: userId, darkTheme}).subscribe()
+  setDarkTheme(darkTheme: boolean): void {
+    this.http.post(`${API_URL}/user/theme`, {darkTheme}).subscribe()
   }
 
-  setLastBoard(userId: string, boardId: string | null): void {
-    this.http.post(`${API_URL}/user/last_board`, {userId, boardId}).subscribe()
+  setLastBoard(boardId: string | null): void {
+    this.http.post(`${API_URL}/user/last_board`, {boardId}).subscribe()
   }
 }
