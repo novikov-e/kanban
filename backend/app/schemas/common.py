@@ -4,6 +4,9 @@ from uuid import UUID
 from pydantic import BaseModel, ConfigDict, Field
 from pydantic.alias_generators import to_camel
 
+POSITION_DESCRIPTION = "Ключ сортировки в списке родителя: важен только порядок, значения не идут подряд"
+INDEX_DESCRIPTION = "Индекс нового места в списке, с нуля. Значение больше длины списка — вставка в конец"
+
 
 class ApiRequest(BaseModel):
     model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True)
@@ -26,22 +29,18 @@ class MoveRequest(ApiRequest):
 
     moved_object_id: UUID = Field(description="Идентификатор перемещаемого элемента")
     current_parent_object: UUID = Field(description="Идентификатор нового родителя")
-    current_position: int = Field(
-        ge=0, description="Новая позиция в списке родителя, с нуля. Значение больше длины списка — вставка в конец"
-    )
+    current_position: int = Field(ge=0, description=INDEX_DESCRIPTION)
 
 
 class ReorderRequest(ApiRequest):
     """Изменение порядка элемента без смены родителя."""
 
     moved_object_id: UUID = Field(description="Идентификатор перемещаемого элемента")
-    current_position: int = Field(
-        ge=0, description="Новая позиция в списке, с нуля. Значение больше длины списка — вставка в конец"
-    )
+    current_position: int = Field(ge=0, description=INDEX_DESCRIPTION)
 
 
 class DeleteRequest(ApiRequest):
-    """Мягкое удаление элемента вместе со всеми дочерними; оставшиеся элементы перенумеровываются."""
+    """Мягкое удаление элемента вместе со всеми дочерними."""
 
     object_id: UUID = Field(description="Идентификатор удаляемого элемента")
 

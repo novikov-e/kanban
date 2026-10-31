@@ -4,7 +4,7 @@ import uuid
 from datetime import datetime
 from typing import TYPE_CHECKING
 
-from sqlalchemy import DateTime, ForeignKey, Index, Integer, Text, func, text
+from sqlalchemy import DateTime, Double, ForeignKey, Index, Integer, Text, func, text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.database import Base
@@ -22,7 +22,7 @@ class Task(Base):
     column_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("columns.column_id"))
     task_name: Mapped[str] = mapped_column(Text, nullable=False)
     color: Mapped[int] = mapped_column(Integer, server_default=text("1"), nullable=False)
-    task_position: Mapped[int] = mapped_column(Integer, server_default=text("0"), nullable=False)
+    task_position: Mapped[float] = mapped_column(Double, server_default=text("0"), nullable=False)
 
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())

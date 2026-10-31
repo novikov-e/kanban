@@ -10,6 +10,7 @@ SUBTASK_ORDER = ordering.OrderedChildren(
     entity="Subtask",
     id=Subtask.subtask_id,
     parent_id=Subtask.task_id,
+    parent_key=Task.task_id,
     position=Subtask.subtask_position,
     deleted_at=Subtask.deleted_at,
     owned_by=subtask_owned_by,

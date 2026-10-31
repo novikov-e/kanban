@@ -2,7 +2,7 @@ from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, Field
 
-from app.schemas.common import ApiRequest
+from app.schemas.common import POSITION_DESCRIPTION, ApiRequest
 from app.schemas.subtask import SubtaskResponse
 
 TASK_COLOR_DESCRIPTION = "Номер цвета из палитры интерфейса: 1 — нейтральный, 2–8 — цветные"
@@ -19,5 +19,5 @@ class TaskResponse(BaseModel):
     id: UUID = Field(validation_alias="task_id")
     name: str = Field(validation_alias="task_name")
     color: int = Field(description=TASK_COLOR_DESCRIPTION)
-    position: int = Field(validation_alias="task_position", description="Позиция в колонке, с нуля")
+    position: float = Field(validation_alias="task_position", description=POSITION_DESCRIPTION)
     subtasks: list[SubtaskResponse] = Field(default=[], description="Подзадачи в порядке позиций")

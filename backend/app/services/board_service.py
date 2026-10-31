@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
 from app.core.errors import NotFoundError
-from app.models import Board, Column, Subtask, Task
+from app.models import Board, Column, Subtask, Task, User
 from app.services import crud, ordering
 from app.services.ownership import board_owned_by
 
@@ -15,6 +15,7 @@ BOARD_ORDER = ordering.OrderedChildren(
     entity="Board",
     id=Board.board_id,
     parent_id=Board.user_id,
+    parent_key=User.id,
     position=Board.board_position,
     deleted_at=Board.deleted_at,
     owned_by=board_owned_by,

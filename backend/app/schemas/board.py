@@ -3,6 +3,7 @@ from uuid import UUID
 from pydantic import BaseModel, ConfigDict, Field
 
 from app.schemas.column import ColumnResponse
+from app.schemas.common import POSITION_DESCRIPTION
 
 
 class BoardShortResponse(BaseModel):
@@ -12,7 +13,7 @@ class BoardShortResponse(BaseModel):
 
     id: UUID = Field(validation_alias="board_id")
     name: str = Field(validation_alias="board_name")
-    position: int = Field(validation_alias="board_position", description="Позиция в списке досок, с нуля")
+    position: float = Field(validation_alias="board_position", description=POSITION_DESCRIPTION)
 
 
 class BoardResponse(BoardShortResponse):

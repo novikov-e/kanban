@@ -10,6 +10,7 @@ COLUMN_ORDER = ordering.OrderedChildren(
     entity="Column",
     id=Column.column_id,
     parent_id=Column.board_id,
+    parent_key=Board.board_id,
     position=Column.column_position,
     deleted_at=Column.deleted_at,
     owned_by=column_owned_by,

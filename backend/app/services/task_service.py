@@ -12,6 +12,7 @@ TASK_ORDER = ordering.OrderedChildren(
     entity="Task",
     id=Task.task_id,
     parent_id=Task.column_id,
+    parent_key=Column.column_id,
     position=Task.task_position,
     deleted_at=Task.deleted_at,
     owned_by=task_owned_by,
