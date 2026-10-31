@@ -50,6 +50,10 @@ nginx во фронтенд-контейнере раздаёт сборку Ang
 ## Соглашения фронтенда
 
 - Standalone-компоненты без `NgModule`, конфигурация приложения — в `src/app/app.config.ts`.
+- Маршруты (`app.routes.ts`): `/login`; `/` — рабочая область (`WorkspaceComponent`), без проекта перенаправляет
+  на последний открытый; `/boards/:boardId` — проект. `authGuard` восстанавливает сессию по refresh-cookie
+  и загружает пользователя, без сессии отправляет на `/login?returnUrl=…`. Параметры маршрута приходят
+  в компоненты через `input()` (`withComponentInputBinding`).
 - Шаблоны используют `@if` / `@for`, зависимости подключаются через `inject()`.
 - Приложение работает без zone.js (`provideZonelessChangeDetection()`), все компоненты — `OnPush`.
 - Состояние хранится в signal-сторах `state/user.store.ts` и `state/board.store.ts`; компоненты получают данные

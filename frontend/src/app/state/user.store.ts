@@ -66,6 +66,9 @@ export class UserStore {
   }
 
   rememberLastBoard(boardId: string | null): void {
+    if (!this.state() || this.state()?.lastBoard === boardId) {
+      return
+    }
     this.update(user => ({...user, lastBoard: boardId}))
     this.send(this.userService.setLastBoard(boardId))
   }

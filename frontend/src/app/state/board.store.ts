@@ -52,6 +52,9 @@ export class BoardStore {
   )
 
   open(boardId: string): void {
+    if (this.openBoardId === boardId) {
+      return
+    }
     this.close()
     this.openBoardId = boardId
     this.load(boardId)

@@ -1,6 +1,6 @@
 import {HttpClient} from '@angular/common/http'
 import {computed, inject, Injectable, signal} from '@angular/core'
-import {catchError, EMPTY, finalize, map, Observable, shareReplay, tap} from 'rxjs'
+import {catchError, EMPTY, finalize, map, Observable, of, shareReplay, tap} from 'rxjs'
 import {API_URL} from '../data/url'
 
 interface TokenResponse {
@@ -18,6 +18,8 @@ export const AUTH_URL = `${API_URL}/auth`
 export class AuthService {
   private http = inject(HttpClient)
   private token = signal<string | null>(null)
+  /** Сервер уже ответил, что сессии нет: до следующего входа refresh не повторяется. */
+  private sessionEnded = false
   private refreshing$: Observable<string> | null = null
 
   readonly accessToken = this.token.asReadonly()
@@ -31,10 +33,21 @@ export class AuthService {
     return this.authenticate(`${AUTH_URL}/register`, credentials)
   }
 
+  /** true, если сессия есть или её удалось восстановить по refresh-cookie. */
+  restoreSession(): Observable<boolean> {
+    if (this.isAuthenticated() || this.sessionEnded) {
+      return of(this.isAuthenticated())
+    }
+    return this.refresh().pipe(
+      map(() => true),
+      catchError(() => of(false)),
+    )
+  }
+
   refresh(): Observable<string> {
     this.refreshing$ ??= this.http.post<TokenResponse>(`${AUTH_URL}/refresh`, null).pipe(
       map(response => response.accessToken),
-      tap({next: token => this.token.set(token), error: () => this.token.set(null)}),
+      tap({next: token => this.setToken(token), error: () => this.setToken(null)}),
       finalize(() => (this.refreshing$ = null)),
       shareReplay(1),
     )
@@ -45,14 +58,19 @@ export class AuthService {
   logout(): Observable<void> {
     return this.http.post<void>(`${AUTH_URL}/logout`, null).pipe(
       catchError(() => EMPTY),
-      finalize(() => this.token.set(null)),
+      finalize(() => this.setToken(null)),
     )
   }
 
   private authenticate(url: string, credentials: Credentials): Observable<void> {
     return this.http.post<TokenResponse>(url, credentials).pipe(
-      tap(response => this.token.set(response.accessToken)),
+      tap(response => this.setToken(response.accessToken)),
       map(() => undefined),
     )
+  }
+
+  private setToken(token: string | null): void {
+    this.token.set(token)
+    this.sessionEnded = token === null
   }
 }

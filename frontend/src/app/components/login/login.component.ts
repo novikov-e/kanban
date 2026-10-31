@@ -1,6 +1,7 @@
 import {HttpErrorResponse, HttpStatusCode} from '@angular/common/http'
-import {ChangeDetectionStrategy, Component, EventEmitter, inject, Output, signal} from '@angular/core'
+import {ChangeDetectionStrategy, Component, inject, input, signal} from '@angular/core'
 import {NonNullableFormBuilder, ReactiveFormsModule, Validators} from '@angular/forms'
+import {Router} from '@angular/router'
 import {AuthService} from '../../services/auth.service'
 
 const MIN_PASSWORD_LENGTH = 8
@@ -19,8 +20,10 @@ const ERRORS: Partial<Record<number, string>> = {
 })
 export class LoginComponent {
   private auth = inject(AuthService)
+  private router = inject(Router)
 
-  @Output() authenticated = new EventEmitter<void>()
+  /** Куда вернуться после входа: страница, с которой guard перенаправил на вход. */
+  readonly returnUrl = input<string>('/')
 
   protected readonly minPasswordLength = MIN_PASSWORD_LENGTH
   protected readonly registering = signal(false)
@@ -42,7 +45,7 @@ export class LoginComponent {
     const credentials = this.form.getRawValue()
     const request$ = this.registering() ? this.auth.register(credentials) : this.auth.login(credentials)
     request$.subscribe({
-      next: () => this.authenticated.emit(),
+      next: () => void this.router.navigateByUrl(this.returnUrl()),
       error: (error: HttpErrorResponse) => this.error.set(ERRORS[error.status] ?? 'Не удалось выполнить вход'),
     })
   }
