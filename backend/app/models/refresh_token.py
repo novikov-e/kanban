@@ -15,4 +15,6 @@ class RefreshToken(Base):
     user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"))
     expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
     revoked_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    # Токен, выданный взамен при ротации; у отозванного выходом — NULL
+    replaced_by: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("refresh_tokens.token_id", ondelete="SET NULL"))
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())

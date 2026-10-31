@@ -32,6 +32,8 @@ class TokenClaims:
 
 ACCESS_TOKEN_TTL = timedelta(minutes=settings.ACCESS_TOKEN_TTL_MINUTES)
 REFRESH_TOKEN_TTL = timedelta(days=settings.REFRESH_TOKEN_TTL_DAYS)
+# Сколько ещё принимается refresh-токен после ротации: ответ с новым токеном мог не дойти до браузера
+REFRESH_REUSE_INTERVAL = timedelta(seconds=settings.REFRESH_REUSE_INTERVAL_SECONDS)
 
 
 def hash_password(password: str) -> str:

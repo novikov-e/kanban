@@ -1,11 +1,19 @@
 from dataclasses import dataclass
 from uuid import UUID
 
-from sqlalchemy import func, select, update
+from sqlalchemy import and_, func, or_, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.errors import AuthError, ConflictError
-from app.core.security import IssuedToken, TokenType, create_token, decode_token, hash_password, verify_password
+from app.core.security import (
+    REFRESH_REUSE_INTERVAL,
+    IssuedToken,
+    TokenType,
+    create_token,
+    decode_token,
+    hash_password,
+    verify_password,
+)
 from app.db.database import SessionFactory
 from app.models import RefreshToken, User
 
@@ -43,16 +51,27 @@ async def login(session: AsyncSession, email: str, password: str) -> TokenPair:
 
 
 async def refresh(session: AsyncSession, refresh_token: str) -> TokenPair:
+    """Ротация refresh-токена.
+
+    Токен, замененный ротацией не дольше REFRESH_REUSE_INTERVAL назад, принимается ещё раз: ответ с новым
+    токеном мог не дойти до браузера (перезагрузка страницы, параллельные вкладки). Время отзыва при этом
+    не меняется, поэтому окно не продлевается.
+    """
     claims = decode_token(refresh_token, TokenType.REFRESH)
+    tokens = await _issue_tokens(session, claims.user_id)
+    rotated_recently = and_(
+        RefreshToken.replaced_by.is_not(None),
+        RefreshToken.revoked_at > func.now() - REFRESH_REUSE_INTERVAL,
+    )
     stmt = (
         update(RefreshToken)
         .where(
             RefreshToken.token_id == claims.token_id,
             RefreshToken.user_id == claims.user_id,
-            RefreshToken.revoked_at.is_(None),
             RefreshToken.expires_at > func.now(),
+            or_(RefreshToken.revoked_at.is_(None), rotated_recently),
         )
-        .values(revoked_at=func.now())
+        .values(revoked_at=func.coalesce(RefreshToken.revoked_at, func.now()), replaced_by=tokens.refresh.token_id)
     )
     if (await session.execute(stmt)).rowcount == 0:
         if await _is_revoked(session, claims.token_id):
@@ -61,7 +80,7 @@ async def refresh(session: AsyncSession, refresh_token: str) -> TokenPair:
             async with SessionFactory() as revoke_session, revoke_session.begin():
                 await _revoke_all(revoke_session, claims.user_id)
         raise AuthError("Refresh token is revoked or expired")
-    return await _issue_tokens(session, claims.user_id)
+    return tokens
 
 
 async def logout(session: AsyncSession, refresh_token: str) -> None:
