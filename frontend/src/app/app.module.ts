@@ -11,7 +11,7 @@ import {SubtaskComponent} from "./components/subtask/subtask.component";
 import {TaskComponent} from "./components/task/task.component";
 import {ColumnComponent} from "./components/column/column.component";
 import {CdkDrag, CdkDropList, CdkDropListGroup} from "@angular/cdk/drag-drop";
-import { provideHttpClient, withInterceptorsFromDi } from "@angular/common/http";
+import { provideHttpClient, withInterceptorsFromDi, withXhr } from "@angular/common/http";
 import {TextFieldModule} from "@angular/cdk/text-field";
 import {MatInputModule} from "@angular/material/input";
 import {CdkMenu, CdkMenuItem, CdkMenuTrigger} from "@angular/cdk/menu";
@@ -55,7 +55,7 @@ import { SelectDirective } from './directives/select.directive';
         FormsModule,
         MatSnackBarModule], providers: [
         MatSnackBarModule,
-        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClient(withXhr(), withInterceptorsFromDi()),
     ] })
 export class AppModule {
 }

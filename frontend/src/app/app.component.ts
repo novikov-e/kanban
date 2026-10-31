@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {Board} from "./models/board";
 import {UserService} from "./services/user.service";
 import {CdkDragDrop, moveItemInArray} from "@angular/cdk/drag-drop";
@@ -17,6 +17,7 @@ import {MatSnackBar} from "@angular/material/snack-bar";
     selector: 'app-root',
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class AppComponent implements OnInit {

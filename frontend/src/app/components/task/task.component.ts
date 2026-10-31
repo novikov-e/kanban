@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from "@angular/core";
+import {Component, Input, OnInit, ChangeDetectionStrategy} from "@angular/core";
 import {Task} from "../../models/task";
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 import {Subtask} from "../../models/subtask";
@@ -11,6 +11,7 @@ import {SubtaskService} from "../../services/subtask.service";
     selector: 'app-task',
     templateUrl: './task.component.html',
     styleUrls: ['../../app.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class TaskComponent implements OnInit {

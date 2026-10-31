@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {Board} from "../../models/board";
 import {Colors} from "../../models/colors";
 import {Column} from "../../models/column";
@@ -10,6 +10,7 @@ import {ColumnService} from "../../services/column.service";
     selector: 'app-board',
     templateUrl: './board.component.html',
     styleUrls: ['../../app.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class BoardComponent implements OnInit {

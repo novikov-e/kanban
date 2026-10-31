@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from "@angular/core";
+import {Component, Input, OnInit, ChangeDetectionStrategy} from "@angular/core";
 import {Column} from "../../models/column";
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from "@angular/cdk/drag-drop";
 import {Task} from "../../models/task";
@@ -11,6 +11,7 @@ import {TaskService} from "../../services/task.service";
     selector: 'app-column',
     templateUrl: './column.component.html',
     styleUrls: ['../../app.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class ColumnComponent implements OnInit {

@@ -1,4 +1,4 @@
-import {Component, Input} from "@angular/core";
+import {Component, Input, ChangeDetectionStrategy} from "@angular/core";
 import {Subtask} from "../../models/subtask";
 import {Colors} from "../../models/colors";
 import {SubtaskService} from "../../services/subtask.service";
@@ -8,6 +8,7 @@ import {TaskComponent} from "../task/task.component";
     selector: 'app-subtask',
     templateUrl: './subtask.component.html',
     styleUrls: ['../../app.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class SubtaskComponent {
