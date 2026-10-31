@@ -28,7 +28,9 @@ Healthcheck бэкенда — `GET /health` (200, если доступна Б�
 
 ## Проверки перед завершением задачи
 
-- Бэкенд (из `backend/`): `uv run ruff format app alembic` и `uv run ruff check app alembic`.
+- Бэкенд (из `backend/`): `uv run ruff format app alembic tests`, `uv run ruff check app alembic tests`
+  и `uv run pytest`. Тесты работают с настоящим PostgreSQL (подключение — как у приложения, из `POSTGRES_*`
+  или `.env`); база `kanban_test` создаётся и мигрируется сама, имя базы обязано оканчиваться на `_test`.
 - Фронтенд (Node.js ^22.22.3 или ^24.15.0): `npm run format` (Prettier), `npx ng build --configuration development`
   и `npx ng test --watch=false` (Vitest).
 - Комментарии — только для неочевидных ограничений; код должен читаться без них.

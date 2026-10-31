@@ -99,6 +99,7 @@ describe('App routes', () => {
 
     httpMock.expectNone({method: 'PATCH', url: '/api/v1/users/me'})
     expect(page(harness).querySelector('app-board')).toBeNull()
+    await vi.waitFor(() => expect(document.querySelector('.mat-mdc-snack-bar-label')).not.toBeNull())
   })
 
   it('refreshes the open board when the tab becomes visible and the board has changed', async () => {
