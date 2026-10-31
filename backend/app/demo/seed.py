@@ -6,8 +6,9 @@ Email задаётся через DEMO_EMAIL (по умолчанию demo@examp
 
 import asyncio
 import os
+import re
 from pathlib import Path
-from uuid import UUID
+from uuid import UUID, uuid5
 
 from sqlalchemy import select, text
 
@@ -16,6 +17,18 @@ from app.db.database import SessionFactory
 from app.models import User
 
 DEMO_BOARD_SQL = Path(__file__).with_name("demo_board.sql")
+UUID_LITERAL = re.compile(r"'([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})'")
+
+
+def demo_board_statements(user_id: UUID) -> list[str]:
+    """Строки demo_board.sql с id, уникальными для пользователя.
+
+    id выводятся из id пользователя и исходного id детерминированно, поэтому у каждого пользователя
+    своя копия доски, а повторный запуск попадает в `on conflict do nothing`.
+    """
+    sql = DEMO_BOARD_SQL.read_text(encoding="utf-8")
+    sql = UUID_LITERAL.sub(lambda match: f"'{uuid5(user_id, match.group(1))}'", sql)
+    return sql.splitlines()
 
 
 async def seed(email: str, password: str) -> UUID:
@@ -26,7 +39,7 @@ async def seed(email: str, password: str) -> UUID:
             session.add(user)
             await session.flush()
             user_id = user.id
-        for statement in DEMO_BOARD_SQL.read_text(encoding="utf-8").splitlines():
+        for statement in demo_board_statements(user_id):
             await session.execute(text(statement), {"user_id": user_id})
     return user_id
 
