@@ -27,9 +27,7 @@ def upgrade() -> None:
             where boards.board_id = users.last_board and boards.user_id = users.id and boards.deleted_at is null
         )
     """)
-    op.create_foreign_key(
-        "users_last_board_fkey", "users", "boards", ["last_board"], ["board_id"], ondelete="SET NULL"
-    )
+    op.create_foreign_key("users_last_board_fkey", "users", "boards", ["last_board"], ["board_id"], ondelete="SET NULL")
 
 
 def downgrade() -> None:

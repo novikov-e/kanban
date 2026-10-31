@@ -16,6 +16,6 @@
       ]
     }
   },
-  "postCreateCommand": "pip3 install --no-cache-dir -r requirements.txt",
+  "postCreateCommand": "pip3 install --user --no-cache-dir uv && uv sync",
   "remoteUser": "vscode"
 }

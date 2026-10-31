@@ -1,3 +1,26 @@
+[project]
+name = "kanban-backend"
+version = "0.1.0"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "fastapi>=0.121",
+    "uvicorn[standard]>=0.30",
+    "sqlalchemy[asyncio]>=2.0.30",
+    "asyncpg>=0.29",
+    "alembic>=1.13",
+    "pydantic>=2.7",
+    "pydantic-settings>=2.3",
+    "email-validator>=2.1",
+    "pyjwt>=2.10",
+    "pwdlib[argon2]>=0.3",
+]
+
+[dependency-groups]
+dev = ["ruff>=0.17"]
+
+[tool.uv]
+package = false
+
 [tool.ruff]
 target-version = "py312"
 line-length = 120
@@ -5,8 +28,9 @@ line-length = 120
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP"]
 
+[tool.ruff.lint.per-file-ignores]
+# SQL в миграциях читается лучше одной строкой
+"alembic/versions/*" = ["E501"]
+
 [tool.ruff.format]
 quote-style = "double"
-
-[tool.ty.environment]
-extra-paths = ["/home/vscode/.local/lib/python3.12/site-packages"]

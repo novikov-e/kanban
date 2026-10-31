@@ -17,13 +17,14 @@ nginx во фронтенд-контейнере раздаёт сборку Ang
 Локальная разработка:
 
 - БД: `docker compose up -d postgresql`.
-- Бэкенд (из `backend/`): `pip install -r requirements.txt`, `alembic upgrade head`, `uvicorn app.main:app --reload --port 8000`.
+- Бэкенд (из `backend/`): `uv sync`, `uv run alembic upgrade head`, `uv run uvicorn app.main:app --reload --port 8000`.
+  Зависимости — в `pyproject.toml`, точные версии — в `uv.lock` (`uv add` / `uv lock --upgrade`, lock коммитится).
   Настройки подключения — в `backend/.env` (шаблон: `backend/.env.example`).
 - Фронтенд (из `frontend/`): `npm ci`, `npm start` — `ng serve` с `proxy.conf.json`, который проксирует `/api` на `localhost:8000`.
 
 ## Проверки перед завершением задачи
 
-- Бэкенд: `ruff format app alembic/env.py` и `ruff check app alembic/env.py`.
+- Бэкенд (из `backend/`): `uv run ruff format app alembic` и `uv run ruff check app alembic`.
 - Фронтенд (Node.js ^22.22.3 или ^24.15.0): `npm run format` (Prettier), `npx ng build --configuration development`
   и `npx ng test --watch=false` (Vitest).
 - Комментарии — только для неочевидных ограничений; код должен читаться без них.
