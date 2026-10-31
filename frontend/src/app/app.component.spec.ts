@@ -66,12 +66,7 @@ describe('AppComponent', () => {
   it('opens the last board of the user', () => {
     const fixture = startWithSession({...user, lastBoard: 'board-2'})
 
-    const boardRequest = httpMock.expectOne({method: 'GET', url: '/api/v1/boards/board-2'})
-    const lastBoardRequest = httpMock.expectOne({method: 'PATCH', url: '/api/v1/users/me'})
-    expect(lastBoardRequest.request.body).toEqual({lastBoardId: 'board-2'})
-
-    boardRequest.flush(new Board('board-2', 'Вторая доска', 1))
-    lastBoardRequest.flush(null)
+    httpMock.expectOne({method: 'GET', url: '/api/v1/boards/board-2'}).flush(new Board('board-2', 'Вторая доска', 1))
     fixture.detectChanges()
 
     const title = fixture.nativeElement.querySelector('.header input') as HTMLInputElement
@@ -83,7 +78,6 @@ describe('AppComponent', () => {
     httpMock.expectOne('/api/v1/boards/board-2').flush(new Board('board-2', 'Вторая доска', 1), {
       headers: {ETag: '"v1"'},
     })
-    httpMock.expectOne({method: 'PATCH', url: '/api/v1/users/me'}).flush(null)
     fixture.detectChanges()
     const title = () => (fixture.nativeElement.querySelector('.header input') as HTMLInputElement).value
 

@@ -1,57 +1,42 @@
 import {CdkTextareaAutosize} from '@angular/cdk/text-field'
-import {ChangeDetectionStrategy, Component, EventEmitter, inject, Input, Output} from '@angular/core'
+import {ChangeDetectionStrategy, Component, inject, input} from '@angular/core'
 import {MatIcon} from '@angular/material/icon'
 import {MatInput} from '@angular/material/input'
 import {ButtonHoverDirective} from '../../directives/button-hover.directive'
 import {FocusDirective} from '../../directives/focus.directive'
 import {Colors} from '../../models/colors'
-import {isSaved} from '../../models/entity'
 import {Subtask} from '../../models/subtask'
-import {SubtaskService} from '../../services/subtask.service'
-import {NameSaver} from '../../utils/name-saver'
+import {BoardStore} from '../../state/board.store'
 
 @Component({
   selector: 'app-subtask',
   templateUrl: './subtask.component.html',
   styleUrls: ['../../app.component.css'],
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [MatIcon, MatInput, CdkTextareaAutosize, FocusDirective, ButtonHoverDirective],
 })
 export class SubtaskComponent {
-  private subtaskService = inject(SubtaskService)
+  private store = inject(BoardStore)
 
-  @Input() subtask: Subtask
-  @Input() taskId: string
-  @Input() color: Colors
-  @Output() deleted = new EventEmitter<void>()
-  @Output() nextRequested = new EventEmitter<void>()
-
-  private nameSaver = new NameSaver(
-    name => this.subtaskService.create(this.taskId, name),
-    (id, name) => this.subtaskService.rename(id, name).subscribe(),
-  )
+  readonly subtask = input.required<Subtask>()
+  readonly taskId = input.required<string>()
+  readonly color = input.required<Colors>()
 
   rename(name: string) {
-    this.nameSaver.save(this.subtask, name)
+    this.store.renameSubtask(this.subtask().id, name)
   }
 
   toggleState() {
-    this.subtask.state = !this.subtask.state
-    if (isSaved(this.subtask)) {
-      this.subtaskService.changeState(this.subtask.id, this.subtask.state).subscribe()
-    }
+    this.store.toggleSubtask(this.subtask().id)
   }
 
   delete() {
-    if (isSaved(this.subtask)) {
-      this.subtaskService.delete(this.subtask.id).subscribe()
-    }
-    this.deleted.emit()
+    this.store.deleteSubtask(this.subtask().id)
   }
 
   onKeydown(input: HTMLTextAreaElement, event: KeyboardEvent) {
     if (event.key === 'Enter' && event.ctrlKey && input.value !== '') {
-      this.nextRequested.emit()
+      this.store.addSubtask(this.taskId())
     } else if (event.key === 'Escape') {
       if (input.value === '') {
         this.delete()

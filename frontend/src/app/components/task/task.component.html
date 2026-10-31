@@ -1,4 +1,6 @@
-<div class="border_container" [style.border-color]="colors[task.color].firstColor">
+@let palette = colors();
+@let color = palette[task().color];
+<div class="border_container" [style.border-color]="color.firstColor">
   <div class="title-and-buttons">
     <div class="text_grow">
       <textarea
@@ -8,8 +10,8 @@
         cdkTextareaAutosize
         #autosize="cdkTextareaAutosize"
         cdkAutosizeMinRows="1"
-        [value]="task.name"
-        [style.color]="colors[task.color].firstColor"
+        [value]="task().name"
+        [style.color]="color.firstColor"
         (change)="rename(taskName.value)"
         appFocus
         (keydown)="onKeydown(taskName, $event)"
@@ -22,30 +24,30 @@
         class="custom_icon_button"
         appButtonHover
         [elementRef]="addSubtaskIcon._elementRef"
-        [color]="colors[task.color]"
+        [color]="color"
         (click)="addSubtask()"
       >
-        <mat-icon #addSubtaskIcon [style.color]="colors[task.color].firstColor">add_circle_outline</mat-icon>
+        <mat-icon #addSubtaskIcon [style.color]="color.firstColor">add_circle_outline</mat-icon>
       </button>
 
       <button
         class="custom_icon_button"
         appButtonHover
         [elementRef]="colorIcon._elementRef"
-        [color]="colors[task.color]"
+        [color]="color"
         [cdkMenuTriggerFor]="menu"
       >
-        <mat-icon #colorIcon [style.color]="colors[task.color].firstColor">circle</mat-icon>
+        <mat-icon #colorIcon [style.color]="color.firstColor">circle</mat-icon>
       </button>
 
       <ng-template #menu>
         <div
           class="colors-menu"
-          [style.border-color]="colors[1].firstColor"
-          [style.background-color]="colors[0].firstColor"
+          [style.border-color]="palette[1].firstColor"
+          [style.background-color]="palette[0].firstColor"
           cdkMenu
         >
-          @for (paletteColor of colors.slice(1); track $index) {
+          @for (paletteColor of palette.slice(1); track $index) {
             <button class="custom_icon_button">
               <mat-icon cdkMenuItem [style.color]="paletteColor.firstColor" (click)="changeColor($index + 1)"
                 >circle</mat-icon
@@ -59,30 +61,24 @@
         class="custom_icon_button"
         appButtonHover
         [elementRef]="removeTaskIcon._elementRef"
-        [color]="colors[task.color]"
+        [color]="color"
         (click)="delete()"
       >
-        <mat-icon #removeTaskIcon [style.color]="colors[task.color].firstColor">remove_circle_outline</mat-icon>
+        <mat-icon #removeTaskIcon [style.color]="color.firstColor">remove_circle_outline</mat-icon>
       </button>
     </div>
   </div>
 
   <div
     cdkDropList
-    [cdkDropListData]="task.subtasks"
+    [cdkDropListData]="task().subtasks"
     class="subtask_drag_list"
     [cdkDropListEnterPredicate]="isSubtaskDrag"
     (cdkDropListDropped)="onSubtaskDrop($event)"
   >
-    @for (subtask of task.subtasks; track subtask) {
+    @for (subtask of task().subtasks; track subtask.id) {
       <div cdkDrag [cdkDragData]="subtask">
-        <app-subtask
-          [subtask]="subtask"
-          [taskId]="task.id"
-          [color]="colors[task.color]"
-          (deleted)="removeSubtask(subtask)"
-          (nextRequested)="addSubtask()"
-        ></app-subtask>
+        <app-subtask [subtask]="subtask" [taskId]="task().id" [color]="color"></app-subtask>
       </div>
     }
   </div>

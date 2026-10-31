@@ -3,6 +3,9 @@
     <app-login (authenticated)="loadUser()"></app-login>
   }
 } @else {
+  @let colors = userStore.colors();
+  @let user = userStore.user();
+  @let board = boardStore.board();
   <div class="app" [style.background-color]="colors[0].firstColor">
     <div class="header" [style.border-color]="colors[1].firstColor">
       <div class="buttons_container ml-5">
@@ -40,7 +43,7 @@
             [matIcon]="newColumnIcon._elementRef"
             [text]="newColumnButton"
             [color]="colors[1]"
-            (click)="addColumn()"
+            (click)="boardStore.addColumn()"
           >
             <mat-icon #newColumnIcon [style.color]="colors[1].firstColor">add_circle_outline</mat-icon>
             <div class="text_in_header_button" #newColumnButton [style.color]="colors[1].firstColor">
@@ -98,7 +101,7 @@
                 (cdkDropListDropped)="onBoardDrop($event)"
                 cdkDropListOrientation="vertical"
               >
-                @for (userBoard of user.boards; track userBoard) {
+                @for (userBoard of user.boards; track userBoard.id) {
                   <div class="board_item" cdkDrag [cdkDragData]="userBoard">
                     <button
                       class="text_button m-5"
@@ -134,7 +137,7 @@
                 [matIcon]="themeIcon._elementRef"
                 [text]="themeButton"
                 [color]="colors[1]"
-                (click)="toggleTheme()"
+                (click)="userStore.toggleTheme()"
               >
                 <mat-icon #themeIcon [style.color]="colors[1].firstColor">{{
                   user.darkTheme ? 'light_mode' : 'dark_mode'

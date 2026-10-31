@@ -1,17 +1,18 @@
+@let palette = colors();
 <div class="column">
-  <div class="border_container min-height-38" [style.border-color]="colors[1].firstColor">
-    <div class="title-and-buttons" [style.border-color]="colors[1].firstColor">
+  <div class="border_container min-height-38" [style.border-color]="palette[1].firstColor">
+    <div class="title-and-buttons" [style.border-color]="palette[1].firstColor">
       <div class="text_grow">
         <textarea
           class="transparent_text_input column-task-title"
           #columnName
-          [value]="column.name"
+          [value]="column().name"
           matInput
           cdkTextareaAutosize
           #autosize="cdkTextareaAutosize"
           appFocus
           cdkAutosizeMinRows="1"
-          [style.color]="colors[1].firstColor"
+          [style.color]="palette[1].firstColor"
           (change)="rename(columnName.value)"
           (keydown)="onKeydown(columnName, $event)"
         >
@@ -23,20 +24,20 @@
           class="custom_icon_button"
           appButtonHover
           [elementRef]="newTaskIcon._elementRef"
-          [color]="colors[1]"
+          [color]="palette[1]"
           (click)="addTask()"
         >
-          <mat-icon class="button_icon" #newTaskIcon [style.color]="colors[1].firstColor">assignment_add</mat-icon>
+          <mat-icon class="button_icon" #newTaskIcon [style.color]="palette[1].firstColor">assignment_add</mat-icon>
         </button>
 
         <button
           class="custom_icon_button"
           appButtonHover
           [elementRef]="removeColumnIcon._elementRef"
-          [color]="colors[1]"
+          [color]="palette[1]"
           (click)="delete()"
         >
-          <mat-icon #removeColumnIcon [style.color]="colors[1].firstColor">remove_circle_outline</mat-icon>
+          <mat-icon #removeColumnIcon [style.color]="palette[1].firstColor">remove_circle_outline</mat-icon>
         </button>
       </div>
     </div>
@@ -44,13 +45,13 @@
   <div
     class="column-drop-list"
     cdkDropList
-    [cdkDropListData]="column.tasks"
+    [cdkDropListData]="column().tasks"
     [cdkDropListEnterPredicate]="isTaskDrag"
     (cdkDropListDropped)="onTaskDrop($event)"
   >
-    @for (task of column.tasks; track task) {
+    @for (task of column().tasks; track task.id) {
       <div cdkDrag [cdkDragData]="task">
-        <app-task [task]="task" [columnId]="column.id" [colors]="colors" (deleted)="removeTask(task)"></app-task>
+        <app-task [task]="task" [colors]="palette"></app-task>
       </div>
     }
   </div>

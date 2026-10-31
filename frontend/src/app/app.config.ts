@@ -1,12 +1,11 @@
-import {ApplicationConfig, provideZoneChangeDetection} from '@angular/core'
+import {ApplicationConfig, provideZonelessChangeDetection} from '@angular/core'
 import {provideHttpClient, withInterceptors} from '@angular/common/http'
 import {authInterceptor} from './interceptors/auth.interceptor'
 import {httpErrorInterceptor} from './interceptors/http-error.interceptor'
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    // Компоненты меняют модели на месте (push/splice), поэтому приложение остаётся на zone.js
-    provideZoneChangeDetection(),
+    provideZonelessChangeDetection(),
     provideHttpClient(withInterceptors([httpErrorInterceptor, authInterceptor])),
   ],
 }
