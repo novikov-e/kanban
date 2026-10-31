@@ -79,7 +79,11 @@ async def rebalance_parent(session: AsyncSession, spec: OrderedChildren, parent_
 
 
 async def rebalance(session: AsyncSession, spec: OrderedChildren) -> int:
-    """Выравнивает позиции во всех списках сущности: 1, 2, 3… Возвращает число изменённых строк."""
+    """Выравнивает позиции во всех списках сущности: 1, 2, 3… Возвращает число изменённых строк.
+
+    Блокирует строки всех родителей, как и перемещения, чтобы они не вычисляли середину по старым позициям.
+    """
+    await session.execute(select(spec.parent_key).with_for_update())
     return await _renumber(session, spec)
 
 
