@@ -1,10 +1,10 @@
 import {computed, inject, Injectable, signal} from '@angular/core'
 import {finalize, Observable} from 'rxjs'
 import {Board} from '../models/board'
-import {Column} from '../models/column'
-import {Entity, hasUnsavedItems, isSaved, newLocalId} from '../models/entity'
-import {Subtask} from '../models/subtask'
-import {DEFAULT_TASK_COLOR, Task} from '../models/task'
+import {newColumn} from '../models/column'
+import {Entity, hasUnsavedItems, isSaved} from '../models/entity'
+import {newSubtask} from '../models/subtask'
+import {newTask} from '../models/task'
 import {errorAlreadyReported} from '../interceptors/http-error.interceptor'
 import {BoardService, VersionedBoard} from '../services/board.service'
 import {ColumnService} from '../services/column.service'
@@ -90,7 +90,7 @@ export class BoardStore {
   }
 
   addColumn(): void {
-    this.update(board => ({...board, columns: [...board.columns, new Column(newLocalId(), '', 0)]}))
+    this.update(board => ({...board, columns: [...board.columns, newColumn()]}))
   }
 
   renameColumn(columnId: string, name: string): void {
@@ -112,7 +112,7 @@ export class BoardStore {
   }
 
   addTask(columnId: string): void {
-    const task = new Task(newLocalId(), '', 0, DEFAULT_TASK_COLOR)
+    const task = newTask()
     this.update(board => tree.updateColumn(board, columnId, column => ({...column, tasks: [...column.tasks, task]})))
   }
 
@@ -141,7 +141,7 @@ export class BoardStore {
   }
 
   addSubtask(taskId: string): void {
-    const subtask = new Subtask(newLocalId(), '', false, 0)
+    const subtask = newSubtask()
     this.update(board => tree.updateTask(board, taskId, task => ({...task, subtasks: [...task.subtasks, subtask]})))
   }
 

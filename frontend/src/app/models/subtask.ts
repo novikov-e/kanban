@@ -1,13 +1,12 @@
-export class Subtask {
-  id: string
-  name: string
-  state: boolean
-  position: number
+import {newLocalId} from './entity'
 
-  constructor(id: string, name: string, state: boolean, position: number) {
-    this.id = id
-    this.name = name
-    this.state = state
-    this.position = position
-  }
+export interface Subtask {
+  readonly id: string
+  readonly name: string
+  /** Выполнена ли подзадача. */
+  readonly state: boolean
+}
+
+export function newSubtask(): Subtask {
+  return {id: newLocalId(), name: '', state: false}
 }

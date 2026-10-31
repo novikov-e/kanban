@@ -32,7 +32,7 @@ export class ColumnComponent {
   protected readonly store = inject(BoardStore)
 
   readonly column = input.required<Column>()
-  readonly colors = input.required<Colors[]>()
+  readonly colors = input.required<readonly Colors[]>()
 
   protected readonly taskListId = taskListId
 
@@ -48,7 +48,7 @@ export class ColumnComponent {
     this.store.addTask(this.column().id)
   }
 
-  onTaskDrop(event: CdkDragDrop<Task[]>) {
+  onTaskDrop(event: CdkDragDrop<readonly Task[]>) {
     if (!isNoopDrop(event)) {
       this.store.moveTask(event.item.data.id, this.column().id, event.currentIndex)
     }

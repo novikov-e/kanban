@@ -2,16 +2,12 @@ import {Column} from './column'
 
 export const NEW_BOARD_NAME = 'Новый проект'
 
-export class Board {
-  id: string
-  name: string
-  position: number
-  columns: Column[]
+/** Проект в списке пользователя, без содержимого. */
+export interface BoardSummary {
+  readonly id: string
+  readonly name: string
+}
 
-  constructor(id: string, name: string, position: number) {
-    this.id = id
-    this.name = name
-    this.position = position
-    this.columns = []
-  }
+export interface Board extends BoardSummary {
+  readonly columns: readonly Column[]
 }

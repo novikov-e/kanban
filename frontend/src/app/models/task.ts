@@ -1,19 +1,16 @@
+import {newLocalId} from './entity'
 import {Subtask} from './subtask'
 
 export const DEFAULT_TASK_COLOR = 1
 
-export class Task {
-  id: string
-  name: string
-  position: number
-  color: number
-  subtasks: Subtask[]
+export interface Task {
+  readonly id: string
+  readonly name: string
+  /** Индекс цвета в палитре темы. */
+  readonly color: number
+  readonly subtasks: readonly Subtask[]
+}
 
-  constructor(id: string, name: string, position: number, color: number) {
-    this.id = id
-    this.name = name
-    this.position = position
-    this.color = color
-    this.subtasks = []
-  }
+export function newTask(): Task {
+  return {id: newLocalId(), name: '', color: DEFAULT_TASK_COLOR, subtasks: []}
 }

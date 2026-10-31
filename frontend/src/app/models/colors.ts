@@ -1,11 +1,5 @@
-export class Colors {
-  name: string
-  firstColor: string
-  secondColor: string
-
-  constructor(name: string, firstColor: string, secondColor: string) {
-    this.name = name
-    this.firstColor = firstColor
-    this.secondColor = secondColor
-  }
+export interface Colors {
+  readonly name: string
+  readonly firstColor: string
+  readonly secondColor: string
 }

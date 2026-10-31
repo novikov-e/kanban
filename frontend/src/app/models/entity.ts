@@ -14,9 +14,9 @@ export function isSaved(entity: Entity): boolean {
 }
 
 interface Tree extends Entity {
-  columns?: Tree[]
-  tasks?: Tree[]
-  subtasks?: Tree[]
+  columns?: readonly Tree[]
+  tasks?: readonly Tree[]
+  subtasks?: readonly Tree[]
 }
 
 export function hasUnsavedItems(tree: Tree): boolean {

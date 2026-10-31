@@ -18,9 +18,9 @@ export class BoardComponent {
   private store = inject(BoardStore)
 
   readonly board = input.required<Board>()
-  readonly colors = input.required<Colors[]>()
+  readonly colors = input.required<readonly Colors[]>()
 
-  onColumnDrop(event: CdkDragDrop<Column[]>) {
+  onColumnDrop(event: CdkDragDrop<readonly Column[]>) {
     if (!isNoopDrop(event)) {
       this.store.moveColumn(event.item.data.id, event.currentIndex)
     }

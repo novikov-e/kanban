@@ -36,7 +36,7 @@ export class TaskComponent {
   protected readonly store = inject(BoardStore)
 
   readonly task = input.required<Task>()
-  readonly colors = input.required<Colors[]>()
+  readonly colors = input.required<readonly Colors[]>()
 
   protected readonly subtaskListId = subtaskListId
 
@@ -56,7 +56,7 @@ export class TaskComponent {
     this.store.deleteTask(this.task().id)
   }
 
-  onSubtaskDrop(event: CdkDragDrop<Subtask[]>) {
+  onSubtaskDrop(event: CdkDragDrop<readonly Subtask[]>) {
     if (!isNoopDrop(event)) {
       this.store.moveSubtask(event.item.data.id, this.task().id, event.currentIndex)
     }

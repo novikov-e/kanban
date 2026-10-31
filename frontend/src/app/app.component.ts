@@ -9,7 +9,7 @@ import {LoginComponent} from './components/login/login.component'
 import {SelectDirective} from './directives/select.directive'
 import {TextButtonDirective} from './directives/text-button.directive'
 import {errorAlreadyReported} from './interceptors/http-error.interceptor'
-import {Board} from './models/board'
+import {BoardSummary} from './models/board'
 import {AuthService} from './services/auth.service'
 import {BoardStore} from './state/board.store'
 import {UserStore} from './state/user.store'
@@ -93,7 +93,7 @@ export class AppComponent implements OnInit {
     this.boardStore.setName(name)
   }
 
-  onBoardDrop(event: CdkDragDrop<Board[]>) {
+  onBoardDrop(event: CdkDragDrop<readonly BoardSummary[]>) {
     if (!isNoopDrop(event)) {
       this.userStore.moveBoard(event.previousIndex, event.currentIndex)
     }

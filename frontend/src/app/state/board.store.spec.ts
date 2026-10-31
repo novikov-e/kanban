@@ -2,9 +2,8 @@ import {provideHttpClient} from '@angular/common/http'
 import {HttpTestingController, provideHttpClientTesting} from '@angular/common/http/testing'
 import {provideZonelessChangeDetection} from '@angular/core'
 import {TestBed} from '@angular/core/testing'
-import {Board} from '../models/board'
-import {Column} from '../models/column'
 import {isSaved} from '../models/entity'
+import {makeBoard, makeColumn} from '../testing/fixtures'
 import {BoardStore} from './board.store'
 
 describe('BoardStore', () => {
@@ -17,9 +16,7 @@ describe('BoardStore', () => {
     })
     store = TestBed.inject(BoardStore)
     httpMock = TestBed.inject(HttpTestingController)
-    const board = new Board('board-1', 'Доска', 1)
-    board.columns = [new Column('column-1', 'Колонка', 1)]
-    store.show({board, etag: null})
+    store.show({board: makeBoard('board-1', 'Доска', [makeColumn('column-1', 'Колонка')]), etag: null})
   })
 
   afterEach(() => httpMock.verify())
@@ -35,7 +32,7 @@ describe('BoardStore', () => {
 
     const create = httpMock.expectOne({method: 'POST', url: '/api/v1/boards/board-1/columns'})
     expect(create.request.body).toEqual({name: 'Первое'})
-    create.flush(new Column('column-2', 'Первое', 2))
+    create.flush(makeColumn('column-2', 'Первое'))
 
     const rename = httpMock.expectOne({method: 'PATCH', url: '/api/v1/columns/column-2'})
     expect(rename.request.body).toEqual({name: 'Второе'})
@@ -52,7 +49,7 @@ describe('BoardStore', () => {
     store.renameColumn(localId, 'Временная')
     store.deleteColumn(localId)
 
-    httpMock.expectOne('/api/v1/boards/board-1/columns').flush(new Column('column-2', 'Временная', 2))
+    httpMock.expectOne('/api/v1/boards/board-1/columns').flush(makeColumn('column-2', 'Временная'))
 
     httpMock.expectOne({method: 'DELETE', url: '/api/v1/columns/column-2'}).flush(null)
     expect(store.board()!.columns.map(column => column.id)).toEqual(['column-1'])
@@ -76,9 +73,9 @@ describe('BoardStore', () => {
       .expectOne({method: 'PATCH', url: '/api/v1/columns/column-1'})
       .flush(null, {status: 500, statusText: 'Server Error'})
 
-    const serverBoard = new Board('board-1', 'Доска', 1)
-    serverBoard.columns = [new Column('column-1', 'Колонка', 1)]
-    httpMock.expectOne({method: 'GET', url: '/api/v1/boards/board-1'}).flush(serverBoard)
+    httpMock
+      .expectOne({method: 'GET', url: '/api/v1/boards/board-1'})
+      .flush(makeBoard('board-1', 'Доска', [makeColumn('column-1', 'Колонка')]))
 
     expect(store.board()!.columns[0].name).toBe('Колонка')
   })
@@ -89,8 +86,8 @@ describe('BoardStore', () => {
     const create = httpMock.expectOne('/api/v1/boards/board-1/columns')
 
     store.open('board-2')
-    httpMock.expectOne('/api/v1/boards/board-2').flush(new Board('board-2', 'Другая доска', 2))
-    create.flush(new Column('column-2', 'Новая', 2))
+    httpMock.expectOne('/api/v1/boards/board-2').flush(makeBoard('board-2', 'Другая доска'))
+    create.flush(makeColumn('column-2', 'Новая'))
 
     httpMock.expectNone({method: 'DELETE'})
     expect(store.board()!.id).toBe('board-2')
@@ -100,9 +97,9 @@ describe('BoardStore', () => {
     store.open('board-2')
     const slow = httpMock.expectOne('/api/v1/boards/board-2')
     store.open('board-3')
-    httpMock.expectOne('/api/v1/boards/board-3').flush(new Board('board-3', 'Третья', 3))
+    httpMock.expectOne('/api/v1/boards/board-3').flush(makeBoard('board-3', 'Третья'))
 
-    slow.flush(new Board('board-2', 'Вторая', 2))
+    slow.flush(makeBoard('board-2', 'Вторая'))
 
     expect(store.board()!.id).toBe('board-3')
   })

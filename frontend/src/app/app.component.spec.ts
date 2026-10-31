@@ -2,8 +2,8 @@ import {TestBed} from '@angular/core/testing'
 import {HttpTestingController, provideHttpClientTesting} from '@angular/common/http/testing'
 import {AppComponent} from './app.component'
 import {appConfig} from './app.config'
-import {Board} from './models/board'
 import {User} from './models/user'
+import {makeBoard} from './testing/fixtures'
 
 const user: User = {
   id: 'user-1',
@@ -15,7 +15,7 @@ const user: User = {
   email: 'user@example.com',
   darkTheme: false,
   lastBoard: null,
-  boards: [new Board('board-1', 'Первая доска', 0), new Board('board-2', 'Вторая доска', 1)],
+  boards: [makeBoard('board-1', 'Первая доска'), makeBoard('board-2', 'Вторая доска')],
 }
 
 describe('AppComponent', () => {
@@ -66,7 +66,7 @@ describe('AppComponent', () => {
   it('opens the last board of the user', () => {
     const fixture = startWithSession({...user, lastBoard: 'board-2'})
 
-    httpMock.expectOne({method: 'GET', url: '/api/v1/boards/board-2'}).flush(new Board('board-2', 'Вторая доска', 1))
+    httpMock.expectOne({method: 'GET', url: '/api/v1/boards/board-2'}).flush(makeBoard('board-2', 'Вторая доска'))
     fixture.detectChanges()
 
     const title = fixture.nativeElement.querySelector('.header input') as HTMLInputElement
@@ -75,7 +75,7 @@ describe('AppComponent', () => {
 
   it('refreshes the open board when the tab becomes visible and the board has changed', () => {
     const fixture = startWithSession({...user, lastBoard: 'board-2'})
-    httpMock.expectOne('/api/v1/boards/board-2').flush(new Board('board-2', 'Вторая доска', 1), {
+    httpMock.expectOne('/api/v1/boards/board-2').flush(makeBoard('board-2', 'Вторая доска'), {
       headers: {ETag: '"v1"'},
     })
     fixture.detectChanges()
@@ -91,7 +91,7 @@ describe('AppComponent', () => {
     document.dispatchEvent(new Event('visibilitychange'))
     httpMock
       .expectOne('/api/v1/boards/board-2')
-      .flush(new Board('board-2', 'Переименована в другой вкладке', 1), {headers: {ETag: '"v2"'}})
+      .flush(makeBoard('board-2', 'Переименована в другой вкладке'), {headers: {ETag: '"v2"'}})
     fixture.detectChanges()
     expect(title()).toBe('Переименована в другой вкладке')
   })
