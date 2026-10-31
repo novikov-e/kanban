@@ -1,8 +1,8 @@
 .colors-menu {
   display: flex;
-  background-color: #171a1c;
+  background-color: var(--theme-background);
   border-radius: 16px;
-  border: solid 2px #bcbcbc;
+  border: solid 2px var(--theme-foreground);
 }
 
 .subtask_drag_list {

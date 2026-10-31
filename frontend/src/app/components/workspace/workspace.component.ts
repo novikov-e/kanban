@@ -1,11 +1,11 @@
 import {CdkDrag, CdkDragDrop, CdkDropList} from '@angular/cdk/drag-drop'
+import {DOCUMENT} from '@angular/common'
 import {ChangeDetectionStrategy, Component, DestroyRef, effect, inject} from '@angular/core'
 import {MatIcon} from '@angular/material/icon'
 import {MatInput} from '@angular/material/input'
 import {MatDrawer, MatDrawerContainer} from '@angular/material/sidenav'
 import {Router, RouterLink, RouterOutlet} from '@angular/router'
 import {SelectDirective} from '../../directives/select.directive'
-import {TextButtonDirective} from '../../directives/text-button.directive'
 import {LOGIN_PATH} from '../../guards/session.guards'
 import {errorAlreadyReported} from '../../interceptors/http-error.interceptor'
 import {BoardSummary} from '../../models/board'
@@ -14,13 +14,15 @@ import {BoardStore} from '../../state/board.store'
 import {UserStore} from '../../state/user.store'
 import {isNoopDrop} from '../../utils/drag-drop'
 
+/** Класс на <html>, переключающий палитру в styles.css. */
+const DARK_THEME_CLASS = 'theme-dark'
+
 @Component({
   selector: 'app-workspace',
   templateUrl: './workspace.component.html',
   styleUrl: './workspace.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    TextButtonDirective,
     MatIcon,
     MatInput,
     SelectDirective,
@@ -44,7 +46,12 @@ export class WorkspaceComponent {
         void this.router.navigate([LOGIN_PATH])
       }
     })
-    inject(DestroyRef).onDestroy(() => this.userStore.clear())
+    const root = inject(DOCUMENT).documentElement
+    effect(() => root.classList.toggle(DARK_THEME_CLASS, this.userStore.user()?.darkTheme === true))
+    inject(DestroyRef).onDestroy(() => {
+      root.classList.remove(DARK_THEME_CLASS)
+      this.userStore.clear()
+    })
   }
 
   logout() {

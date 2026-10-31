@@ -7,7 +7,7 @@
 >
   @for (column of board().columns; track column.id) {
     <div class="column_item" cdkDrag [cdkDragData]="column">
-      <app-column [column]="column" [colors]="colors()"></app-column>
+      <app-column [column]="column"></app-column>
     </div>
   }
 </div>

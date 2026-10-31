@@ -1,3 +1,84 @@
+/*
+ * Палитра темы. Номер --task-color-N совпадает с полем color задачи (1–8): 1 — основной цвет текста,
+ * 2 — красный, он же цвет опасных действий. Тёмная тема — класс theme-dark на <html>, чтобы палитру видели
+ * и оверлеи, и превью перетаскивания, которые CDK вставляет в body.
+ */
+:root {
+  --theme-background: #fafafa;
+  --task-color-1: #3c3c3c;
+  --task-color-1-hover: #838383;
+  --task-color-2: #db4c4c;
+  --task-color-2-hover: #993535;
+  --task-color-3: #eb3472;
+  --task-color-3-hover: #a4244f;
+  --task-color-4: #fd7336;
+  --task-color-4-hover: #b15025;
+  --task-color-5: #4b8333;
+  --task-color-5-hover: #345b23;
+  --task-color-6: #2a9095;
+  --task-color-6-hover: #1d6468;
+  --task-color-7: #2478b7;
+  --task-color-7-hover: #195480;
+  --task-color-8: #a969a0;
+  --task-color-8-hover: #764970;
+
+  --theme-foreground: var(--task-color-1);
+  --theme-foreground-hover: var(--task-color-1-hover);
+  --theme-danger: var(--task-color-2);
+  --theme-danger-hover: var(--task-color-2-hover);
+
+  /* Цвет текущего элемента: задача переопределяет его через data-color, подзадачи наследуют */
+  --accent: var(--theme-foreground);
+  --accent-hover: var(--theme-foreground-hover);
+}
+
+:root.theme-dark {
+  --theme-background: #303030;
+  --task-color-1: #bebebe;
+  --task-color-1-hover: #838383;
+}
+
+[data-color='1'] {
+  --accent: var(--task-color-1);
+  --accent-hover: var(--task-color-1-hover);
+}
+
+[data-color='2'],
+.danger {
+  --accent: var(--task-color-2);
+  --accent-hover: var(--task-color-2-hover);
+}
+
+[data-color='3'] {
+  --accent: var(--task-color-3);
+  --accent-hover: var(--task-color-3-hover);
+}
+
+[data-color='4'] {
+  --accent: var(--task-color-4);
+  --accent-hover: var(--task-color-4-hover);
+}
+
+[data-color='5'] {
+  --accent: var(--task-color-5);
+  --accent-hover: var(--task-color-5-hover);
+}
+
+[data-color='6'] {
+  --accent: var(--task-color-6);
+  --accent-hover: var(--task-color-6-hover);
+}
+
+[data-color='7'] {
+  --accent: var(--task-color-7);
+  --accent-hover: var(--task-color-7-hover);
+}
+
+[data-color='8'] {
+  --accent: var(--task-color-8);
+  --accent-hover: var(--task-color-8-hover);
+}
+
 html,
 body {
   height: 100%;
@@ -25,7 +106,7 @@ button {
 
 .border_container {
   box-sizing: border-box;
-  border: solid 2px #bcbcbc;
+  border: solid 2px var(--accent);
   border-radius: 18px;
   margin: 0 1px 2px 1px;
   padding: 5px;
@@ -51,6 +132,7 @@ button {
   border: none;
   outline: none;
   background-color: transparent;
+  color: var(--accent);
   overflow: hidden;
   margin-left: 3px;
   padding: 3px;
@@ -72,6 +154,11 @@ button {
   height: 24px;
   border: none;
   background-color: transparent;
+  color: var(--accent);
   position: relative;
   padding: 0;
+}
+
+.custom_icon_button:hover {
+  color: var(--accent-hover);
 }

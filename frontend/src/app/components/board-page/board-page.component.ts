@@ -17,7 +17,7 @@ import {BoardComponent} from '../board/board.component'
   selector: 'app-board-page',
   template: `
     @if (boardStore.board(); as board) {
-      <app-board [board]="board" [colors]="userStore.colors()"></app-board>
+      <app-board [board]="board"></app-board>
     }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

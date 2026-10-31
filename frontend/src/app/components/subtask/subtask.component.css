@@ -3,6 +3,7 @@
 }
 
 .custom_checkbox {
+  color: var(--accent);
   position: relative;
   width: 24px;
   height: 24px;

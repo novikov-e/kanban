@@ -1,7 +1,6 @@
-@let palette = colors();
 <div class="column">
-  <div class="border_container column_header" [style.border-color]="palette[1].firstColor">
-    <div class="title-and-buttons" [style.border-color]="palette[1].firstColor">
+  <div class="border_container column_header">
+    <div class="title-and-buttons">
       <div class="text_grow">
         <textarea
           class="transparent_text_input column-task-title"
@@ -12,7 +11,6 @@
           #autosize="cdkTextareaAutosize"
           appFocus
           cdkAutosizeMinRows="1"
-          [style.color]="palette[1].firstColor"
           (change)="rename(columnName.value)"
           (keydown)="onKeydown(columnName, $event)"
         >
@@ -20,24 +18,12 @@
       </div>
 
       <div class="buttons_container">
-        <button
-          class="custom_icon_button"
-          appButtonHover
-          [elementRef]="newTaskIcon._elementRef"
-          [color]="palette[1]"
-          (click)="addTask()"
-        >
-          <mat-icon #newTaskIcon [style.color]="palette[1].firstColor">assignment_add</mat-icon>
+        <button class="custom_icon_button" (click)="addTask()">
+          <mat-icon>assignment_add</mat-icon>
         </button>
 
-        <button
-          class="custom_icon_button"
-          appButtonHover
-          [elementRef]="removeColumnIcon._elementRef"
-          [color]="palette[1]"
-          (click)="delete()"
-        >
-          <mat-icon #removeColumnIcon [style.color]="palette[1].firstColor">remove_circle_outline</mat-icon>
+        <button class="custom_icon_button" (click)="delete()">
+          <mat-icon>remove_circle_outline</mat-icon>
         </button>
       </div>
     </div>
@@ -52,7 +38,7 @@
   >
     @for (task of column().tasks; track task.id) {
       <div cdkDrag [cdkDragData]="task">
-        <app-task [task]="task" [colors]="palette"></app-task>
+        <app-task [task]="task"></app-task>
       </div>
     }
   </div>

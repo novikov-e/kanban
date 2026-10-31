@@ -1,7 +1,6 @@
 import {CdkDrag, CdkDragDrop, CdkDropList} from '@angular/cdk/drag-drop'
 import {ChangeDetectionStrategy, Component, inject, input} from '@angular/core'
 import {Board} from '../../models/board'
-import {Colors} from '../../models/colors'
 import {Column} from '../../models/column'
 import {BoardStore} from '../../state/board.store'
 import {isNoopDrop} from '../../utils/drag-drop'
@@ -18,7 +17,6 @@ export class BoardComponent {
   private store = inject(BoardStore)
 
   readonly board = input.required<Board>()
-  readonly colors = input.required<readonly Colors[]>()
 
   onColumnDrop(event: CdkDragDrop<readonly Column[]>) {
     if (!isNoopDrop(event)) {

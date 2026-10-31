@@ -3,9 +3,7 @@ import {CdkTextareaAutosize} from '@angular/cdk/text-field'
 import {ChangeDetectionStrategy, Component, inject, input} from '@angular/core'
 import {MatIcon} from '@angular/material/icon'
 import {MatInput} from '@angular/material/input'
-import {ButtonHoverDirective} from '../../directives/button-hover.directive'
 import {FocusDirective} from '../../directives/focus.directive'
-import {Colors} from '../../models/colors'
 import {Column} from '../../models/column'
 import {Task} from '../../models/task'
 import {BoardStore} from '../../state/board.store'
@@ -17,22 +15,12 @@ import {TaskComponent} from '../task/task.component'
   templateUrl: './column.component.html',
   styleUrl: './column.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    MatInput,
-    CdkTextareaAutosize,
-    FocusDirective,
-    ButtonHoverDirective,
-    MatIcon,
-    CdkDropList,
-    CdkDrag,
-    TaskComponent,
-  ],
+  imports: [MatInput, CdkTextareaAutosize, FocusDirective, MatIcon, CdkDropList, CdkDrag, TaskComponent],
 })
 export class ColumnComponent {
   protected readonly store = inject(BoardStore)
 
   readonly column = input.required<Column>()
-  readonly colors = input.required<readonly Colors[]>()
 
   protected readonly taskListId = taskListId
 

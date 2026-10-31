@@ -4,11 +4,9 @@ import {CdkTextareaAutosize} from '@angular/cdk/text-field'
 import {ChangeDetectionStrategy, Component, inject, input} from '@angular/core'
 import {MatIcon} from '@angular/material/icon'
 import {MatInput} from '@angular/material/input'
-import {ButtonHoverDirective} from '../../directives/button-hover.directive'
 import {FocusDirective} from '../../directives/focus.directive'
-import {Colors} from '../../models/colors'
 import {Subtask} from '../../models/subtask'
-import {Task} from '../../models/task'
+import {Task, TASK_COLORS} from '../../models/task'
 import {BoardStore} from '../../state/board.store'
 import {isNoopDrop, subtaskListId} from '../../utils/drag-drop'
 import {SubtaskComponent} from '../subtask/subtask.component'
@@ -18,11 +16,11 @@ import {SubtaskComponent} from '../subtask/subtask.component'
   templateUrl: './task.component.html',
   styleUrl: './task.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {'[attr.data-color]': 'task().color'},
   imports: [
     MatInput,
     CdkTextareaAutosize,
     FocusDirective,
-    ButtonHoverDirective,
     MatIcon,
     CdkMenuTrigger,
     CdkMenu,
@@ -36,9 +34,9 @@ export class TaskComponent {
   protected readonly store = inject(BoardStore)
 
   readonly task = input.required<Task>()
-  readonly colors = input.required<readonly Colors[]>()
 
   protected readonly subtaskListId = subtaskListId
+  protected readonly taskColors = TASK_COLORS
 
   rename(name: string) {
     this.store.renameTask(this.task().id, name)

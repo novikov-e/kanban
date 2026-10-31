@@ -3,16 +3,14 @@
     <div class="custom_checkbox">
       @if (subtask().state) {
         <div (click)="toggleState()">
-          <mat-icon class="custom_checkbox_size" [style.color]="color().firstColor">check_circle</mat-icon>
+          <mat-icon class="custom_checkbox_size">check_circle</mat-icon>
         </div>
       } @else {
         <div (click)="toggleState()">
-          <mat-icon class="custom_checkbox_focused custom_checkbox_size" [style.color]="color().firstColor"
-            >circle</mat-icon
-          >
+          <mat-icon class="custom_checkbox_focused custom_checkbox_size">circle</mat-icon>
         </div>
         <div>
-          <mat-icon class="custom_checkbox_size" [style.color]="color().firstColor">radio_button_unchecked</mat-icon>
+          <mat-icon class="custom_checkbox_size">radio_button_unchecked</mat-icon>
         </div>
       }
     </div>
@@ -27,7 +25,6 @@
       #autosize="cdkTextareaAutosize"
       cdkAutosizeMinRows="1"
       #subtaskName
-      [style.color]="color().firstColor"
       [value]="subtask().name"
       (change)="rename(subtaskName.value)"
       (keydown)="onKeydown(subtaskName, $event)"
@@ -36,14 +33,8 @@
   </div>
 
   <div class="buttons_container">
-    <button
-      class="custom_icon_button"
-      appButtonHover
-      [elementRef]="removeSubtaskIcon._elementRef"
-      [color]="color()"
-      (click)="delete()"
-    >
-      <mat-icon #removeSubtaskIcon [style.color]="color().firstColor">remove_circle_outline</mat-icon>
+    <button class="custom_icon_button" (click)="delete()">
+      <mat-icon>remove_circle_outline</mat-icon>
     </button>
   </div>
 </div>

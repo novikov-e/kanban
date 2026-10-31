@@ -1,7 +1,5 @@
-import {computed, inject, Injectable, signal} from '@angular/core'
+import {inject, Injectable, signal} from '@angular/core'
 import {Observable, tap} from 'rxjs'
-import {darkTheme} from '../data/dark-theme'
-import {lightTheme} from '../data/light-theme'
 import {errorAlreadyReported} from '../interceptors/http-error.interceptor'
 import {Board} from '../models/board'
 import {User} from '../models/user'
@@ -17,7 +15,6 @@ export class UserStore {
   private readonly state = signal<User | null>(null)
 
   readonly user = this.state.asReadonly()
-  readonly colors = computed(() => (this.state()?.darkTheme ? darkTheme : lightTheme))
 
   load(): Observable<User> {
     return this.userService.getMe().pipe(tap(user => this.state.set(user)))
