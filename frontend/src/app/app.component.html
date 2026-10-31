@@ -1,116 +1,126 @@
 <!doctype html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="UTF-8">
     <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
     <title>{{title}}</title>
-</head>
-<body [style.background-color]="colors[0].firstColor">
+  </head>
+  <body [style.background-color]="colors[0].firstColor">
 
-<div class="header" [style.border-color]="colors[1].firstColor">
-    <div class="buttons_container ml-5">
+    <div class="header" [style.border-color]="colors[1].firstColor">
+      <div class="buttons_container ml-5">
         <button class="text_button" appTextButton [matIcon]="menuIcon._elementRef"
-                [text]="menuButton" [color]="colors[1]"
-                (click)="drawer.toggle()">
-            <mat-icon #menuIcon [style.color]="colors[1].firstColor">menu</mat-icon>
-            <div class="text_in_header_button" #menuButton
-                 [style.color]="colors[1].firstColor">Меню
-            </div>
+          [text]="menuButton" [color]="colors[1]"
+          (click)="drawer.toggle()">
+          <mat-icon #menuIcon [style.color]="colors[1].firstColor">menu</mat-icon>
+          <div class="text_in_header_button" #menuButton
+            [style.color]="colors[1].firstColor">Меню
+          </div>
         </button>
-    </div>
+      </div>
 
-    <div *ngIf="board!=null" class="gr">
-        <input type="text" class="transparent_text_input column-task-title text_align_center font-size-17"
-               #boardName [value]="board.name" matInput appSelect
-               [style.color]="colors[1].firstColor" (change)="renameBoard(board.id, boardName.value)">
-    </div>
+      @if (board!=null) {
+        <div class="gr">
+          <input type="text" class="transparent_text_input column-task-title text_align_center font-size-17"
+            #boardName [value]="board.name" matInput appSelect
+            [style.color]="colors[1].firstColor" (change)="renameBoard(board.id, boardName.value)">
+        </div>
+      }
 
-    <div *ngIf="board!=null" class="buttons_container mr-5">
-        <button class="text_button" appTextButton [matIcon]="newColumnIcon._elementRef"
-                [text]="newColumnButton" [color]="colors[1]" (click)="newColumn()">
+      @if (board!=null) {
+        <div class="buttons_container mr-5">
+          <button class="text_button" appTextButton [matIcon]="newColumnIcon._elementRef"
+            [text]="newColumnButton" [color]="colors[1]" (click)="newColumn()">
             <mat-icon #newColumnIcon [style.color]="colors[1].firstColor">add_circle_outline</mat-icon>
             <div class="text_in_header_button" #newColumnButton
-                 [style.color]="colors[1].firstColor">Добавить колонку
+              [style.color]="colors[1].firstColor">Добавить колонку
             </div>
-        </button>
-
-        <button class="text_button" appTextButton [matIcon]="exitIcon._elementRef"
-                [text]="exitButton" [color]="colors[1]" (click)="closeBoard()">
+          </button>
+          <button class="text_button" appTextButton [matIcon]="exitIcon._elementRef"
+            [text]="exitButton" [color]="colors[1]" (click)="closeBoard()">
             <mat-icon #exitIcon [style.color]="colors[1].firstColor">logout</mat-icon>
             <div class="text_in_header_button" #exitButton
-                 [style.color]="colors[1].firstColor">Выйти из проекта
+              [style.color]="colors[1].firstColor">Выйти из проекта
             </div>
-        </button>
-
-        <button class="text_button" appTextButton [matIcon]="deleteBoardIcon._elementRef"
-                [text]="deleteBoardButton" [color]="colors[2]"
-                (click)="deleteBoard(board.id, board.position)">
+          </button>
+          <button class="text_button" appTextButton [matIcon]="deleteBoardIcon._elementRef"
+            [text]="deleteBoardButton" [color]="colors[2]"
+            (click)="deleteBoard(board.id, board.position)">
             <mat-icon #deleteBoardIcon [style.color]="colors[2].firstColor">remove_circle_outline</mat-icon>
             <div class="text_in_header_button" #deleteBoardButton
-                 [style.color]="colors[2].firstColor">Удалить проект
+              [style.color]="colors[2].firstColor">Удалить проект
             </div>
-        </button>
+          </button>
+        </div>
+      }
     </div>
-</div>
 
 
-<div class="workspace_container">
-    <mat-drawer-container class="background_transparent" autosize>
+    <div class="workspace_container">
+      <mat-drawer-container class="background_transparent" autosize>
         <mat-drawer class="background_transparent pl-1" #drawer mode="side">
-            <div class="user_details" [style.border-color]="colors[1].firstColor">
-                <button class="text_button m-5" appTextButton [matIcon]="createBoardIcon._elementRef"
-                        [text]="textButton" [color]="colors[1]" (click)="newBoard()">
-                    <mat-icon #createBoardIcon [style.color]="colors[1].firstColor">add_circle_outline</mat-icon>
-                    <div class="text_in_button" #textButton [style.color]="colors[1].firstColor">Создать проект
-                    </div>
-                </button>
+          <div class="user_details" [style.border-color]="colors[1].firstColor">
+            <button class="text_button m-5" appTextButton [matIcon]="createBoardIcon._elementRef"
+              [text]="textButton" [color]="colors[1]" (click)="newBoard()">
+              <mat-icon #createBoardIcon [style.color]="colors[1].firstColor">add_circle_outline</mat-icon>
+              <div class="text_in_button" #textButton [style.color]="colors[1].firstColor">Создать проект
+              </div>
+            </button>
 
-                <div class="list_boards" cdkDropList
-                     (cdkDropListDropped)="moveBoard($event)" cdkDropListOrientation="vertical">
-                    <div class="board_item" *ngFor="let userBoard of user.boards" cdkDrag>
-                        <div class="example-custom-placeholder" *cdkDragPlaceholder></div>
-                        <button class="text_button m-5" appTextButton [matIcon]="dashboardIcon._elementRef"
-                                [text]="dashboardButton" [color]="colors[1]" (click)="openBoard(userBoard.id)">
-                            <mat-icon #dashboardIcon [style.color]="colors[1].firstColor">dashboard</mat-icon>
-                            <div class="text_in_button" #dashboardButton
-                                 [style.color]="colors[1].firstColor">{{userBoard.name}}</div>
-                        </button>
-                    </div>
+            <div class="list_boards" cdkDropList
+              (cdkDropListDropped)="moveBoard($event)" cdkDropListOrientation="vertical">
+              @for (userBoard of user.boards; track userBoard) {
+                <div class="board_item" cdkDrag>
+                  <div class="example-custom-placeholder" *cdkDragPlaceholder></div>
+                  <button class="text_button m-5" appTextButton [matIcon]="dashboardIcon._elementRef"
+                    [text]="dashboardButton" [color]="colors[1]" (click)="openBoard(userBoard.id)">
+                    <mat-icon #dashboardIcon [style.color]="colors[1].firstColor">dashboard</mat-icon>
+                    <div class="text_in_button" #dashboardButton
+                    [style.color]="colors[1].firstColor">{{userBoard.name}}</div>
+                  </button>
                 </div>
-
-                <button class="text_button m-5" appTextButton
-                        [matIcon]="settingsIcon._elementRef" [text]="settingsButtonText" [color]="colors[1]">
-                    <mat-icon #settingsIcon [style.color]="colors[1].firstColor">settings</mat-icon>
-                    <div class="text_in_button" #settingsButtonText [style.color]="colors[1].firstColor">Настройки
-                    </div>
-                </button>
-
-                <button class="text_button m-5" *ngIf="!user.darkTheme" appTextButton
-                        [matIcon]="darkModeIcon._elementRef"
-                        [text]="darkThemeButtonText" [color]="colors[1]" (click)="changeTheme()">
-                    <mat-icon #darkModeIcon [style.color]="colors[1].firstColor">dark_mode</mat-icon>
-                    <div class="text_in_button" #darkThemeButtonText [style.color]="colors[1].firstColor">Тёмная
-                        тема
-                    </div>
-                </button>
-
-                <button class="text_button m-5" *ngIf="user.darkTheme" appTextButton
-                        [matIcon]="lightModeIcon._elementRef"
-                        [text]="lightThemeButtonText" [color]="colors[1]" (click)="changeTheme()">
-                    <mat-icon #lightModeIcon [style.color]="colors[1].firstColor">light_mode</mat-icon>
-                    <div #lightThemeButtonText [style.color]="colors[1].firstColor" class="text_in_button">Светлая
-                        тема
-                    </div>
-                </button>
+              }
             </div>
+
+            <button class="text_button m-5" appTextButton
+              [matIcon]="settingsIcon._elementRef" [text]="settingsButtonText" [color]="colors[1]">
+              <mat-icon #settingsIcon [style.color]="colors[1].firstColor">settings</mat-icon>
+              <div class="text_in_button" #settingsButtonText [style.color]="colors[1].firstColor">Настройки
+              </div>
+            </button>
+
+            @if (!user.darkTheme) {
+              <button class="text_button m-5" appTextButton
+                [matIcon]="darkModeIcon._elementRef"
+                [text]="darkThemeButtonText" [color]="colors[1]" (click)="changeTheme()">
+                <mat-icon #darkModeIcon [style.color]="colors[1].firstColor">dark_mode</mat-icon>
+                <div class="text_in_button" #darkThemeButtonText [style.color]="colors[1].firstColor">Тёмная
+                  тема
+                </div>
+              </button>
+            }
+
+            @if (user.darkTheme) {
+              <button class="text_button m-5" appTextButton
+                [matIcon]="lightModeIcon._elementRef"
+                [text]="lightThemeButtonText" [color]="colors[1]" (click)="changeTheme()">
+                <mat-icon #lightModeIcon [style.color]="colors[1].firstColor">light_mode</mat-icon>
+                <div #lightThemeButtonText [style.color]="colors[1].firstColor" class="text_in_button">Светлая
+                  тема
+                </div>
+              </button>
+            }
+          </div>
         </mat-drawer>
-        <app-board *ngIf="board!=null" [board]="board" [colors]="colors"
-                   [subtaskDropLists]="subtaskDropLists" [taskDropLists]="taskDropLists"
-                   [columnDropLists]="columnDropLists" [appComponent]="this"></app-board>
-    </mat-drawer-container>
-</div>
-</body>
+        @if (board!=null) {
+          <app-board [board]="board" [colors]="colors"
+            [subtaskDropLists]="subtaskDropLists" [taskDropLists]="taskDropLists"
+          [columnDropLists]="columnDropLists" [appComponent]="this"></app-board>
+        }
+      </mat-drawer-container>
+    </div>
+  </body>
 </html>
