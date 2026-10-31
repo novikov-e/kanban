@@ -24,7 +24,7 @@ describe('httpErrorInterceptor', () => {
 
   afterEach(() => httpMock.verify())
 
-  it('reports a failed request and passes the error on so the caller can roll back', () => {
+  it('reports a failed request and passes the error on so the caller can roll back', async () => {
     let status: number | undefined
     http.patch('/api/v1/columns/column-1', {name: 'Колонка'}).subscribe({
       error: (error: HttpErrorResponse) => (status = error.status),
@@ -33,7 +33,7 @@ describe('httpErrorInterceptor', () => {
     httpMock.expectOne('/api/v1/columns/column-1').flush(null, {status: 500, statusText: 'Server Error'})
 
     expect(status).toBe(500)
-    expect(snackBar.open).toHaveBeenCalledOnce()
+    await vi.waitFor(() => expect(snackBar.open).toHaveBeenCalledOnce())
   })
 
   it('does not report an unchanged resource', () => {

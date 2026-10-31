@@ -1,6 +1,5 @@
 import {HttpErrorResponse, HttpInterceptorFn, HttpStatusCode} from '@angular/common/http'
-import {inject} from '@angular/core'
-import {MatSnackBar} from '@angular/material/snack-bar'
+import {inject, Injector} from '@angular/core'
 import {catchError, throwError} from 'rxjs'
 import {AUTH_URL} from '../services/auth.service'
 
@@ -14,13 +13,20 @@ export const httpErrorInterceptor: HttpInterceptorFn = (request, next) => {
   if (request.url.startsWith(AUTH_URL)) {
     return next(request)
   }
-  const snackBar = inject(MatSnackBar)
+  const injector = inject(Injector)
   return next(request).pipe(
     catchError(error => {
       if (!(error instanceof HttpErrorResponse) || error.status !== HttpStatusCode.NotModified) {
-        snackBar.open(ERROR_MESSAGE, CLOSE_ACTION, {horizontalPosition: 'end', verticalPosition: 'top'})
+        showError(injector)
       }
       return throwError(() => error)
     }),
+  )
+}
+
+/** Снекбар Material загружается при первой ошибке, чтобы не попасть в начальный бандл. */
+function showError(injector: Injector): void {
+  void import('@angular/material/snack-bar').then(({MatSnackBar}) =>
+    injector.get(MatSnackBar).open(ERROR_MESSAGE, CLOSE_ACTION, {horizontalPosition: 'end', verticalPosition: 'top'}),
   )
 }
