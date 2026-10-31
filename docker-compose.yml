@@ -1,7 +1,7 @@
 # Значения можно переопределить в файле .env рядом с docker-compose.yml
 x-db-env: &db-env
   POSTGRES_USER: ${POSTGRES_USER:-kanban_user}
-  POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-kanban_password}
+  POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Задайте POSTGRES_PASSWORD в .env рядом с docker-compose.yml}
   POSTGRES_DB: ${POSTGRES_DB:-kanban_db}
 
 services:

@@ -6,7 +6,7 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
     POSTGRES_USER: str = "kanban_user"
-    POSTGRES_PASSWORD: str = "kanban_password"
+    POSTGRES_PASSWORD: str
     POSTGRES_HOST: str = "postgresql"
     POSTGRES_PORT: str = "5432"
     POSTGRES_DB: str = "kanban_db"

@@ -4,7 +4,9 @@
 
 ## Запуск
 
-Весь стек в Docker (из корня): `docker compose up -d --build`, приложение — http://localhost:8080.
+Весь стек в Docker (из корня): скопировать `.env.example` в `.env` и задать секреты, затем
+`docker compose up -d --build`, приложение — http://localhost:8080. Значений по умолчанию у секретов нет:
+без `POSTGRES_PASSWORD` и `JWT_SECRET` compose и бэкенд не запустятся.
 Сервисы `postgresql`, `backend`, `frontend` в общей сети `kanban`. Бэкенд применяет миграции при старте,
 nginx во фронтенд-контейнере раздаёт сборку Angular и проксирует `/api/` на `backend:8000`.
 
