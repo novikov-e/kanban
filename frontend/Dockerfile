@@ -13,6 +13,7 @@ RUN npx ng build --configuration production
 FROM nginx:1.27-alpine
 
 COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY nginx/security-headers.conf /etc/nginx/snippets/security-headers.conf
 COPY --from=build /app/dist/kanban-frontend/browser /usr/share/nginx/html
 
 EXPOSE 80
