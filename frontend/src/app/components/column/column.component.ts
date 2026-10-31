@@ -11,7 +11,9 @@ import {isSaved, UNSAVED_ID} from '../../models/entity'
 import {DEFAULT_TASK_COLOR, Task} from '../../models/task'
 import {ColumnService} from '../../services/column.service'
 import {TaskService} from '../../services/task.service'
+import {tap} from 'rxjs'
 import {applyDrop, removeItem} from '../../utils/drag-drop'
+import {NameSaver} from '../../utils/name-saver'
 import {TaskComponent} from '../task/task.component'
 
 @Component({
@@ -45,16 +47,13 @@ export class ColumnComponent implements OnInit {
     this.taskDropLists.push(this.column.id)
   }
 
+  private nameSaver = new NameSaver(
+    name => this.columnService.create(this.boardId, name).pipe(tap(created => this.taskDropLists.push(created.id))),
+    (id, name) => this.columnService.rename(id, name),
+  )
+
   rename(name: string) {
-    this.column.name = name
-    if (isSaved(this.column)) {
-      this.columnService.rename(this.column.id, name)
-    } else {
-      this.columnService.create(this.boardId, name).subscribe(created => {
-        this.column.id = created.id
-        this.taskDropLists.push(created.id)
-      })
-    }
+    this.nameSaver.save(this.column, name)
   }
 
   delete() {

@@ -8,6 +8,7 @@ import {Colors} from '../../models/colors'
 import {isSaved} from '../../models/entity'
 import {Subtask} from '../../models/subtask'
 import {SubtaskService} from '../../services/subtask.service'
+import {NameSaver} from '../../utils/name-saver'
 
 @Component({
   selector: 'app-subtask',
@@ -25,13 +26,13 @@ export class SubtaskComponent {
   @Output() deleted = new EventEmitter<void>()
   @Output() nextRequested = new EventEmitter<void>()
 
+  private nameSaver = new NameSaver(
+    name => this.subtaskService.create(this.taskId, name),
+    (id, name) => this.subtaskService.rename(id, name),
+  )
+
   rename(name: string) {
-    this.subtask.name = name
-    if (isSaved(this.subtask)) {
-      this.subtaskService.rename(this.subtask.id, name)
-    } else {
-      this.subtaskService.create(this.taskId, name).subscribe(created => (this.subtask.id = created.id))
-    }
+    this.nameSaver.save(this.subtask, name)
   }
 
   toggleState() {

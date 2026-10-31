@@ -12,7 +12,9 @@ import {Subtask} from '../../models/subtask'
 import {Task} from '../../models/task'
 import {SubtaskService} from '../../services/subtask.service'
 import {TaskService} from '../../services/task.service'
+import {tap} from 'rxjs'
 import {applyDrop, removeItem} from '../../utils/drag-drop'
+import {NameSaver} from '../../utils/name-saver'
 import {SubtaskComponent} from '../subtask/subtask.component'
 
 @Component({
@@ -48,16 +50,13 @@ export class TaskComponent implements OnInit {
     this.subtaskDropLists.push(this.task.id)
   }
 
+  private nameSaver = new NameSaver(
+    name => this.taskService.create(this.columnId, name).pipe(tap(created => this.subtaskDropLists.push(created.id))),
+    (id, name) => this.taskService.rename(id, name),
+  )
+
   rename(name: string) {
-    this.task.name = name
-    if (isSaved(this.task)) {
-      this.taskService.rename(this.task.id, name)
-    } else {
-      this.taskService.create(this.columnId, name).subscribe(created => {
-        this.task.id = created.id
-        this.subtaskDropLists.push(created.id)
-      })
-    }
+    this.nameSaver.save(this.task, name)
   }
 
   changeColor(color: number) {
