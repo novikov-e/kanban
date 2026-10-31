@@ -43,21 +43,14 @@
   </div>
   <div
     class="column-drop-list"
-    id="{{ column.id }}"
     cdkDropList
     [cdkDropListData]="column.tasks"
-    [cdkDropListConnectedTo]="taskDropLists"
+    [cdkDropListEnterPredicate]="isTaskDrag"
     (cdkDropListDropped)="onTaskDrop($event)"
   >
     @for (task of column.tasks; track task) {
       <div cdkDrag [cdkDragData]="task">
-        <app-task
-          [task]="task"
-          [columnId]="column.id"
-          [subtaskDropLists]="subtaskDropLists"
-          [colors]="colors"
-          (deleted)="removeTask(task)"
-        ></app-task>
+        <app-task [task]="task" [columnId]="column.id" [colors]="colors" (deleted)="removeTask(task)"></app-task>
       </div>
     }
   </div>

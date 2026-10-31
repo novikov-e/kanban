@@ -1,6 +1,6 @@
 import {CdkDrag, CdkDragDrop, CdkDropList} from '@angular/cdk/drag-drop'
 import {CdkTextareaAutosize} from '@angular/cdk/text-field'
-import {ChangeDetectionStrategy, Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core'
+import {ChangeDetectionStrategy, Component, EventEmitter, inject, Input, Output} from '@angular/core'
 import {MatIcon} from '@angular/material/icon'
 import {MatInput} from '@angular/material/input'
 import {ButtonHoverDirective} from '../../directives/button-hover.directive'
@@ -11,8 +11,7 @@ import {isSaved, UNSAVED_ID} from '../../models/entity'
 import {DEFAULT_TASK_COLOR, Task} from '../../models/task'
 import {ColumnService} from '../../services/column.service'
 import {TaskService} from '../../services/task.service'
-import {tap} from 'rxjs'
-import {applyDrop, removeItem} from '../../utils/drag-drop'
+import {applyDrop, isTaskDrag, removeItem} from '../../utils/drag-drop'
 import {NameSaver} from '../../utils/name-saver'
 import {TaskComponent} from '../task/task.component'
 
@@ -32,23 +31,19 @@ import {TaskComponent} from '../task/task.component'
     TaskComponent,
   ],
 })
-export class ColumnComponent implements OnInit {
+export class ColumnComponent {
   private columnService = inject(ColumnService)
   private taskService = inject(TaskService)
 
+  protected readonly isTaskDrag = isTaskDrag
+
   @Input() column: Column
   @Input() boardId: string
-  @Input() taskDropLists: string[]
-  @Input() subtaskDropLists: string[]
   @Input() colors: Colors[]
   @Output() deleted = new EventEmitter<void>()
 
-  ngOnInit(): void {
-    this.taskDropLists.push(this.column.id)
-  }
-
   private nameSaver = new NameSaver(
-    name => this.columnService.create(this.boardId, name).pipe(tap(created => this.taskDropLists.push(created.id))),
+    name => this.columnService.create(this.boardId, name),
     (id, name) => this.columnService.rename(id, name),
   )
 

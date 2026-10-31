@@ -142,13 +142,7 @@
         }
       </mat-drawer>
       @if (board) {
-        <app-board
-          [board]="board"
-          [colors]="colors"
-          [columnDropLists]="columnDropLists"
-          [taskDropLists]="taskDropLists"
-          [subtaskDropLists]="subtaskDropLists"
-        ></app-board>
+        <app-board [board]="board" [colors]="colors"></app-board>
       }
     </mat-drawer-container>
   </div>

@@ -1,7 +1,7 @@
 import {CdkDrag, CdkDragDrop, CdkDropList} from '@angular/cdk/drag-drop'
 import {CdkMenu, CdkMenuItem, CdkMenuTrigger} from '@angular/cdk/menu'
 import {CdkTextareaAutosize} from '@angular/cdk/text-field'
-import {ChangeDetectionStrategy, Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core'
+import {ChangeDetectionStrategy, Component, EventEmitter, inject, Input, Output} from '@angular/core'
 import {MatIcon} from '@angular/material/icon'
 import {MatInput} from '@angular/material/input'
 import {ButtonHoverDirective} from '../../directives/button-hover.directive'
@@ -12,8 +12,7 @@ import {Subtask} from '../../models/subtask'
 import {Task} from '../../models/task'
 import {SubtaskService} from '../../services/subtask.service'
 import {TaskService} from '../../services/task.service'
-import {tap} from 'rxjs'
-import {applyDrop, removeItem} from '../../utils/drag-drop'
+import {applyDrop, isSubtaskDrag, removeItem} from '../../utils/drag-drop'
 import {NameSaver} from '../../utils/name-saver'
 import {SubtaskComponent} from '../subtask/subtask.component'
 
@@ -36,22 +35,19 @@ import {SubtaskComponent} from '../subtask/subtask.component'
     SubtaskComponent,
   ],
 })
-export class TaskComponent implements OnInit {
+export class TaskComponent {
   private taskService = inject(TaskService)
   private subtaskService = inject(SubtaskService)
 
+  protected readonly isSubtaskDrag = isSubtaskDrag
+
   @Input() task: Task
   @Input() columnId: string
-  @Input() subtaskDropLists: string[]
   @Input() colors: Colors[]
   @Output() deleted = new EventEmitter<void>()
 
-  ngOnInit(): void {
-    this.subtaskDropLists.push(this.task.id)
-  }
-
   private nameSaver = new NameSaver(
-    name => this.taskService.create(this.columnId, name).pipe(tap(created => this.subtaskDropLists.push(created.id))),
+    name => this.taskService.create(this.columnId, name),
     (id, name) => this.taskService.rename(id, name),
   )
 

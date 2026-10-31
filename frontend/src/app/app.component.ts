@@ -40,9 +40,6 @@ export class AppComponent implements OnInit {
   user: User
   board: Board | null = null
   colors: Colors[] = lightTheme
-  columnDropLists: string[] = []
-  taskDropLists: string[] = []
-  subtaskDropLists: string[] = []
 
   ngOnInit(): void {
     this.userService.getUser().subscribe(user => {
@@ -73,7 +70,6 @@ export class AppComponent implements OnInit {
 
   closeBoard() {
     this.board = null
-    this.columnDropLists = []
     this.rememberLastBoard(null)
   }
 

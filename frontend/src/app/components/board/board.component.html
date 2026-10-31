@@ -1,22 +1,21 @@
-<div
-  class="columns"
-  id="{{ board.id }}"
-  cdkDropList
-  [cdkDropListData]="board.columns"
-  [cdkDropListConnectedTo]="columnDropLists"
-  cdkDropListOrientation="horizontal"
-  (cdkDropListDropped)="onColumnDrop($event)"
->
-  @for (column of board.columns; track column) {
-    <div class="nothing" cdkDrag [cdkDragData]="column">
-      <app-column
-        [column]="column"
-        [boardId]="board.id"
-        [taskDropLists]="taskDropLists"
-        [subtaskDropLists]="subtaskDropLists"
-        [colors]="colors"
-        (deleted)="removeColumn(column)"
-      ></app-column>
-    </div>
-  }
+<div class="nothing" cdkDropListGroup>
+  <div
+    class="columns"
+    cdkDropList
+    [cdkDropListData]="board.columns"
+    [cdkDropListEnterPredicate]="isColumnDrag"
+    cdkDropListOrientation="horizontal"
+    (cdkDropListDropped)="onColumnDrop($event)"
+  >
+    @for (column of board.columns; track column) {
+      <div class="nothing" cdkDrag [cdkDragData]="column">
+        <app-column
+          [column]="column"
+          [boardId]="board.id"
+          [colors]="colors"
+          (deleted)="removeColumn(column)"
+        ></app-column>
+      </div>
+    }
+  </div>
 </div>
