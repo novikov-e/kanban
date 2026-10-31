@@ -11,7 +11,7 @@ import {SubtaskComponent} from "./components/subtask/subtask.component";
 import {TaskComponent} from "./components/task/task.component";
 import {ColumnComponent} from "./components/column/column.component";
 import {CdkDrag, CdkDropList, CdkDropListGroup} from "@angular/cdk/drag-drop";
-import {HttpClientModule} from "@angular/common/http";
+import { provideHttpClient, withInterceptorsFromDi } from "@angular/common/http";
 import {TextFieldModule} from "@angular/cdk/text-field";
 import {MatInputModule} from "@angular/material/input";
 import {CdkMenu, CdkMenuItem, CdkMenuTrigger} from "@angular/cdk/menu";
@@ -24,44 +24,38 @@ import {MatSnackBarModule} from "@angular/material/snack-bar";
 import { FocusDirective } from './directives/focus.directive';
 import { SelectDirective } from './directives/select.directive';
 
-@NgModule({
-  declarations: [
-    AppComponent,
-    SubtaskComponent,
-    TaskComponent,
-    ColumnComponent,
-    BoardComponent,
-    ButtonHoverDirective,
-    TextButtonDirective,
-    TextButtonDirective,
-    FocusDirective,
-    SelectDirective,
-  ],
-  imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    MatToolbarModule,
-    MatIconModule,
-    MatSidenavModule,
-    MatButtonModule,
-    MatGridListModule,
-    CdkDropList,
-    HttpClientModule,
-    TextFieldModule,
-    MatInputModule,
-    CdkMenuTrigger,
-    CdkMenu,
-    CdkMenuItem,
-    CdkDrag,
-    CdkDropListGroup,
-    MatSlideToggleModule,
-    FormsModule,
-    MatSnackBarModule,
-  ],
-  providers: [
-    MatSnackBarModule,
-  ],
-  bootstrap: [AppComponent]
-})
+@NgModule({ declarations: [
+        AppComponent,
+        SubtaskComponent,
+        TaskComponent,
+        ColumnComponent,
+        BoardComponent,
+        ButtonHoverDirective,
+        TextButtonDirective,
+        TextButtonDirective,
+        FocusDirective,
+        SelectDirective,
+    ],
+    bootstrap: [AppComponent], imports: [BrowserModule,
+        BrowserAnimationsModule,
+        MatToolbarModule,
+        MatIconModule,
+        MatSidenavModule,
+        MatButtonModule,
+        MatGridListModule,
+        CdkDropList,
+        TextFieldModule,
+        MatInputModule,
+        CdkMenuTrigger,
+        CdkMenu,
+        CdkMenuItem,
+        CdkDrag,
+        CdkDropListGroup,
+        MatSlideToggleModule,
+        FormsModule,
+        MatSnackBarModule], providers: [
+        MatSnackBarModule,
+        provideHttpClient(withInterceptorsFromDi()),
+    ] })
 export class AppModule {
 }

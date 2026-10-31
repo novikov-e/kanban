@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpErrorResponse} from "@angular/common/http";
+import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import {catchError, Observable, throwError} from "rxjs";
 import {User} from "../models/user";
 import {ErrorService} from "./error.service";
