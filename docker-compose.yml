@@ -17,6 +17,21 @@ x-logging: &logging
     max-size: "20m"
     max-file: "3"
 
+# Сервисы из образа бэкенда: API, миграции и ежедневная перенумерация позиций
+x-backend-service: &backend-service
+  build: ./backend
+  image: kanban-backend
+  environment: *backend-env
+  networks:
+    - kanban
+  security_opt:
+    - no-new-privileges:true
+  logging: *logging
+
+x-after-migrations: &after-migrations
+  migrate:
+    condition: service_completed_successfully
+
 services:
   postgresql:
     image: postgres:18.3
@@ -48,33 +63,27 @@ services:
           memory: 1G
     logging: *logging
 
-  backend:
-    build: ./backend
-    restart: unless-stopped
-    environment: *backend-env
+  migrate:
+    <<: *backend-service
+    command: ["alembic", "upgrade", "head"]
+    restart: "no"
     depends_on:
       postgresql:
         condition: service_healthy
-    networks:
-      - kanban
-    security_opt:
-      - no-new-privileges:true
-    logging: *logging
+
+  backend:
+    <<: *backend-service
+    restart: unless-stopped
+    depends_on: *after-migrations
 
   positions-rebalancer:
-    build: ./backend
+    <<: *backend-service
     command: ["python", "-m", "app.jobs.rebalance_positions"]
     restart: unless-stopped
     environment:
       <<: *backend-env
       POSITIONS_REBALANCE_AT: ${POSITIONS_REBALANCE_AT:-03:00}
-    depends_on:
-      - backend
-    networks:
-      - kanban
-    security_opt:
-      - no-new-privileges:true
-    logging: *logging
+    depends_on: *after-migrations
 
   frontend:
     build: ./frontend

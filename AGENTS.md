@@ -7,8 +7,10 @@
 Весь стек в Docker (из корня): скопировать `.env.example` в `.env` и задать секреты, затем
 `docker compose up -d --build`, приложение — http://localhost:8080. Значений по умолчанию у секретов нет:
 без `POSTGRES_PASSWORD` и `JWT_SECRET` compose и бэкенд не запустятся.
-Сервисы `postgresql`, `backend`, `frontend` в общей сети `kanban`. Бэкенд применяет миграции при старте,
-nginx во фронтенд-контейнере раздаёт сборку Angular и проксирует `/api/` на `backend:8000`.
+Сервисы `postgresql`, `migrate`, `backend`, `positions-rebalancer`, `frontend` в общей сети `kanban`.
+Одноразовый `migrate` (`alembic upgrade head`) запускается после готовности БД; `backend` и
+`positions-rebalancer` стартуют только после его успешного завершения. Все три собираются из одного образа
+`kanban-backend`. nginx во фронтенд-контейнере раздаёт сборку Angular и проксирует `/api/` на `backend:8000`.
 
 Демо-данные не входят в миграции. Создать демо-пользователя с демо-доской:
 `docker compose exec -e DEMO_PASSWORD=<пароль> backend python -m app.demo.seed`
