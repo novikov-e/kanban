@@ -1,10 +1,7 @@
 from fastapi import FastAPI, Request, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-from pydantic import BaseModel
-from sqlalchemy import text
 
-from app.api.dependencies import DbSession
 from app.api.v1.router import api_router
 from app.core.config import settings
 from app.core.errors import AuthError, ConflictError, NotFoundError
@@ -27,7 +24,6 @@ TAGS = [
     {"name": "Column", "description": "Колонки доски"},
     {"name": "Task", "description": "Задачи в колонках"},
     {"name": "Subtask", "description": "Подзадачи задачи"},
-    {"name": "Service", "description": "Служебные эндпоинты"},
 ]
 
 app = FastAPI(title="Kanban API", version="1.0.0", description=DESCRIPTION, openapi_tags=TAGS)
@@ -60,14 +56,3 @@ async def handle_auth_error(_: Request, error: AuthError) -> JSONResponse:
 @app.exception_handler(ConflictError)
 async def handle_conflict(_: Request, error: ConflictError) -> JSONResponse:
     return JSONResponse(status_code=status.HTTP_409_CONFLICT, content={"detail": str(error)})
-
-
-class PingResponse(BaseModel):
-    status: str
-    db_version: str
-
-
-@app.get("/ping", tags=["Service"], summary="Проверка доступности API и БД")
-async def ping(db: DbSession) -> PingResponse:
-    db_version = (await db.execute(text("SELECT version()"))).scalar_one()
-    return PingResponse(status="ok", db_version=db_version)
