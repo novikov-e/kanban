@@ -73,7 +73,10 @@ export class ColumnComponent implements OnInit {
   }
 
   onTaskDrop(event: CdkDragDrop<Task[]>) {
-    this.taskService.move(event.item.data.id, this.column.id, event.currentIndex)
+    const task: Task = event.item.data
+    if (isSaved(task) && isSaved(this.column)) {
+      this.taskService.move(task.id, this.column.id, event.currentIndex)
+    }
     applyDrop(event)
   }
 

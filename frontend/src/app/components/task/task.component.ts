@@ -76,7 +76,10 @@ export class TaskComponent implements OnInit {
   }
 
   onSubtaskDrop(event: CdkDragDrop<Subtask[]>) {
-    this.subtaskService.move(event.item.data.id, this.task.id, event.currentIndex)
+    const subtask: Subtask = event.item.data
+    if (isSaved(subtask) && isSaved(this.task)) {
+      this.subtaskService.move(subtask.id, this.task.id, event.currentIndex)
+    }
     applyDrop(event)
   }
 

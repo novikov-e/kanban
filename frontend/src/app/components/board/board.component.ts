@@ -3,6 +3,7 @@ import {ChangeDetectionStrategy, Component, inject, Input, OnInit} from '@angula
 import {Board} from '../../models/board'
 import {Colors} from '../../models/colors'
 import {Column} from '../../models/column'
+import {isSaved} from '../../models/entity'
 import {ColumnService} from '../../services/column.service'
 import {removeItem} from '../../utils/drag-drop'
 import {ColumnComponent} from '../column/column.component'
@@ -32,7 +33,10 @@ export class BoardComponent implements OnInit {
   }
 
   onColumnDrop(event: CdkDragDrop<Column[]>) {
-    this.columnService.move(event.item.data.id, this.board.id, event.currentIndex)
+    const column: Column = event.item.data
+    if (isSaved(column)) {
+      this.columnService.move(column.id, this.board.id, event.currentIndex)
+    }
     moveItemInArray(this.board.columns, event.previousIndex, event.currentIndex)
   }
 }
