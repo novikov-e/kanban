@@ -30,7 +30,7 @@ export class BoardComponent {
   onColumnDrop(event: CdkDragDrop<Column[]>) {
     const column: Column = event.item.data
     if (isSaved(column)) {
-      this.columnService.move(column.id, this.board.id, event.currentIndex)
+      this.columnService.move(column.id, this.board.id, event.currentIndex).subscribe()
     }
     moveItemInArray(this.board.columns, event.previousIndex, event.currentIndex)
   }

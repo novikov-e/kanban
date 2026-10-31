@@ -44,7 +44,7 @@ export class ColumnComponent {
 
   private nameSaver = new NameSaver(
     name => this.columnService.create(this.boardId, name),
-    (id, name) => this.columnService.rename(id, name),
+    (id, name) => this.columnService.rename(id, name).subscribe(),
   )
 
   rename(name: string) {
@@ -53,7 +53,7 @@ export class ColumnComponent {
 
   delete() {
     if (isSaved(this.column)) {
-      this.columnService.delete(this.column.id)
+      this.columnService.delete(this.column.id).subscribe()
     }
     this.deleted.emit()
   }
@@ -69,7 +69,7 @@ export class ColumnComponent {
   onTaskDrop(event: CdkDragDrop<Task[]>) {
     const task: Task = event.item.data
     if (isSaved(task) && isSaved(this.column)) {
-      this.taskService.move(task.id, this.column.id, event.currentIndex)
+      this.taskService.move(task.id, this.column.id, event.currentIndex).subscribe()
     }
     applyDrop(event)
   }

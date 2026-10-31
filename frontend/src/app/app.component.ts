@@ -111,11 +111,11 @@ export class AppComponent implements OnInit {
     if (board) {
       board.name = name
     }
-    this.boardService.rename(boardId, name)
+    this.boardService.rename(boardId, name).subscribe()
   }
 
   onBoardDrop(event: CdkDragDrop<Board[]>) {
-    this.boardService.move(event.item.data.id, event.currentIndex)
+    this.boardService.move(event.item.data.id, event.currentIndex).subscribe()
     moveItemInArray(this.user.boards, event.previousIndex, event.currentIndex)
   }
 
@@ -123,7 +123,7 @@ export class AppComponent implements OnInit {
     if (this.board?.id === boardId) {
       this.closeBoard()
     }
-    this.boardService.delete(boardId)
+    this.boardService.delete(boardId).subscribe()
     this.user.boards = this.user.boards.filter(board => board.id !== boardId)
   }
 
@@ -134,7 +134,7 @@ export class AppComponent implements OnInit {
   toggleTheme() {
     this.user.darkTheme = !this.user.darkTheme
     this.colors = this.user.darkTheme ? darkTheme : lightTheme
-    this.userService.setDarkTheme(this.user.darkTheme)
+    this.userService.setDarkTheme(this.user.darkTheme).subscribe()
   }
 
   private showBoard({board, etag}: VersionedBoard) {
@@ -144,6 +144,6 @@ export class AppComponent implements OnInit {
 
   private rememberLastBoard(boardId: string | null) {
     this.user.lastBoard = boardId
-    this.userService.setLastBoard(boardId)
+    this.userService.setLastBoard(boardId).subscribe()
   }
 }

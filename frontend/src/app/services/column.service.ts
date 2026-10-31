@@ -12,15 +12,15 @@ export class ColumnService {
     return this.http.post<Column>(`${API_URL}/boards/${boardId}/columns`, {name})
   }
 
-  rename(columnId: string, name: string): void {
-    this.http.patch(`${API_URL}/columns/${columnId}`, {name}).subscribe()
+  rename(columnId: string, name: string): Observable<void> {
+    return this.http.patch<void>(`${API_URL}/columns/${columnId}`, {name})
   }
 
-  move(columnId: string, boardId: string, index: number): void {
-    this.http.patch(`${API_URL}/columns/${columnId}`, {boardId, index}).subscribe()
+  move(columnId: string, boardId: string, index: number): Observable<void> {
+    return this.http.patch<void>(`${API_URL}/columns/${columnId}`, {boardId, index})
   }
 
-  delete(columnId: string): void {
-    this.http.delete(`${API_URL}/columns/${columnId}`).subscribe()
+  delete(columnId: string): Observable<void> {
+    return this.http.delete<void>(`${API_URL}/columns/${columnId}`)
   }
 }

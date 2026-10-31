@@ -12,19 +12,19 @@ export class SubtaskService {
     return this.http.post<Subtask>(`${API_URL}/tasks/${taskId}/subtasks`, {name})
   }
 
-  rename(subtaskId: string, name: string): void {
-    this.http.patch(`${API_URL}/subtasks/${subtaskId}`, {name}).subscribe()
+  rename(subtaskId: string, name: string): Observable<void> {
+    return this.http.patch<void>(`${API_URL}/subtasks/${subtaskId}`, {name})
   }
 
-  changeState(subtaskId: string, state: boolean): void {
-    this.http.patch(`${API_URL}/subtasks/${subtaskId}`, {state}).subscribe()
+  changeState(subtaskId: string, state: boolean): Observable<void> {
+    return this.http.patch<void>(`${API_URL}/subtasks/${subtaskId}`, {state})
   }
 
-  move(subtaskId: string, taskId: string, index: number): void {
-    this.http.patch(`${API_URL}/subtasks/${subtaskId}`, {taskId, index}).subscribe()
+  move(subtaskId: string, taskId: string, index: number): Observable<void> {
+    return this.http.patch<void>(`${API_URL}/subtasks/${subtaskId}`, {taskId, index})
   }
 
-  delete(subtaskId: string): void {
-    this.http.delete(`${API_URL}/subtasks/${subtaskId}`).subscribe()
+  delete(subtaskId: string): Observable<void> {
+    return this.http.delete<void>(`${API_URL}/subtasks/${subtaskId}`)
   }
 }

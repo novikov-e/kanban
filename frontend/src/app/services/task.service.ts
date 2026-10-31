@@ -12,19 +12,19 @@ export class TaskService {
     return this.http.post<Task>(`${API_URL}/columns/${columnId}/tasks`, {name})
   }
 
-  rename(taskId: string, name: string): void {
-    this.http.patch(`${API_URL}/tasks/${taskId}`, {name}).subscribe()
+  rename(taskId: string, name: string): Observable<void> {
+    return this.http.patch<void>(`${API_URL}/tasks/${taskId}`, {name})
   }
 
-  changeColor(taskId: string, color: number): void {
-    this.http.patch(`${API_URL}/tasks/${taskId}`, {color}).subscribe()
+  changeColor(taskId: string, color: number): Observable<void> {
+    return this.http.patch<void>(`${API_URL}/tasks/${taskId}`, {color})
   }
 
-  move(taskId: string, columnId: string, index: number): void {
-    this.http.patch(`${API_URL}/tasks/${taskId}`, {columnId, index}).subscribe()
+  move(taskId: string, columnId: string, index: number): Observable<void> {
+    return this.http.patch<void>(`${API_URL}/tasks/${taskId}`, {columnId, index})
   }
 
-  delete(taskId: string): void {
-    this.http.delete(`${API_URL}/tasks/${taskId}`).subscribe()
+  delete(taskId: string): Observable<void> {
+    return this.http.delete<void>(`${API_URL}/tasks/${taskId}`)
   }
 }

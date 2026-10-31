@@ -28,7 +28,7 @@ export class SubtaskComponent {
 
   private nameSaver = new NameSaver(
     name => this.subtaskService.create(this.taskId, name),
-    (id, name) => this.subtaskService.rename(id, name),
+    (id, name) => this.subtaskService.rename(id, name).subscribe(),
   )
 
   rename(name: string) {
@@ -38,13 +38,13 @@ export class SubtaskComponent {
   toggleState() {
     this.subtask.state = !this.subtask.state
     if (isSaved(this.subtask)) {
-      this.subtaskService.changeState(this.subtask.id, this.subtask.state)
+      this.subtaskService.changeState(this.subtask.id, this.subtask.state).subscribe()
     }
   }
 
   delete() {
     if (isSaved(this.subtask)) {
-      this.subtaskService.delete(this.subtask.id)
+      this.subtaskService.delete(this.subtask.id).subscribe()
     }
     this.deleted.emit()
   }

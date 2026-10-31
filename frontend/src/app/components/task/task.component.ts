@@ -48,7 +48,7 @@ export class TaskComponent {
 
   private nameSaver = new NameSaver(
     name => this.taskService.create(this.columnId, name),
-    (id, name) => this.taskService.rename(id, name),
+    (id, name) => this.taskService.rename(id, name).subscribe(),
   )
 
   rename(name: string) {
@@ -58,7 +58,7 @@ export class TaskComponent {
   changeColor(color: number) {
     this.task.color = color
     if (isSaved(this.task)) {
-      this.taskService.changeColor(this.task.id, color)
+      this.taskService.changeColor(this.task.id, color).subscribe()
     }
   }
 
@@ -73,14 +73,14 @@ export class TaskComponent {
   onSubtaskDrop(event: CdkDragDrop<Subtask[]>) {
     const subtask: Subtask = event.item.data
     if (isSaved(subtask) && isSaved(this.task)) {
-      this.subtaskService.move(subtask.id, this.task.id, event.currentIndex)
+      this.subtaskService.move(subtask.id, this.task.id, event.currentIndex).subscribe()
     }
     applyDrop(event)
   }
 
   delete() {
     if (isSaved(this.task)) {
-      this.taskService.delete(this.task.id)
+      this.taskService.delete(this.task.id).subscribe()
     }
     this.deleted.emit()
   }

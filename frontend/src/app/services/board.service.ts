@@ -32,16 +32,16 @@ export class BoardService {
     return this.http.post<Board>(`${API_URL}/boards`, null)
   }
 
-  rename(boardId: string, name: string): void {
-    this.http.patch(`${API_URL}/boards/${boardId}`, {name}).subscribe()
+  rename(boardId: string, name: string): Observable<void> {
+    return this.http.patch<void>(`${API_URL}/boards/${boardId}`, {name})
   }
 
-  move(boardId: string, index: number): void {
-    this.http.patch(`${API_URL}/boards/${boardId}`, {index}).subscribe()
+  move(boardId: string, index: number): Observable<void> {
+    return this.http.patch<void>(`${API_URL}/boards/${boardId}`, {index})
   }
 
-  delete(boardId: string): void {
-    this.http.delete(`${API_URL}/boards/${boardId}`).subscribe()
+  delete(boardId: string): Observable<void> {
+    return this.http.delete<void>(`${API_URL}/boards/${boardId}`)
   }
 
   private request(boardId: string, headers: HttpHeaders): Observable<VersionedBoard> {
