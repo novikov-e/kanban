@@ -1,16 +1,16 @@
-import {Directive, ElementRef, HostListener, Input} from '@angular/core'
+import {Directive, ElementRef, HostListener, input} from '@angular/core'
 import {Colors} from '../models/colors'
 
 @Directive({selector: '[appButtonHover]'})
 export class ButtonHoverDirective {
-  @Input() elementRef: ElementRef<HTMLElement>
-  @Input() color: Colors
+  readonly elementRef = input.required<ElementRef<HTMLElement>>()
+  readonly color = input.required<Colors>()
 
   @HostListener('mouseenter') onMouseEnter() {
-    this.elementRef.nativeElement.style.color = this.color.secondColor
+    this.elementRef().nativeElement.style.color = this.color().secondColor
   }
 
   @HostListener('mouseleave') onMouseLeave() {
-    this.elementRef.nativeElement.style.color = this.color.firstColor
+    this.elementRef().nativeElement.style.color = this.color().firstColor
   }
 }

@@ -1,6 +1,6 @@
 import {Board} from './board'
 
-export class User {
+export interface User {
   id: string
   firstname: string
   lastname: string

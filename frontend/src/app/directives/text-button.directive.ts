@@ -1,22 +1,22 @@
-import {Directive, ElementRef, HostListener, Input} from '@angular/core'
+import {Directive, ElementRef, HostListener, input} from '@angular/core'
 import {Colors} from '../models/colors'
 
 @Directive({selector: '[appTextButton]'})
 export class TextButtonDirective {
-  @Input() matIcon: ElementRef<HTMLElement>
-  @Input() text: HTMLElement
-  @Input() color: Colors
+  readonly matIcon = input.required<ElementRef<HTMLElement>>()
+  readonly text = input.required<HTMLElement>()
+  readonly color = input.required<Colors>()
 
   @HostListener('mouseenter') onMouseEnter() {
-    this.paint(this.color.secondColor)
+    this.paint(this.color().secondColor)
   }
 
   @HostListener('mouseleave') onMouseLeave() {
-    this.paint(this.color.firstColor)
+    this.paint(this.color().firstColor)
   }
 
   private paint(color: string) {
-    this.matIcon.nativeElement.style.color = color
-    this.text.style.color = color
+    this.matIcon().nativeElement.style.color = color
+    this.text().style.color = color
   }
 }
