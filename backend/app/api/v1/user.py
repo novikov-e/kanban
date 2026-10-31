@@ -10,8 +10,7 @@ router = APIRouter(prefix="/api/v1/user", tags=["User"])
 
 @router.get("", response_model=UserResponse)
 async def get_user(db: AsyncSession = Depends(get_db)):
-    # Временно захардкожено, как в Java коде.
-    # В будущем email должен извлекаться из JWT токена авторизации.
+    # Временно захардкожено: email должен извлекаться из JWT токена авторизации.
     email = "noved256@gmail.com"
     user = await user_service.get_user_by_email(db, email)
     if not user:

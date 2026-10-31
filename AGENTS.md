@@ -1,7 +1,6 @@
 # Kanban
 
 Пет-проект канбан-доски: Angular 22 (`frontend/`), FastAPI + SQLAlchemy 2 async (`backend/`), PostgreSQL.
-`backend-old/` — прежний бэкенд на Java/Spring, только для справки, не изменять.
 
 ## Запуск
 

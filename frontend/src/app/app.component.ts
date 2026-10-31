@@ -33,7 +33,7 @@ export class AppComponent implements OnInit {
   private _snackBar = inject(MatSnackBar);
 
 
-  title: string = "stack check"
+  title: string = "Kanban"
   user: User
   board: Board | null
   colors: Colors[] = lightTheme

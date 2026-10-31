@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "stack-check-frontend": {
+    "kanban-frontend": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -14,7 +14,7 @@
           "builder": "@angular/build:application",
           "options": {
             "outputPath": {
-              "base": "dist/stack-check-frontend"
+              "base": "dist/kanban-frontend"
             },
             "index": "src/index.html",
             "polyfills": [
@@ -46,6 +46,11 @@
                   "maximumError": "4kb"
                 }
               ],
+              "optimization": {
+                "scripts": true,
+                "styles": true,
+                "fonts": false
+              },
               "outputHashing": "all"
             },
             "development": {
@@ -70,10 +75,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "stack-check-frontend:build:production"
+              "buildTarget": "kanban-frontend:build:production"
             },
             "development": {
-              "buildTarget": "stack-check-frontend:build:development"
+              "buildTarget": "kanban-frontend:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -81,7 +86,7 @@
         "extract-i18n": {
           "builder": "@angular/build:extract-i18n",
           "options": {
-            "buildTarget": "stack-check-frontend:build"
+            "buildTarget": "kanban-frontend:build"
           }
         },
         "test": {
