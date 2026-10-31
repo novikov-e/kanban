@@ -11,6 +11,8 @@
 Одноразовый `migrate` (`alembic upgrade head`) запускается после готовности БД; `backend` и
 `positions-rebalancer` стартуют только после его успешного завершения. Все три собираются из одного образа
 `kanban-backend`. nginx во фронтенд-контейнере раздаёт сборку Angular и проксирует `/api/` на `backend:8000`.
+Healthcheck бэкенда — `GET /health` (200, если доступна БД, иначе 503); наружу он не проксируется,
+`frontend` ждёт здорового `backend`.
 
 Демо-данные не входят в миграции. Создать демо-пользователя с демо-доской:
 `docker compose exec -e DEMO_PASSWORD=<пароль> backend python -m app.demo.seed`

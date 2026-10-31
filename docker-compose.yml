@@ -75,6 +75,12 @@ services:
     <<: *backend-service
     restart: unless-stopped
     depends_on: *after-migrations
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=3)"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
 
   positions-rebalancer:
     <<: *backend-service
@@ -91,7 +97,8 @@ services:
     ports:
       - "127.0.0.1:8080:80"
     depends_on:
-      - backend
+      backend:
+        condition: service_healthy
     networks:
       - kanban
     logging: *logging
