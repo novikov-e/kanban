@@ -8,6 +8,10 @@
 Сервисы `postgresql`, `backend`, `frontend` в общей сети `kanban`. Бэкенд применяет миграции при старте,
 nginx во фронтенд-контейнере раздаёт сборку Angular и проксирует `/api/` на `backend:8000`.
 
+Демо-данные не входят в миграции. Создать демо-пользователя с демо-доской:
+`docker compose exec -e DEMO_PASSWORD=<пароль> backend python -m app.demo.seed`
+(email — `DEMO_EMAIL`, по умолчанию `demo@example.com`; повторный запуск ничего не дублирует).
+
 Локальная разработка:
 
 - БД: `docker compose up -d postgresql`.
