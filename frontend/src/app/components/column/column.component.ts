@@ -9,7 +9,7 @@ import {Colors} from '../../models/colors'
 import {Column} from '../../models/column'
 import {Task} from '../../models/task'
 import {BoardStore} from '../../state/board.store'
-import {isNoopDrop, isTaskDrag} from '../../utils/drag-drop'
+import {isNoopDrop, taskListId} from '../../utils/drag-drop'
 import {TaskComponent} from '../task/task.component'
 
 @Component({
@@ -29,12 +29,12 @@ import {TaskComponent} from '../task/task.component'
   ],
 })
 export class ColumnComponent {
-  private store = inject(BoardStore)
+  protected readonly store = inject(BoardStore)
 
   readonly column = input.required<Column>()
   readonly colors = input.required<Colors[]>()
 
-  protected readonly isTaskDrag = isTaskDrag
+  protected readonly taskListId = taskListId
 
   rename(name: string) {
     this.store.renameColumn(this.column().id, name)

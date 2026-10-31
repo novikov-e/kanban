@@ -71,9 +71,10 @@
 
   <div
     cdkDropList
+    [id]="subtaskListId(task().id)"
     [cdkDropListData]="task().subtasks"
+    [cdkDropListConnectedTo]="store.subtaskListIds()"
     class="subtask_drag_list"
-    [cdkDropListEnterPredicate]="isSubtaskDrag"
     (cdkDropListDropped)="onSubtaskDrop($event)"
   >
     @for (subtask of task().subtasks; track subtask.id) {

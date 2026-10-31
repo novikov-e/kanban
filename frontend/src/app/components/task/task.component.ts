@@ -10,7 +10,7 @@ import {Colors} from '../../models/colors'
 import {Subtask} from '../../models/subtask'
 import {Task} from '../../models/task'
 import {BoardStore} from '../../state/board.store'
-import {isNoopDrop, isSubtaskDrag} from '../../utils/drag-drop'
+import {isNoopDrop, subtaskListId} from '../../utils/drag-drop'
 import {SubtaskComponent} from '../subtask/subtask.component'
 
 @Component({
@@ -33,12 +33,12 @@ import {SubtaskComponent} from '../subtask/subtask.component'
   ],
 })
 export class TaskComponent {
-  private store = inject(BoardStore)
+  protected readonly store = inject(BoardStore)
 
   readonly task = input.required<Task>()
   readonly colors = input.required<Colors[]>()
 
-  protected readonly isSubtaskDrag = isSubtaskDrag
+  protected readonly subtaskListId = subtaskListId
 
   rename(name: string) {
     this.store.renameTask(this.task().id, name)

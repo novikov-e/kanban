@@ -1,16 +1,13 @@
-<div class="nothing" cdkDropListGroup>
-  <div
-    class="columns"
-    cdkDropList
-    [cdkDropListData]="board().columns"
-    [cdkDropListEnterPredicate]="isColumnDrag"
-    cdkDropListOrientation="horizontal"
-    (cdkDropListDropped)="onColumnDrop($event)"
-  >
-    @for (column of board().columns; track column.id) {
-      <div class="nothing" cdkDrag [cdkDragData]="column">
-        <app-column [column]="column" [colors]="colors()"></app-column>
-      </div>
-    }
-  </div>
+<div
+  class="columns"
+  cdkDropList
+  [cdkDropListData]="board().columns"
+  cdkDropListOrientation="horizontal"
+  (cdkDropListDropped)="onColumnDrop($event)"
+>
+  @for (column of board().columns; track column.id) {
+    <div class="nothing" cdkDrag [cdkDragData]="column">
+      <app-column [column]="column" [colors]="colors()"></app-column>
+    </div>
+  }
 </div>

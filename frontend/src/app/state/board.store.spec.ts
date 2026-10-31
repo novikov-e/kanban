@@ -69,4 +69,20 @@ describe('BoardStore', () => {
     httpMock.expectNone(req => req.url.endsWith('/tasks'))
     expect(localColumn().tasks[0].name).toBe('Задача')
   })
+
+  it('connects the drop lists of all columns and tasks and keeps them stable on unrelated changes', () => {
+    store.addTask('column-1')
+    const taskId = store.board()!.columns[0].tasks[0].id
+    const taskListIds = store.taskListIds()
+
+    store.renameColumn('column-1', 'Колонка 2')
+    httpMock.expectOne({method: 'PATCH', url: '/api/v1/columns/column-1'}).flush(null)
+
+    expect(store.taskListIds()).toBe(taskListIds)
+    expect(taskListIds).toEqual(['tasks-of-column-1'])
+    expect(store.subtaskListIds()).toEqual([`subtasks-of-${taskId}`])
+
+    store.addColumn()
+    expect(store.taskListIds()).toEqual(['tasks-of-column-1', `tasks-of-${localColumn().id}`])
+  })
 })

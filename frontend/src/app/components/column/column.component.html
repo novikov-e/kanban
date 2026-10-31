@@ -45,8 +45,9 @@
   <div
     class="column-drop-list"
     cdkDropList
+    [id]="taskListId(column().id)"
     [cdkDropListData]="column().tasks"
-    [cdkDropListEnterPredicate]="isTaskDrag"
+    [cdkDropListConnectedTo]="store.taskListIds()"
     (cdkDropListDropped)="onTaskDrop($event)"
   >
     @for (task of column().tasks; track task.id) {

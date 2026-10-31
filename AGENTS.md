@@ -55,6 +55,8 @@ nginx во фронтенд-контейнере раздаёт сборку Ang
 - Состояние хранится в signal-сторах `state/user.store.ts` и `state/board.store.ts`; компоненты получают данные
   через `input()` и вызывают методы стора. Дерево доски неизменяемо: правки — только через чистые функции
   `utils/board-tree.ts`, которые возвращают новые объекты.
+- Списки перетаскивания вложены друг в друга, поэтому `cdkDropListGroup` не работает: списки одного уровня
+  связываются через `cdkDropListConnectedTo` с id из `BoardStore.taskListIds` / `subtaskListIds`.
 - Сервисы в `services/` только отправляют HTTP-запросы и возвращают `Observable`; подписываются сторы.
 - Ошибки HTTP обрабатывает `interceptors/http-error.interceptor.ts` (снекбар), сервисы их не перехватывают.
 - Access-токен хранится только в памяти (`AuthService`); `auth.interceptor.ts` подставляет его и при 401

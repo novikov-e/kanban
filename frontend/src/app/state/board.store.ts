@@ -1,4 +1,4 @@
-import {inject, Injectable, signal} from '@angular/core'
+import {computed, inject, Injectable, signal} from '@angular/core'
 import {finalize, Observable} from 'rxjs'
 import {Board} from '../models/board'
 import {Column} from '../models/column'
@@ -10,6 +10,7 @@ import {ColumnService} from '../services/column.service'
 import {SubtaskService} from '../services/subtask.service'
 import {TaskService} from '../services/task.service'
 import * as tree from '../utils/board-tree'
+import {sameItems, subtaskListId, taskListId} from '../utils/drag-drop'
 
 /** Как сохранять название элемента одного уровня доски. */
 interface NamedItems {
@@ -33,6 +34,18 @@ export class BoardStore {
   private readonly creating = new Set<string>()
 
   readonly board = this.state.asReadonly()
+
+  /**
+   * id списков, между которыми перетаскиваются задачи и подзадачи. cdkDropListGroup не подходит:
+   * вложенный cdkDropList сбрасывает группу для своих потомков.
+   */
+  readonly taskListIds = computed(() => this.state()?.columns.map(column => taskListId(column.id)) ?? [], {
+    equal: sameItems,
+  })
+  readonly subtaskListIds = computed(
+    () => this.state()?.columns.flatMap(column => column.tasks.map(task => subtaskListId(task.id))) ?? [],
+    {equal: sameItems},
+  )
 
   open(boardId: string): void {
     this.close()
