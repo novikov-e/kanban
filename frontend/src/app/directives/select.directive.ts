@@ -1,7 +1,8 @@
 import {AfterViewInit, Directive, ElementRef, OnInit} from '@angular/core';
 
 @Directive({
-  selector: '[appSelect]'
+    selector: '[appSelect]',
+    standalone: false
 })
 export class SelectDirective implements AfterViewInit {
 

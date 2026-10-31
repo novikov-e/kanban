@@ -2,7 +2,8 @@ import {Directive, ElementRef, HostListener, Input} from '@angular/core';
 import {Colors} from "../models/colors";
 
 @Directive({
-  selector: '[appTextButton]'
+    selector: '[appTextButton]',
+    standalone: false
 })
 export class TextButtonDirective {
 

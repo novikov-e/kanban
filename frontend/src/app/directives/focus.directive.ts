@@ -1,7 +1,8 @@
 import {AfterViewInit, Directive, ElementRef, HostListener, OnInit} from '@angular/core';
 
 @Directive({
-    selector: '[appFocus]'
+    selector: '[appFocus]',
+    standalone: false
 })
 export class FocusDirective implements AfterViewInit {
 

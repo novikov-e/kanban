@@ -7,9 +7,10 @@ import {AppComponent} from "../../app.component";
 import {ColumnService} from "../../services/column.service";
 
 @Component({
-  selector: 'app-board',
-  templateUrl: './board.component.html',
-  styleUrls: ['../../app.component.css']
+    selector: 'app-board',
+    templateUrl: './board.component.html',
+    styleUrls: ['../../app.component.css'],
+    standalone: false
 })
 export class BoardComponent implements OnInit {
 

@@ -7,7 +7,8 @@ import {TaskComponent} from "../task/task.component";
 @Component({
     selector: 'app-subtask',
     templateUrl: './subtask.component.html',
-    styleUrls: ['../../app.component.css']
+    styleUrls: ['../../app.component.css'],
+    standalone: false
 })
 export class SubtaskComponent {
 

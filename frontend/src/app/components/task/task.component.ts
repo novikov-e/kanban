@@ -10,7 +10,8 @@ import {SubtaskService} from "../../services/subtask.service";
 @Component({
     selector: 'app-task',
     templateUrl: './task.component.html',
-    styleUrls: ['../../app.component.css']
+    styleUrls: ['../../app.component.css'],
+    standalone: false
 })
 export class TaskComponent implements OnInit {
 

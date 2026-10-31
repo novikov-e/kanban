@@ -10,7 +10,8 @@ import {TaskService} from "../../services/task.service";
 @Component({
     selector: 'app-column',
     templateUrl: './column.component.html',
-    styleUrls: ['../../app.component.css']
+    styleUrls: ['../../app.component.css'],
+    standalone: false
 })
 export class ColumnComponent implements OnInit {
 
