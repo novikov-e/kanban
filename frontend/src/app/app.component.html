@@ -62,6 +62,7 @@
     <div class="workspace_container">
       <mat-drawer-container class="background_transparent" autosize>
         <mat-drawer class="background_transparent pl-1" #drawer mode="side">
+          @if (user) {
           <div class="user_details" [style.border-color]="colors[1].firstColor">
             <button class="text_button m-5" appTextButton [matIcon]="createBoardIcon._elementRef"
               [text]="textButton" [color]="colors[1]" (click)="newBoard()">
@@ -114,6 +115,7 @@
               </button>
             }
           </div>
+          }
         </mat-drawer>
         @if (board!=null) {
           <app-board [board]="board" [colors]="colors"

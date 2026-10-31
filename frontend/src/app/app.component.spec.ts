@@ -1,31 +1,65 @@
-import { TestBed } from '@angular/core/testing';
-import { AppComponent } from './app.component';
+import {TestBed} from '@angular/core/testing';
+import {provideHttpClient} from '@angular/common/http';
+import {HttpTestingController, provideHttpClientTesting} from '@angular/common/http/testing';
+import {AppComponent} from './app.component';
+import {AppModule} from './app.module';
+import {Board} from './models/board';
+import {User} from './models/user';
+
+const user: User = {
+  id: 'user-1',
+  firstname: 'Егор',
+  lastname: 'Новиков',
+  dateOfBirth: '1990-01-31',
+  sex: 'M',
+  image: '',
+  email: 'user@example.com',
+  darkTheme: false,
+  lastBoard: null,
+  boards: [new Board('board-1', 'Первая доска', 0), new Board('board-2', 'Вторая доска', 1)],
+};
 
 describe('AppComponent', () => {
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [
-        AppComponent
-      ],
-    }).compileComponents();
+  let httpMock: HttpTestingController;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [AppModule],
+      providers: [provideHttpClient(), provideHttpClientTesting()],
+    });
+    httpMock = TestBed.inject(HttpTestingController);
   });
 
-  it('should create the app', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
-  });
+  afterEach(() => httpMock.verify());
 
-  // it(`should have as title 'stack-check-frontend'`, () => {
-  //   const fixture = TestBed.createComponent(AppComponent);
-  //   const app = fixture.componentInstance;
-  //   expect(app.title).toEqual('stack-check-frontend');
-  // });
-
-  it('should render title', () => {
+  it('loads the user and lists their boards in the menu', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('.content span')?.textContent).toContain('stack-check-frontend app is running!');
+
+    httpMock.expectOne({method: 'GET', url: '/api/v1/user'}).flush(user);
+    fixture.detectChanges();
+
+    const menu = fixture.nativeElement.querySelector('.list_boards') as HTMLElement;
+    expect(menu.textContent).toContain('Первая доска');
+    expect(menu.textContent).toContain('Вторая доска');
+  });
+
+  it('opens the last board of the user', () => {
+    const fixture = TestBed.createComponent(AppComponent);
+    fixture.detectChanges();
+
+    httpMock.expectOne('/api/v1/user').flush({...user, lastBoard: 'board-2'});
+
+    const boardRequest = httpMock.expectOne(req => req.url === '/api/v1/board');
+    expect(boardRequest.request.params.get('id')).toBe('board-2');
+    const lastBoardRequest = httpMock.expectOne({method: 'POST', url: '/api/v1/user/last_board'});
+    expect(lastBoardRequest.request.body).toEqual({userId: 'user-1', boardId: 'board-2'});
+
+    boardRequest.flush(new Board('board-2', 'Вторая доска', 1));
+    lastBoardRequest.flush({status: 'success'});
+    fixture.detectChanges();
+
+    const title = fixture.nativeElement.querySelector('.header input') as HTMLInputElement;
+    expect(title.value).toBe('Вторая доска');
   });
 });
