@@ -1,6 +1,6 @@
 @let palette = colors();
 <div class="column">
-  <div class="border_container min-height-38" [style.border-color]="palette[1].firstColor">
+  <div class="border_container column_header" [style.border-color]="palette[1].firstColor">
     <div class="title-and-buttons" [style.border-color]="palette[1].firstColor">
       <div class="text_grow">
         <textarea
@@ -27,7 +27,7 @@
           [color]="palette[1]"
           (click)="addTask()"
         >
-          <mat-icon class="button_icon" #newTaskIcon [style.color]="palette[1].firstColor">assignment_add</mat-icon>
+          <mat-icon #newTaskIcon [style.color]="palette[1].firstColor">assignment_add</mat-icon>
         </button>
 
         <button

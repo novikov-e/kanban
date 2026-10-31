@@ -16,7 +16,7 @@ import {SubtaskComponent} from '../subtask/subtask.component'
 @Component({
   selector: 'app-task',
   templateUrl: './task.component.html',
-  styleUrls: ['../../app.component.css'],
+  styleUrl: './task.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     MatInput,

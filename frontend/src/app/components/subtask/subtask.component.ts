@@ -11,7 +11,7 @@ import {BoardStore} from '../../state/board.store'
 @Component({
   selector: 'app-subtask',
   templateUrl: './subtask.component.html',
-  styleUrls: ['../../app.component.css'],
+  styleUrl: './subtask.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [MatIcon, MatInput, CdkTextareaAutosize, FocusDirective, ButtonHoverDirective],
 })

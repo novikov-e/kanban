@@ -10,7 +10,7 @@ import {ColumnComponent} from '../column/column.component'
 @Component({
   selector: 'app-board',
   templateUrl: './board.component.html',
-  styleUrls: ['../../app.component.css'],
+  styleUrl: './board.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CdkDropList, CdkDrag, ColumnComponent],
 })

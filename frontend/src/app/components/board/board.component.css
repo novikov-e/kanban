@@ -1,0 +1,25 @@
+.columns {
+  height: 100%;
+  display: flex;
+  overflow-x: auto;
+}
+
+.columns::-webkit-scrollbar {
+  width: 10px;
+  background-color: transparent;
+}
+
+.columns::-webkit-scrollbar-thumb {
+  border: 2px solid #bcbcbc;
+  border-radius: 10px;
+  background-color: transparent;
+}
+
+.columns::-webkit-scrollbar-track {
+  border-radius: 10px;
+  background-color: transparent;
+}
+
+.column_item {
+  height: 100%;
+}

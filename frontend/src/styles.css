@@ -1,11 +1,77 @@
 html,
-body,
-app-root,
-app-workspace {
-  display: block;
+body {
   height: 100%;
 }
+
 body {
   margin: 0;
   font-family: Roboto, 'Helvetica Neue', sans-serif;
+}
+
+input,
+textarea,
+button {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+/* Превью перетаскивания CDK вставляет в body, вне рабочей области */
+.cdk-drag-preview {
+  font-family: sans-serif;
+  font-size: 15px;
+}
+
+/* Общие элементы колонок, задач и подзадач */
+
+.border_container {
+  box-sizing: border-box;
+  border: solid 2px #bcbcbc;
+  border-radius: 18px;
+  margin: 0 1px 2px 1px;
+  padding: 5px;
+  user-select: none;
+}
+
+.title-and-buttons {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  align-items: start;
+  box-sizing: border-box;
+}
+
+.text_grow {
+  display: flex;
+  height: 100%;
+  flex-grow: 1;
+}
+
+.transparent_text_input {
+  width: 100%;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  overflow: hidden;
+  margin-left: 3px;
+  padding: 3px;
+}
+
+.column-task-title {
+  margin-left: 6px;
+  font-size: 15px;
+  font-weight: bold;
+  padding: 3px;
+}
+
+.buttons_container {
+  display: flex;
+}
+
+.custom_icon_button {
+  width: 24px;
+  height: 24px;
+  border: none;
+  background-color: transparent;
+  position: relative;
+  padding: 0;
 }

@@ -15,7 +15,7 @@ import {TaskComponent} from '../task/task.component'
 @Component({
   selector: 'app-column',
   templateUrl: './column.component.html',
-  styleUrls: ['../../app.component.css'],
+  styleUrl: './column.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     MatInput,

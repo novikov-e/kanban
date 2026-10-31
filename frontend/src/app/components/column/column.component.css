@@ -1,0 +1,22 @@
+.column {
+  width: 320px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.column_header {
+  min-height: 38px;
+  align-items: center;
+}
+
+.column-drop-list {
+  height: 100%;
+  box-sizing: border-box;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.column-drop-list::-webkit-scrollbar {
+  width: 0;
+}

@@ -17,7 +17,7 @@ import {isNoopDrop} from '../../utils/drag-drop'
 @Component({
   selector: 'app-workspace',
   templateUrl: './workspace.component.html',
-  styleUrls: ['../../app.component.css'],
+  styleUrl: './workspace.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     TextButtonDirective,

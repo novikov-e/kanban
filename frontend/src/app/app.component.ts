@@ -4,6 +4,7 @@ import {RouterOutlet} from '@angular/router'
 @Component({
   selector: 'app-root',
   template: '<router-outlet />',
+  styles: ':host { display: block; height: 100%; }',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [RouterOutlet],
 })

@@ -1,0 +1,24 @@
+.subtask {
+  margin-top: 2px;
+}
+
+.custom_checkbox {
+  position: relative;
+  width: 24px;
+  height: 24px;
+}
+
+.custom_checkbox_size {
+  height: 24px;
+  width: 24px;
+  position: absolute;
+}
+
+.custom_checkbox_focused {
+  display: none;
+}
+
+.custom_checkbox:hover .custom_checkbox_focused {
+  display: block;
+  z-index: 1;
+}

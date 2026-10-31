@@ -6,7 +6,7 @@
   (cdkDropListDropped)="onColumnDrop($event)"
 >
   @for (column of board().columns; track column.id) {
-    <div class="nothing" cdkDrag [cdkDragData]="column">
+    <div class="column_item" cdkDrag [cdkDragData]="column">
       <app-column [column]="column" [colors]="colors()"></app-column>
     </div>
   }

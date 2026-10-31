@@ -1,0 +1,10 @@
+.colors-menu {
+  display: flex;
+  background-color: #171a1c;
+  border-radius: 16px;
+  border: solid 2px #bcbcbc;
+}
+
+.subtask_drag_list {
+  min-height: 1px;
+}
