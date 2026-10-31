@@ -1,8 +1,9 @@
 from uuid import UUID
 
-from fastapi import APIRouter, status
+from fastapi import APIRouter, Request, status
 
 from app.api.dependencies import UNAUTHORIZED, CurrentUserId, DbSession, not_found
+from app.api.etag import NOT_MODIFIED, json_with_etag
 from app.schemas.board import BoardResponse, BoardUpdateRequest
 from app.services import board_service
 
@@ -15,10 +16,19 @@ async def create_board(user_id: CurrentUserId, db: DbSession):
     return await board_service.create_board(db, user_id)
 
 
-@router.get("/{board_id}", response_model=BoardResponse, summary="Доска целиком", responses=not_found("доска"))
-async def get_board(board_id: UUID, user_id: CurrentUserId, db: DbSession):
-    """Доска со всеми колонками, задачами и подзадачами."""
-    return await board_service.get_board(db, user_id, board_id)
+@router.get(
+    "/{board_id}",
+    response_model=BoardResponse,
+    summary="Доска целиком",
+    responses={**not_found("доска"), **NOT_MODIFIED},
+)
+async def get_board(board_id: UUID, request: Request, user_id: CurrentUserId, db: DbSession):
+    """Доска со всеми колонками, задачами и подзадачами.
+
+    Ответ содержит `ETag`; с заголовком `If-None-Match` неизменившаяся доска отвечает 304 без тела.
+    """
+    board = await board_service.get_board(db, user_id, board_id)
+    return json_with_etag(request, BoardResponse.model_validate(board))
 
 
 @router.patch(

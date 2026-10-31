@@ -1,5 +1,5 @@
 import {CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray} from '@angular/cdk/drag-drop'
-import {ChangeDetectionStrategy, Component, inject, OnInit, signal} from '@angular/core'
+import {ChangeDetectionStrategy, Component, HostListener, inject, OnInit, signal} from '@angular/core'
 import {MatIcon} from '@angular/material/icon'
 import {MatInput} from '@angular/material/input'
 import {MatDrawer, MatDrawerContainer} from '@angular/material/sidenav'
@@ -12,10 +12,10 @@ import {TextButtonDirective} from './directives/text-button.directive'
 import {Board} from './models/board'
 import {Colors} from './models/colors'
 import {Column} from './models/column'
-import {UNSAVED_ID} from './models/entity'
+import {hasUnsavedItems, UNSAVED_ID} from './models/entity'
 import {User} from './models/user'
 import {AuthService} from './services/auth.service'
-import {BoardService} from './services/board.service'
+import {BoardService, VersionedBoard} from './services/board.service'
 import {UserService} from './services/user.service'
 
 @Component({
@@ -45,6 +45,7 @@ export class AppComponent implements OnInit {
   user: User
   board: Board | null = null
   colors: Colors[] = lightTheme
+  private boardEtag: string | null = null
 
   ngOnInit(): void {
     this.auth.refresh().subscribe({
@@ -83,8 +84,21 @@ export class AppComponent implements OnInit {
       return
     }
     this.board = null
-    this.boardService.get(boardId).subscribe(board => (this.board = board))
+    this.boardService.get(boardId).subscribe(loaded => this.showBoard(loaded))
     this.rememberLastBoard(boardId)
+  }
+
+  @HostListener('document:visibilitychange')
+  syncBoard() {
+    const board = this.board
+    if (document.visibilityState !== 'visible' || !board || !this.boardEtag || hasUnsavedItems(board)) {
+      return
+    }
+    this.boardService.getIfChanged(board.id, this.boardEtag).subscribe(changed => {
+      if (changed && this.board?.id === board.id) {
+        this.showBoard(changed)
+      }
+    })
   }
 
   closeBoard() {
@@ -121,6 +135,11 @@ export class AppComponent implements OnInit {
     this.user.darkTheme = !this.user.darkTheme
     this.colors = this.user.darkTheme ? darkTheme : lightTheme
     this.userService.setDarkTheme(this.user.darkTheme)
+  }
+
+  private showBoard({board, etag}: VersionedBoard) {
+    this.board = board
+    this.boardEtag = etag
   }
 
   private rememberLastBoard(boardId: string | null) {

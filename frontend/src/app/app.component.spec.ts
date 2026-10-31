@@ -77,4 +77,28 @@ describe('AppComponent', () => {
     const title = fixture.nativeElement.querySelector('.header input') as HTMLInputElement
     expect(title.value).toBe('Вторая доска')
   })
+
+  it('refreshes the open board when the tab becomes visible and the board has changed', () => {
+    const fixture = startWithSession({...user, lastBoard: 'board-2'})
+    httpMock.expectOne('/api/v1/boards/board-2').flush(new Board('board-2', 'Вторая доска', 1), {
+      headers: {ETag: '"v1"'},
+    })
+    httpMock.expectOne({method: 'PATCH', url: '/api/v1/users/me'}).flush(null)
+    fixture.detectChanges()
+    const title = () => (fixture.nativeElement.querySelector('.header input') as HTMLInputElement).value
+
+    document.dispatchEvent(new Event('visibilitychange'))
+    const unchanged = httpMock.expectOne('/api/v1/boards/board-2')
+    expect(unchanged.request.headers.get('If-None-Match')).toBe('"v1"')
+    unchanged.flush(null, {status: 304, statusText: 'Not Modified'})
+    fixture.detectChanges()
+    expect(title()).toBe('Вторая доска')
+
+    document.dispatchEvent(new Event('visibilitychange'))
+    httpMock
+      .expectOne('/api/v1/boards/board-2')
+      .flush(new Board('board-2', 'Переименована в другой вкладке', 1), {headers: {ETag: '"v2"'}})
+    fixture.detectChanges()
+    expect(title()).toBe('Переименована в другой вкладке')
+  })
 })
