@@ -8,12 +8,13 @@ from app.schemas.board import BoardShortResponse
 from app.schemas.common import ApiRequest
 
 
-class ThemeUpdateRequest(ApiRequest):
-    dark_theme: bool = Field(description="Включить тёмную тему")
+class UserUpdateRequest(ApiRequest):
+    """Частичное изменение настроек: переданные поля меняются, остальные остаются как есть."""
 
-
-class LastBoardUpdateRequest(ApiRequest):
-    board_id: UUID | None = Field(description="Доска, открываемая при следующем входе; null — доска закрыта")
+    dark_theme: bool | None = Field(default=None, description="Включить тёмную тему")
+    last_board_id: UUID | None = Field(
+        default=None, description="Доска, открываемая при следующем входе; null — доска закрыта"
+    )
 
 
 class UserResponse(BaseModel):

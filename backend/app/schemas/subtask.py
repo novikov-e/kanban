@@ -2,12 +2,16 @@ from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, Field
 
-from app.schemas.common import POSITION_DESCRIPTION, ApiRequest
+from app.schemas.common import INDEX_DESCRIPTION, POSITION_DESCRIPTION, ApiRequest
 
 
-class ChangeStateRequest(ApiRequest):
-    subtask_id: UUID = Field(description="Идентификатор подзадачи")
-    state: bool = Field(description="Выполнена ли подзадача")
+class SubtaskUpdateRequest(ApiRequest):
+    """Частичное изменение подзадачи; `taskId` и `index` перемещают её."""
+
+    name: str | None = Field(default=None, description="Новое название")
+    state: bool | None = Field(default=None, description="Выполнена ли подзадача")
+    task_id: UUID | None = Field(default=None, description="Новая задача пользователя")
+    index: int | None = Field(default=None, ge=0, description=INDEX_DESCRIPTION)
 
 
 class SubtaskResponse(BaseModel):

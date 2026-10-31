@@ -8,15 +8,15 @@ import {User} from '../models/user'
 export class UserService {
   private http = inject(HttpClient)
 
-  getUser(): Observable<User> {
-    return this.http.get<User>(`${API_URL}/user`)
+  getMe(): Observable<User> {
+    return this.http.get<User>(`${API_URL}/users/me`)
   }
 
   setDarkTheme(darkTheme: boolean): void {
-    this.http.post(`${API_URL}/user/theme`, {darkTheme}).subscribe()
+    this.http.patch(`${API_URL}/users/me`, {darkTheme}).subscribe()
   }
 
-  setLastBoard(boardId: string | null): void {
-    this.http.post(`${API_URL}/user/last_board`, {boardId}).subscribe()
+  setLastBoard(lastBoardId: string | null): void {
+    this.http.patch(`${API_URL}/users/me`, {lastBoardId}).subscribe()
   }
 }

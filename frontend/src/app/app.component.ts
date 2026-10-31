@@ -54,7 +54,7 @@ export class AppComponent implements OnInit {
   }
 
   loadUser() {
-    this.userService.getUser().subscribe(user => {
+    this.userService.getMe().subscribe(user => {
       this.user = user
       this.sessionChecked.set(true)
       this.colors = user.darkTheme ? darkTheme : lightTheme

@@ -9,22 +9,22 @@ export class BoardService {
   private http = inject(HttpClient)
 
   get(boardId: string): Observable<Board> {
-    return this.http.get<Board>(`${API_URL}/board`, {params: {id: boardId}})
+    return this.http.get<Board>(`${API_URL}/boards/${boardId}`)
   }
 
   create(): Observable<Board> {
-    return this.http.post<Board>(`${API_URL}/board/create`, null)
+    return this.http.post<Board>(`${API_URL}/boards`, null)
   }
 
   rename(boardId: string, name: string): void {
-    this.http.post(`${API_URL}/board/rename`, {objectId: boardId, name}).subscribe()
+    this.http.patch(`${API_URL}/boards/${boardId}`, {name}).subscribe()
   }
 
-  move(boardId: string, position: number): void {
-    this.http.post(`${API_URL}/board/move`, {movedObjectId: boardId, currentPosition: position}).subscribe()
+  move(boardId: string, index: number): void {
+    this.http.patch(`${API_URL}/boards/${boardId}`, {index}).subscribe()
   }
 
   delete(boardId: string): void {
-    this.http.post(`${API_URL}/board/delete`, {objectId: boardId}).subscribe()
+    this.http.delete(`${API_URL}/boards/${boardId}`).subscribe()
   }
 }

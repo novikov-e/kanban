@@ -9,23 +9,22 @@ export class TaskService {
   private http = inject(HttpClient)
 
   create(columnId: string, name: string): Observable<Task> {
-    return this.http.post<Task>(`${API_URL}/task/create`, {parentObjectId: columnId, name})
+    return this.http.post<Task>(`${API_URL}/columns/${columnId}/tasks`, {name})
   }
 
   rename(taskId: string, name: string): void {
-    this.http.post(`${API_URL}/task/rename`, {objectId: taskId, name}).subscribe()
+    this.http.patch(`${API_URL}/tasks/${taskId}`, {name}).subscribe()
   }
 
   changeColor(taskId: string, color: number): void {
-    this.http.post(`${API_URL}/task/color`, {taskId, color}).subscribe()
+    this.http.patch(`${API_URL}/tasks/${taskId}`, {color}).subscribe()
   }
 
-  move(taskId: string, columnId: string, position: number): void {
-    const body = {movedObjectId: taskId, currentParentObject: columnId, currentPosition: position}
-    this.http.post(`${API_URL}/task/move`, body).subscribe()
+  move(taskId: string, columnId: string, index: number): void {
+    this.http.patch(`${API_URL}/tasks/${taskId}`, {columnId, index}).subscribe()
   }
 
   delete(taskId: string): void {
-    this.http.post(`${API_URL}/task/delete`, {objectId: taskId}).subscribe()
+    this.http.delete(`${API_URL}/tasks/${taskId}`).subscribe()
   }
 }

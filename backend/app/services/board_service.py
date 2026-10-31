@@ -15,10 +15,12 @@ BOARD_ORDER = ordering.OrderedChildren(
     entity="Board",
     id=Board.board_id,
     parent_id=Board.user_id,
-    parent_key=User.id,
     position=Board.board_position,
     deleted_at=Board.deleted_at,
     owned_by=board_owned_by,
+    parent_entity="User",
+    parent_key=User.id,
+    parent_owned_by=lambda user_id: User.id == user_id,
 )
 
 
@@ -26,7 +28,7 @@ async def create_board(session: AsyncSession, user_id: UUID) -> Board:
     board = Board(
         user_id=user_id,
         board_name=DEFAULT_BOARD_NAME,
-        board_position=await ordering.next_position(session, BOARD_ORDER, user_id),
+        board_position=await ordering.next_position(session, BOARD_ORDER, user_id, user_id),
     )
     return await crud.insert(session, board, empty_collections=("columns",))
 
@@ -47,12 +49,13 @@ async def get_board(session: AsyncSession, user_id: UUID, board_id: UUID) -> Boa
     return board
 
 
-async def rename_board(session: AsyncSession, user_id: UUID, board_id: UUID, name: str) -> None:
-    await crud.update_by_id(session, Board.board_id, board_id, "Board", board_owned_by(user_id), board_name=name)
-
-
-async def move_board(session: AsyncSession, user_id: UUID, board_id: UUID, position: int) -> None:
-    await ordering.move(session, BOARD_ORDER, user_id, board_id, user_id, position)
+async def update_board(
+    session: AsyncSession, user_id: UUID, board_id: UUID, name: str | None = None, index: int | None = None
+) -> None:
+    values = {"board_name": name} if name is not None else {}
+    await crud.update_by_id(session, Board.board_id, board_id, "Board", board_owned_by(user_id), **values)
+    if index is not None:
+        await ordering.move(session, BOARD_ORDER, user_id, board_id, new_index=index)
 
 
 async def delete_board(session: AsyncSession, user_id: UUID, board_id: UUID) -> None:

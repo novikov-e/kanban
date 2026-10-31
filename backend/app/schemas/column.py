@@ -2,8 +2,16 @@ from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, Field
 
-from app.schemas.common import POSITION_DESCRIPTION
+from app.schemas.common import INDEX_DESCRIPTION, POSITION_DESCRIPTION, ApiRequest
 from app.schemas.task import TaskResponse
+
+
+class ColumnUpdateRequest(ApiRequest):
+    """Частичное изменение колонки; `boardId` и `index` перемещают её."""
+
+    name: str | None = Field(default=None, description="Новое название")
+    board_id: UUID | None = Field(default=None, description="Новая доска пользователя")
+    index: int | None = Field(default=None, ge=0, description=INDEX_DESCRIPTION)
 
 
 class ColumnResponse(BaseModel):

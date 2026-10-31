@@ -1,3 +1,4 @@
+from typing import Any
 from uuid import UUID
 
 from sqlalchemy import select
@@ -22,11 +23,8 @@ async def get_user(session: AsyncSession, user_id: UUID) -> User:
     return user
 
 
-async def update_theme(session: AsyncSession, user_id: UUID, dark_theme: bool) -> None:
-    await crud.update_by_id(session, User.id, user_id, "User", User.id == user_id, dark_theme=dark_theme)
-
-
-async def update_last_board(session: AsyncSession, user_id: UUID, board_id: UUID | None) -> None:
-    if board_id is not None:
-        await crud.ensure_exists(session, Board.board_id, board_id, "Board", board_owned_by(user_id))
-    await crud.update_by_id(session, User.id, user_id, "User", User.id == user_id, last_board=board_id)
+async def update_user(session: AsyncSession, user_id: UUID, **values: Any) -> None:
+    """Обновляет настройки пользователя: `dark_theme` и `last_board` (None — доска закрыта)."""
+    if values.get("last_board") is not None:
+        await crud.ensure_exists(session, Board.board_id, values["last_board"], "Board", board_owned_by(user_id))
+    await crud.update_by_id(session, User.id, user_id, "User", User.id == user_id, **values)

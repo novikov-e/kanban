@@ -32,7 +32,12 @@ nginx во фронтенд-контейнере раздаёт сборку Ang
 ## Сущности и API
 
 Иерархия: Board → Column → Task → Subtask. Одни и те же имена используются в моделях фронтенда,
-компонентах, сервисах, маршрутах (`/api/v1/board`, `/column`, `/task`, `/subtask`) и моделях бэкенда.
+компонентах, сервисах, маршрутах и моделях бэкенда.
+
+- REST: `GET/PATCH /users/me`; `POST /boards`; `GET/PATCH/DELETE /boards/{id}`; создание дочерних элементов —
+  `POST /boards/{id}/columns`, `/columns/{id}/tasks`, `/tasks/{id}/subtasks`; `PATCH/DELETE /columns/{id}`,
+  `/tasks/{id}`, `/subtasks/{id}`. `PATCH` частичный и отвечает 204; перемещение — `PATCH` с `index`
+  и, при смене родителя, `boardId` / `columnId` / `taskId`.
 
 - JSON ответов — camelCase с полями `id`, `name`, `position` и вложенными `columns` / `tasks` / `subtasks`.
   Маппинг с колонками БД (`board_id`, `task_name`, …) делается через `validation_alias` в `backend/app/schemas/`.

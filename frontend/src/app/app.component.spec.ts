@@ -35,7 +35,7 @@ describe('AppComponent', () => {
     const fixture = TestBed.createComponent(AppComponent)
     fixture.detectChanges()
     httpMock.expectOne({method: 'POST', url: '/api/v1/auth/refresh'}).flush({accessToken: 'access-token'})
-    const userRequest = httpMock.expectOne({method: 'GET', url: '/api/v1/user'})
+    const userRequest = httpMock.expectOne({method: 'GET', url: '/api/v1/users/me'})
     expect(userRequest.request.headers.get('Authorization')).toBe('Bearer access-token')
     userRequest.flush(sessionUser)
     fixture.detectChanges()
@@ -66,13 +66,12 @@ describe('AppComponent', () => {
   it('opens the last board of the user', () => {
     const fixture = startWithSession({...user, lastBoard: 'board-2'})
 
-    const boardRequest = httpMock.expectOne(req => req.url === '/api/v1/board')
-    expect(boardRequest.request.params.get('id')).toBe('board-2')
-    const lastBoardRequest = httpMock.expectOne({method: 'POST', url: '/api/v1/user/last_board'})
-    expect(lastBoardRequest.request.body).toEqual({boardId: 'board-2'})
+    const boardRequest = httpMock.expectOne({method: 'GET', url: '/api/v1/boards/board-2'})
+    const lastBoardRequest = httpMock.expectOne({method: 'PATCH', url: '/api/v1/users/me'})
+    expect(lastBoardRequest.request.body).toEqual({lastBoardId: 'board-2'})
 
     boardRequest.flush(new Board('board-2', 'Вторая доска', 1))
-    lastBoardRequest.flush({status: 'success'})
+    lastBoardRequest.flush(null)
     fixture.detectChanges()
 
     const title = fixture.nativeElement.querySelector('.header input') as HTMLInputElement

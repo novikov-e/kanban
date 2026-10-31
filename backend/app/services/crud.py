@@ -31,6 +31,10 @@ async def update_by_id(
     owned: ColumnElement[bool],
     **values: Any,
 ) -> None:
+    """Обновляет поля объекта; без полей только проверяет, что объект существует и принадлежит пользователю."""
+    if not values:
+        await ensure_exists(session, id_column, object_id, entity, owned)
+        return
     model = id_column.class_
     stmt = update(model).where(id_column == object_id, model.deleted_at.is_(None), owned).values(**values)
     result = await session.execute(stmt)

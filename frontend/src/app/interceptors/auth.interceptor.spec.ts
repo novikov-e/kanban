@@ -22,12 +22,12 @@ describe('authInterceptor', () => {
 
   it('refreshes an expired access token once and retries the request', () => {
     let response: unknown
-    http.get('/api/v1/user').subscribe(body => (response = body))
+    http.get('/api/v1/users/me').subscribe(body => (response = body))
 
-    httpMock.expectOne('/api/v1/user').flush(null, {status: 401, statusText: 'Unauthorized'})
+    httpMock.expectOne('/api/v1/users/me').flush(null, {status: 401, statusText: 'Unauthorized'})
     httpMock.expectOne({method: 'POST', url: '/api/v1/auth/refresh'}).flush({accessToken: 'fresh-token'})
 
-    const retry = httpMock.expectOne('/api/v1/user')
+    const retry = httpMock.expectOne('/api/v1/users/me')
     expect(retry.request.headers.get('Authorization')).toBe('Bearer fresh-token')
     retry.flush({id: 'user-1'})
 
@@ -37,9 +37,9 @@ describe('authInterceptor', () => {
 
   it('drops the session when the refresh token is rejected', () => {
     let completed = false
-    http.get('/api/v1/user').subscribe({complete: () => (completed = true)})
+    http.get('/api/v1/users/me').subscribe({complete: () => (completed = true)})
 
-    httpMock.expectOne('/api/v1/user').flush(null, {status: 401, statusText: 'Unauthorized'})
+    httpMock.expectOne('/api/v1/users/me').flush(null, {status: 401, statusText: 'Unauthorized'})
     httpMock.expectOne('/api/v1/auth/refresh').flush(null, {status: 401, statusText: 'Unauthorized'})
 
     expect(completed).toBe(true)

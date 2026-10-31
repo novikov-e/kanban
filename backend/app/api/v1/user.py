@@ -1,27 +1,29 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, status
 
 from app.api.dependencies import UNAUTHORIZED, CurrentUserId, DbSession, not_found
-from app.schemas.common import StatusResponse
-from app.schemas.user import LastBoardUpdateRequest, ThemeUpdateRequest, UserResponse
+from app.schemas.user import UserResponse, UserUpdateRequest
 from app.services import user_service
 
-router = APIRouter(prefix="/user", tags=["User"], responses=UNAUTHORIZED)
+router = APIRouter(prefix="/users", tags=["User"], responses=UNAUTHORIZED)
 
 
-@router.get("", response_model=UserResponse, summary="Текущий пользователь", responses=not_found("пользователь"))
-async def get_user(user_id: CurrentUserId, db: DbSession):
+@router.get("/me", response_model=UserResponse, summary="Текущий пользователь", responses=not_found("пользователь"))
+async def get_me(user_id: CurrentUserId, db: DbSession):
     """Профиль пользователя, его настройки и список досок без содержимого."""
     return await user_service.get_user(db, user_id)
 
 
-@router.post("/theme", summary="Переключить тему", responses=not_found("пользователь"))
-async def update_theme(request: ThemeUpdateRequest, user_id: CurrentUserId, db: DbSession) -> StatusResponse:
-    await user_service.update_theme(db, user_id, request.dark_theme)
-    return StatusResponse()
-
-
-@router.post("/last_board", summary="Запомнить открытую доску", responses=not_found("пользователь", "доска"))
-async def update_last_board(request: LastBoardUpdateRequest, user_id: CurrentUserId, db: DbSession) -> StatusResponse:
-    """Доска откроется автоматически при следующем входе."""
-    await user_service.update_last_board(db, user_id, request.board_id)
-    return StatusResponse()
+@router.patch(
+    "/me",
+    status_code=status.HTTP_204_NO_CONTENT,
+    summary="Изменить настройки",
+    responses=not_found("пользователь", "доска"),
+)
+async def update_me(request: UserUpdateRequest, user_id: CurrentUserId, db: DbSession) -> None:
+    """Тема интерфейса и доска, которая откроется при следующем входе."""
+    values = {}
+    if request.dark_theme is not None:
+        values["dark_theme"] = request.dark_theme
+    if "last_board_id" in request.model_fields_set:
+        values["last_board"] = request.last_board_id
+    await user_service.update_user(db, user_id, **values)

@@ -23,21 +23,23 @@ class OrderedChildren:
     entity: str
     id: InstrumentedAttribute[Any]
     parent_id: InstrumentedAttribute[Any]
-    parent_key: InstrumentedAttribute[Any]
     position: InstrumentedAttribute[Any]
     deleted_at: InstrumentedAttribute[Any]
     owned_by: Callable[[UUID], ColumnElement[bool]]
+    parent_entity: str
+    parent_key: InstrumentedAttribute[Any]
+    parent_owned_by: Callable[[UUID], ColumnElement[bool]]
 
     @property
     def model(self) -> type:
         return self.id.class_
 
 
-async def next_position(session: AsyncSession, spec: OrderedChildren, parent_id: UUID) -> float:
+async def next_position(session: AsyncSession, spec: OrderedChildren, user_id: UUID, parent_id: UUID) -> float:
+    """Позиция в конце списка `parent_id`; проверяет, что родитель принадлежит пользователю."""
+    await _ensure_parent_owned(session, spec, user_id, parent_id)
     await _lock_parent(session, spec, parent_id)
-    stmt = select(func.max(spec.position)).where(spec.parent_id == parent_id, spec.deleted_at.is_(None))
-    last = (await session.execute(stmt)).scalar_one_or_none()
-    return POSITION_STEP if last is None else last + POSITION_STEP
+    return await _position_at(session, spec, None, parent_id, None)
 
 
 async def move(
@@ -45,22 +47,28 @@ async def move(
     spec: OrderedChildren,
     user_id: UUID,
     object_id: UUID,
-    new_parent_id: UUID,
-    new_index: int,
+    new_parent_id: UUID | None = None,
+    new_index: int | None = None,
 ) -> None:
-    """Ставит объект на место `new_index` в списке `new_parent_id`; индекс за концом списка — вставка в конец."""
-    await _ensure_owned(session, spec, user_id, object_id)
-    await _lock_parent(session, spec, new_parent_id)
+    """Ставит объект на место `new_index` в списке `new_parent_id`.
 
-    position = await _position_at(session, spec, object_id, new_parent_id, new_index)
+    Без родителя объект остаётся в текущем списке, без индекса — встаёт в конец; индекс за концом списка — тоже.
+    """
+    current_parent_id = await _ensure_owned(session, spec, user_id, object_id)
+    parent_id = new_parent_id or current_parent_id
+    if parent_id != current_parent_id:
+        await _ensure_parent_owned(session, spec, user_id, parent_id)
+    await _lock_parent(session, spec, parent_id)
+
+    position = await _position_at(session, spec, object_id, parent_id, new_index)
     if position is None:
-        await rebalance_parent(session, spec, new_parent_id)
-        position = await _position_at(session, spec, object_id, new_parent_id, new_index)
+        await rebalance_parent(session, spec, parent_id)
+        position = await _position_at(session, spec, object_id, parent_id, new_index)
 
     stmt = (
         update(spec.model)
         .where(spec.id == object_id)
-        .values({spec.parent_id.key: new_parent_id, spec.position.key: position})
+        .values({spec.parent_id.key: parent_id, spec.position.key: position})
     )
     await session.execute(stmt)
     await session.commit()
@@ -107,15 +115,20 @@ async def _renumber(session: AsyncSession, spec: OrderedChildren, *conditions: C
 
 
 async def _position_at(
-    session: AsyncSession, spec: OrderedChildren, object_id: UUID, parent_id: UUID, index: int
+    session: AsyncSession, spec: OrderedChildren, object_id: UUID | None, parent_id: UUID, index: int | None
 ) -> float | None:
-    """Позиция между соседями будущего места; None, если точности double между ними не хватает."""
-    is_sibling = (spec.parent_id == parent_id, spec.deleted_at.is_(None), spec.id != object_id)
+    """Позиция между соседями будущего места; None, если точности double между ними не хватает.
+
+    `index=None` — место в конце списка.
+    """
+    is_sibling = [spec.parent_id == parent_id, spec.deleted_at.is_(None)]
+    if object_id is not None:
+        is_sibling.append(spec.id != object_id)
     siblings = select(spec.position).where(*is_sibling).order_by(spec.position, spec.id)
     if index == 0:
         return _between(None, (await session.execute(siblings.limit(1))).scalar_one_or_none())
 
-    neighbours = list((await session.execute(siblings.offset(index - 1).limit(2))).scalars())
+    neighbours = [] if index is None else list((await session.execute(siblings.offset(index - 1).limit(2))).scalars())
     if not neighbours:
         last = (await session.execute(select(func.max(spec.position)).where(*is_sibling))).scalar_one_or_none()
         return _between(last, None)
@@ -133,10 +146,22 @@ def _between(previous: float | None, following: float | None) -> float | None:
     return middle if previous < middle < following else None
 
 
-async def _ensure_owned(session: AsyncSession, spec: OrderedChildren, user_id: UUID, object_id: UUID) -> None:
-    stmt = select(spec.id).where(spec.id == object_id, spec.deleted_at.is_(None), spec.owned_by(user_id))
-    if (await session.execute(stmt)).scalar_one_or_none() is None:
+async def _ensure_owned(session: AsyncSession, spec: OrderedChildren, user_id: UUID, object_id: UUID) -> UUID:
+    """Возвращает текущего родителя объекта."""
+    stmt = select(spec.parent_id).where(spec.id == object_id, spec.deleted_at.is_(None), spec.owned_by(user_id))
+    parent_id = (await session.execute(stmt)).scalar_one_or_none()
+    if parent_id is None:
         raise NotFoundError(spec.entity)
+    return parent_id
+
+
+async def _ensure_parent_owned(session: AsyncSession, spec: OrderedChildren, user_id: UUID, parent_id: UUID) -> None:
+    parent = spec.parent_key.class_
+    stmt = select(spec.parent_key).where(
+        spec.parent_key == parent_id, parent.deleted_at.is_(None), spec.parent_owned_by(user_id)
+    )
+    if (await session.execute(stmt)).scalar_one_or_none() is None:
+        raise NotFoundError(spec.parent_entity)
 
 
 async def _lock_parent(session: AsyncSession, spec: OrderedChildren, parent_id: UUID) -> None:

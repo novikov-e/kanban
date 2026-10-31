@@ -1,42 +1,44 @@
+from uuid import UUID
+
 from fastapi import APIRouter, status
 
 from app.api.dependencies import UNAUTHORIZED, CurrentUserId, DbSession, not_found
-from app.schemas.column import ColumnResponse
-from app.schemas.common import CreateChildRequest, DeleteRequest, MoveRequest, RenameRequest, StatusResponse
+from app.schemas.column import ColumnResponse, ColumnUpdateRequest
+from app.schemas.common import CreateNamedRequest
 from app.services import column_service
 
-router = APIRouter(prefix="/column", tags=["Column"], responses=UNAUTHORIZED)
+router = APIRouter(tags=["Column"], responses=UNAUTHORIZED)
 
 
 @router.post(
-    "/create",
+    "/boards/{board_id}/columns",
     status_code=status.HTTP_201_CREATED,
     response_model=ColumnResponse,
     summary="Создать колонку",
     responses=not_found("доска"),
 )
-async def create_column(request: CreateChildRequest, user_id: CurrentUserId, db: DbSession):
-    """Добавляет колонку в конец доски `parentObjectId`."""
-    return await column_service.create_column(db, user_id, request.parent_object_id, request.name)
+async def create_column(board_id: UUID, request: CreateNamedRequest, user_id: CurrentUserId, db: DbSession):
+    """Добавляет колонку в конец доски."""
+    return await column_service.create_column(db, user_id, board_id, request.name)
 
 
-@router.post("/rename", summary="Переименовать колонку", responses=not_found("колонка"))
-async def rename_column(request: RenameRequest, user_id: CurrentUserId, db: DbSession) -> StatusResponse:
-    await column_service.rename_column(db, user_id, request.object_id, request.name)
-    return StatusResponse()
+@router.patch(
+    "/columns/{column_id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+    summary="Изменить колонку",
+    responses=not_found("колонка", "доска"),
+)
+async def update_column(column_id: UUID, request: ColumnUpdateRequest, user_id: CurrentUserId, db: DbSession) -> None:
+    """Переименование, изменение порядка на доске и перенос на другую доску пользователя."""
+    await column_service.update_column(db, user_id, column_id, request.name, request.board_id, request.index)
 
 
-@router.post("/move", summary="Переместить колонку", responses=not_found("колонка", "доска"))
-async def move_column(request: MoveRequest, user_id: CurrentUserId, db: DbSession) -> StatusResponse:
-    """Меняет порядок колонки на доске или переносит её на другую доску пользователя."""
-    await column_service.move_column(
-        db, user_id, request.moved_object_id, request.current_parent_object, request.current_position
-    )
-    return StatusResponse()
-
-
-@router.post("/delete", summary="Удалить колонку", responses=not_found("колонка"))
-async def delete_column(request: DeleteRequest, user_id: CurrentUserId, db: DbSession) -> StatusResponse:
+@router.delete(
+    "/columns/{column_id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+    summary="Удалить колонку",
+    responses=not_found("колонка"),
+)
+async def delete_column(column_id: UUID, user_id: CurrentUserId, db: DbSession) -> None:
     """Удаляет колонку вместе с задачами и подзадачами."""
-    await column_service.delete_column(db, user_id, request.object_id)
-    return StatusResponse()
+    await column_service.delete_column(db, user_id, column_id)

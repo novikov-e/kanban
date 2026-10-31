@@ -9,23 +9,22 @@ export class SubtaskService {
   private http = inject(HttpClient)
 
   create(taskId: string, name: string): Observable<Subtask> {
-    return this.http.post<Subtask>(`${API_URL}/subtask/create`, {parentObjectId: taskId, name})
+    return this.http.post<Subtask>(`${API_URL}/tasks/${taskId}/subtasks`, {name})
   }
 
   rename(subtaskId: string, name: string): void {
-    this.http.post(`${API_URL}/subtask/rename`, {objectId: subtaskId, name}).subscribe()
+    this.http.patch(`${API_URL}/subtasks/${subtaskId}`, {name}).subscribe()
   }
 
   changeState(subtaskId: string, state: boolean): void {
-    this.http.post(`${API_URL}/subtask/state`, {subtaskId, state}).subscribe()
+    this.http.patch(`${API_URL}/subtasks/${subtaskId}`, {state}).subscribe()
   }
 
-  move(subtaskId: string, taskId: string, position: number): void {
-    const body = {movedObjectId: subtaskId, currentParentObject: taskId, currentPosition: position}
-    this.http.post(`${API_URL}/subtask/move`, body).subscribe()
+  move(subtaskId: string, taskId: string, index: number): void {
+    this.http.patch(`${API_URL}/subtasks/${subtaskId}`, {taskId, index}).subscribe()
   }
 
   delete(subtaskId: string): void {
-    this.http.post(`${API_URL}/subtask/delete`, {objectId: subtaskId}).subscribe()
+    this.http.delete(`${API_URL}/subtasks/${subtaskId}`).subscribe()
   }
 }
