@@ -1,28 +1,35 @@
-import {Component, Input, OnInit} from "@angular/core";
+import { Component, Input, OnInit, ChangeDetectionStrategy, inject } from "@angular/core";
 import {Column} from "../../models/column";
-import {CdkDragDrop, moveItemInArray, transferArrayItem} from "@angular/cdk/drag-drop";
+import { CdkDragDrop, moveItemInArray, transferArrayItem, CdkDropList, CdkDrag } from "@angular/cdk/drag-drop";
 import {Task} from "../../models/task";
 import {Colors} from "../../models/colors";
 import {ColumnService} from "../../services/column.service";
 import {BoardComponent} from "../board/board.component";
 import {TaskService} from "../../services/task.service";
+import { MatInput } from "@angular/material/input";
+import { CdkTextareaAutosize } from "@angular/cdk/text-field";
+import { FocusDirective } from "../../directives/focus.directive";
+import { ButtonHoverDirective } from "../../directives/button-hover.directive";
+import { MatIcon } from "@angular/material/icon";
+import { TaskComponent } from "../task/task.component";
 
 @Component({
     selector: 'app-column',
     templateUrl: './column.component.html',
-    styleUrls: ['../../app.component.css']
+    styleUrls: ['../../app.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [MatInput, CdkTextareaAutosize, FocusDirective, ButtonHoverDirective, MatIcon, CdkDropList, CdkDrag, TaskComponent]
 })
 export class ColumnComponent implements OnInit {
+    private columnService = inject(ColumnService);
+    private taskService = inject(TaskService);
+
 
     @Input() column: Column
     @Input() taskDropLists: string[]
     @Input() subtaskDropLists: string[]
     @Input() colors: Colors[]
     @Input() boardComponent: BoardComponent
-
-    constructor(private columnService: ColumnService,
-                private taskService: TaskService) {
-    }
 
     ngOnInit(): void {
         this.taskDropLists.push(this.column.id)

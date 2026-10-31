@@ -1,5 +1,5 @@
-# Сборка: Angular 15 поддерживает Node.js до 18.x
-FROM node:18-alpine AS build
+# Сборка: Angular 22 требует Node.js ^22.22.3 или ^24.15.0
+FROM node:24-alpine AS build
 
 WORKDIR /app
 
@@ -14,6 +14,6 @@ RUN npx ng build --configuration production
 FROM nginx:1.27-alpine
 
 COPY nginx.conf /etc/nginx/conf.d/default.conf
-COPY --from=build /app/dist/stack-check-frontend /usr/share/nginx/html
+COPY --from=build /app/dist/stack-check-frontend/browser /usr/share/nginx/html
 
 EXPOSE 80

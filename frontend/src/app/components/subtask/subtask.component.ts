@@ -1,22 +1,28 @@
-import {Component, Input} from "@angular/core";
+import { Component, Input, ChangeDetectionStrategy, inject } from "@angular/core";
 import {Subtask} from "../../models/subtask";
 import {Colors} from "../../models/colors";
 import {SubtaskService} from "../../services/subtask.service";
 import {TaskComponent} from "../task/task.component";
+import { MatIcon } from "@angular/material/icon";
+import { MatInput } from "@angular/material/input";
+import { CdkTextareaAutosize } from "@angular/cdk/text-field";
+import { FocusDirective } from "../../directives/focus.directive";
+import { ButtonHoverDirective } from "../../directives/button-hover.directive";
 
 @Component({
     selector: 'app-subtask',
     templateUrl: './subtask.component.html',
-    styleUrls: ['../../app.component.css']
+    styleUrls: ['../../app.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [MatIcon, MatInput, CdkTextareaAutosize, FocusDirective, ButtonHoverDirective]
 })
 export class SubtaskComponent {
+    private subtaskService = inject(SubtaskService);
+
 
     @Input() subtask: Subtask
     @Input() color: Colors
     @Input() taskComponent: TaskComponent
-
-    constructor(private subtaskService: SubtaskService) {
-    }
 
     renameSubtask(name: string) {
         this.subtask.name = name

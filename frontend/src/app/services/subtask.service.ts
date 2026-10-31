@@ -1,5 +1,5 @@
-import {Injectable} from '@angular/core';
-import {HttpClient, HttpErrorResponse} from "@angular/common/http";
+import { Injectable, inject } from '@angular/core';
+import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import {ErrorService} from "./error.service";
 import {catchError, Observable, throwError} from "rxjs";
 import {Subtask} from "../models/subtask";
@@ -9,8 +9,9 @@ import {url} from "../data/url";
   providedIn: 'root'
 })
 export class SubtaskService {
+  private http = inject(HttpClient);
+  private errorService = inject(ErrorService);
 
-  constructor(private http: HttpClient, private errorService: ErrorService) {}
 
   createSubtask(taskId: string, name: string, position: number): Observable<Subtask> {
     const data = {parentObjectId: taskId, name: name, position: position}

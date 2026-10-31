@@ -1,7 +1,7 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
 import {Board} from "./models/board";
 import {UserService} from "./services/user.service";
-import {CdkDragDrop, moveItemInArray} from "@angular/cdk/drag-drop";
+import { CdkDragDrop, moveItemInArray, CdkDropList, CdkDrag } from "@angular/cdk/drag-drop";
 import {User} from "./models/user";
 import {Colors} from "./models/colors";
 import {lightTheme} from "./data/light-theme";
@@ -11,14 +11,27 @@ import {Column} from "./models/column";
 import {Observable} from "rxjs";
 import {ErrorService} from "./services/error.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import { TextButtonDirective } from './directives/text-button.directive';
+import { MatIcon } from '@angular/material/icon';
+import { MatInput } from '@angular/material/input';
+import { SelectDirective } from './directives/select.directive';
+import { MatDrawerContainer, MatDrawer } from '@angular/material/sidenav';
+import { BoardComponent } from './components/board/board.component';
 
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [TextButtonDirective, MatIcon, MatInput, SelectDirective, MatDrawerContainer, MatDrawer, CdkDropList, CdkDrag, BoardComponent]
 })
 export class AppComponent implements OnInit {
+  private userService = inject(UserService);
+  private boardService = inject(BoardService);
+  errorService = inject(ErrorService);
+  private _snackBar = inject(MatSnackBar);
+
 
   title: string = "stack check"
   user: User
@@ -28,10 +41,7 @@ export class AppComponent implements OnInit {
   taskDropLists: string[] = []
   subtaskDropLists: string[] = []
 
-  constructor(private userService: UserService,
-              private boardService: BoardService,
-              public errorService: ErrorService,
-              private _snackBar: MatSnackBar) {
+  constructor() {
     this.errorService.error$.subscribe({next: (message) => {
       if (message) {
         this.openSnackBar("Произошла ошибка, пожалуйста перезагрузите страницу.", "Закрыть")

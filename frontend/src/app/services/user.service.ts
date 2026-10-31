@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import {HttpClient, HttpErrorResponse} from "@angular/common/http";
+import { Injectable, inject } from '@angular/core';
+import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import {catchError, Observable, throwError} from "rxjs";
 import {User} from "../models/user";
 import {ErrorService} from "./error.service";
@@ -9,8 +9,9 @@ import {url} from "../data/url";
   providedIn: 'root'
 })
 export class UserService {
+  private http = inject(HttpClient);
+  private errorService = inject(ErrorService);
 
-  constructor(private http: HttpClient, private errorService: ErrorService) { }
 
   getUser(): Observable<User> {
     return this.http.get<User>(`${url}/user`).pipe(catchError(this.errorHandler.bind(this)))

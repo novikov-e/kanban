@@ -1,6 +1,6 @@
 # Kanban
 
-Пет-проект канбан-доски: Angular 15 (`frontend/`), FastAPI + SQLAlchemy 2 async (`backend/`), PostgreSQL.
+Пет-проект канбан-доски: Angular 22 (`frontend/`), FastAPI + SQLAlchemy 2 async (`backend/`), PostgreSQL.
 `backend-old/` — прежний бэкенд на Java/Spring, только для справки, не изменять.
 
 ## Запуск
@@ -19,8 +19,7 @@ nginx во фронтенд-контейнере раздаёт сборку Ang
 ## Проверки перед завершением задачи
 
 - Бэкенд: `ruff check app alembic/env.py`.
-- Фронтенд: `npx ng build --configuration development`. Production-сборку проверять в Docker:
-  Angular 15 требует Node.js 18.
+- Фронтенд (Node.js ^22.22.3 или ^24.15.0): `npx ng build --configuration development` и `npx ng test --watch=false` (Vitest).
 - Изменения моделей сопровождаются миграцией Alembic; `alembic check` должен проходить без новых операций.
 
 ## Сущности и API
@@ -32,6 +31,13 @@ nginx во фронтенд-контейнере раздаёт сборку Ang
   Маппинг с колонками БД (`board_id`, `task_name`, …) делается через `validation_alias` в `backend/app/schemas/`.
 - Тела запросов описаны в `backend/app/schemas/common.py`.
 - Видимые пользователю тексты интерфейса на русском называют доску «проектом».
+
+## Соглашения фронтенда
+
+- Standalone-компоненты без `NgModule`, конфигурация приложения — в `src/app/app.config.ts`.
+- Шаблоны используют `@if` / `@for`, зависимости подключаются через `inject()`.
+- Компоненты меняют модели на месте (`push`, `splice`), поэтому приложение работает на zone.js
+  (`provideZoneChangeDetection()`), а компоненты объявлены с `ChangeDetectionStrategy.Eager`.
 
 ## Соглашения бэкенда
 

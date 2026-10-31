@@ -1,12 +1,9 @@
-import {AfterViewInit, Directive, ElementRef, HostListener, OnInit} from '@angular/core';
+import { AfterViewInit, Directive, ElementRef, HostListener, OnInit, inject } from '@angular/core';
 
-@Directive({
-    selector: '[appFocus]'
-})
+@Directive({ selector: '[appFocus]' })
 export class FocusDirective implements AfterViewInit {
+    private el = inject(ElementRef);
 
-    constructor(private el: ElementRef) {
-    }
 
     // @HostListener('document:click')
     // clickout() {
