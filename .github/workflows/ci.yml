@@ -1,0 +1,90 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    services:
+      postgresql:
+        image: postgres:18.3
+        env:
+          POSTGRES_USER: kanban_user
+          POSTGRES_PASSWORD: ci-only-password
+          POSTGRES_DB: kanban_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U kanban_user -d kanban_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      POSTGRES_HOST: 127.0.0.1
+      POSTGRES_PORT: "5432"
+      POSTGRES_USER: kanban_user
+      POSTGRES_PASSWORD: ci-only-password
+      POSTGRES_DB: kanban_test
+      JWT_SECRET: ci-only-jwt-secret-0123456789abcdef
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+          cache-dependency-glob: backend/uv.lock
+      - run: uv sync --frozen
+      - name: Ruff
+        run: |
+          uv run ruff format --check app alembic tests
+          uv run ruff check app alembic tests
+      - name: Тесты
+        run: uv run pytest
+      - name: Модели совпадают с миграциями
+        run: uv run alembic check
+
+  frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm ci
+      - name: Prettier
+        run: npx prettier --check "src/**/*.{ts,html,css}"
+      - name: Сборка
+        run: npx ng build
+      - name: Тесты
+        run: npx ng test --watch=false
+      - name: Сообщения для перевода актуальны
+        # Сравниваются id и тексты; номера строк в контексте меняются при любой правке файла
+        run: |
+          npx ng extract-i18n --output-path "$RUNNER_TEMP/locale"
+          diff <(grep -v '<context' src/locale/messages.xlf) <(grep -v '<context' "$RUNNER_TEMP/locale/messages.xlf")
+
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Образ бэкенда
+        run: docker build --tag kanban-backend backend
+      - name: Образ фронтенда
+        run: docker build --tag kanban-frontend frontend

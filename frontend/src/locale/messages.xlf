@@ -230,14 +230,14 @@
         <source>Не удалось выполнить запрос к серверу.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/interceptors/http-error.interceptor.ts</context>
-          <context context-type="linenumber">7</context>
+          <context context-type="linenumber">6</context>
         </context-group>
       </trans-unit>
       <trans-unit id="error.close" datatype="html">
         <source>Закрыть</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/interceptors/http-error.interceptor.ts</context>
-          <context context-type="linenumber">8</context>
+          <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
       <trans-unit id="color.main" datatype="html">
