@@ -27,5 +27,5 @@ class Board(Base):
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     deleted_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
 
-    user: Mapped[User] = relationship(back_populates="boards")
+    user: Mapped[User] = relationship(back_populates="boards", foreign_keys=[user_id])
     columns: Mapped[list[Column]] = relationship(back_populates="board", order_by="Column.column_position")

@@ -4,7 +4,7 @@ import uuid
 from datetime import date, datetime
 from typing import TYPE_CHECKING
 
-from sqlalchemy import Boolean, Date, DateTime, String, func, text
+from sqlalchemy import Boolean, Date, DateTime, ForeignKey, String, func, text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.database import Base
@@ -25,10 +25,12 @@ class User(Base):
     email: Mapped[str] = mapped_column(String(100), unique=True, nullable=False)
     password: Mapped[str] = mapped_column(String(255), nullable=False)
     dark_theme: Mapped[bool] = mapped_column(Boolean, server_default=text("false"))
-    last_board: Mapped[uuid.UUID | None] = mapped_column(nullable=True)
+    last_board: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("boards.board_id", ondelete="SET NULL"))
 
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     deleted_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
 
-    boards: Mapped[list[Board]] = relationship(back_populates="user", order_by="Board.board_position")
+    boards: Mapped[list[Board]] = relationship(
+        back_populates="user", foreign_keys="Board.user_id", order_by="Board.board_position"
+    )

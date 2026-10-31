@@ -1,6 +1,6 @@
 from uuid import UUID
 
-from sqlalchemy import select
+from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
@@ -56,4 +56,5 @@ async def move_board(session: AsyncSession, user_id: UUID, board_id: UUID, posit
 
 
 async def delete_board(session: AsyncSession, user_id: UUID, board_id: UUID) -> None:
+    await session.execute(update(User).where(User.id == user_id, User.last_board == board_id).values(last_board=None))
     await ordering.soft_delete(session, BOARD_ORDER, user_id, board_id)
