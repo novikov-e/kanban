@@ -1,4 +1,4 @@
-FROM node:18.13-bullseye
+FROM node:24-bookworm
 
 # Устанавливаем Angular CLI прямо в образ контейнера
-RUN npm install -g @angular/cli@^15
+RUN npm install -g @angular/cli@^22
