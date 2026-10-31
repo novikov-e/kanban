@@ -1,20 +1,12 @@
 [tool.ruff]
-# Версия Python (совпадает с твоим контейнером, например, 3.12)
 target-version = "py312"
-# Увеличенная длина строки (по умолчанию 88, для современных проектов 120 удобнее)
 line-length = 120
 
 [tool.ruff.lint]
-# E (стиль кода), F (ошибки логики), I (сортировка импортов - замена isort), UP (современный синтаксис)
 select = ["E", "F", "I", "UP"]
-# Игнорируем некоторые правила, которые могут мешать в FastAPI/SQLAlchemy
-ignore = []
 
 [tool.ruff.format]
-# Использовать одинарные или двойные кавычки (Ruff по умолчанию использует двойные, как Black)
 quote-style = "double"
-# Добавлять запятую в конце многострочных структур
-skip-magic-trailing-comma = false
 
 [tool.ty.environment]
 extra-paths = ["/home/vscode/.local/lib/python3.12/site-packages"]

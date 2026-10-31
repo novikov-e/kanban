@@ -18,12 +18,10 @@ class Board(Base):
     __tablename__ = "boards"
     __table_args__ = (Index("user_boards_index", "user_id"),)
 
-    board_id: Mapped[uuid.UUID] = mapped_column(
-        primary_key=True, server_default=text("gen_random_uuid()"))
+    board_id: Mapped[uuid.UUID] = mapped_column(primary_key=True, server_default=text("gen_random_uuid()"))
     user_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("users.id"))
     board_name: Mapped[str] = mapped_column(String(100), nullable=False)
-    board_position: Mapped[int] = mapped_column(
-        Integer, server_default=text("0"), nullable=False)
+    board_position: Mapped[int] = mapped_column(Integer, server_default=text("0"), nullable=False)
 
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())

@@ -6,8 +6,9 @@ from app.schemas.task import TaskResponse
 
 
 class ColumnResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     id: UUID = Field(validation_alias="column_id")
     name: str = Field(validation_alias="column_name")
-    position: int = Field(validation_alias="column_position")
-    tasks: list[TaskResponse] = []
-    model_config = ConfigDict(from_attributes=True)
+    position: int = Field(validation_alias="column_position", description="Позиция на доске, с нуля")
+    tasks: list[TaskResponse] = Field(default=[], description="Задачи в порядке позиций")

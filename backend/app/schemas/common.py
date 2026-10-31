@@ -1,38 +1,45 @@
+from typing import Literal
 from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, Field
-
-# Общие DTO запросов для всех уровней иерархии (board -> column -> task -> subtask).
-# Позиции и родители, которые фронтенд присылает "до" операции, сервер не использует:
-# актуальный порядок всегда берётся из БД.
+from pydantic.alias_generators import to_camel
 
 
-class CreateObjectDto(BaseModel):
-    parent_object_id: UUID = Field(alias="parentObjectId")
-    position: int
-    model_config = ConfigDict(populate_by_name=True)
+class ApiRequest(BaseModel):
+    model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True)
 
 
-class CreateObjectWithNameDto(BaseModel):
-    parent_object_id: UUID = Field(alias="parentObjectId")
-    name: str
-    position: int
-    model_config = ConfigDict(populate_by_name=True)
+class CreateChildRequest(ApiRequest):
+    """Создание элемента в конце списка родителя."""
+
+    parent_object_id: UUID = Field(description="Идентификатор родителя: доски, колонки или задачи")
+    name: str = Field(description="Название элемента", examples=["Новая задача"])
 
 
-class RenameDto(BaseModel):
-    object_id: UUID = Field(alias="objectId")
-    name: str
-    model_config = ConfigDict(populate_by_name=True)
+class RenameRequest(ApiRequest):
+    object_id: UUID = Field(description="Идентификатор переименовываемого элемента")
+    name: str = Field(description="Новое название", examples=["В работе"])
 
 
-class MoveDto(BaseModel):
-    moved_object_id: UUID = Field(alias="movedObjectId")
-    current_parent_object: UUID = Field(alias="currentParentObject")
-    current_position: int = Field(alias="currentPosition", ge=0)
-    model_config = ConfigDict(populate_by_name=True)
+class MoveRequest(ApiRequest):
+    """Перемещение элемента. Текущие родитель и позиция берутся из БД, а не из запроса."""
+
+    moved_object_id: UUID = Field(description="Идентификатор перемещаемого элемента")
+    current_parent_object: UUID = Field(description="Идентификатор нового родителя")
+    current_position: int = Field(
+        ge=0, description="Новая позиция в списке родителя, с нуля. Значение больше длины списка — вставка в конец"
+    )
 
 
-class DeleteObjectDto(BaseModel):
-    object_id: UUID = Field(alias="objectId")
-    model_config = ConfigDict(populate_by_name=True)
+class DeleteRequest(ApiRequest):
+    """Мягкое удаление элемента вместе со всеми дочерними; оставшиеся элементы перенумеровываются."""
+
+    object_id: UUID = Field(description="Идентификатор удаляемого элемента")
+
+
+class StatusResponse(BaseModel):
+    status: Literal["success"] = "success"
+
+
+class ErrorResponse(BaseModel):
+    detail: str = Field(examples=["Board not found"])

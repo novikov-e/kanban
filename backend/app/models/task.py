@@ -18,15 +18,11 @@ class Task(Base):
     __tablename__ = "tasks"
     __table_args__ = (Index("column_tasks_index", "column_id"),)
 
-    task_id: Mapped[uuid.UUID] = mapped_column(
-        primary_key=True, server_default=text("gen_random_uuid()"))
-    column_id: Mapped[uuid.UUID | None] = mapped_column(
-        ForeignKey("columns.column_id"))
+    task_id: Mapped[uuid.UUID] = mapped_column(primary_key=True, server_default=text("gen_random_uuid()"))
+    column_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("columns.column_id"))
     task_name: Mapped[str] = mapped_column(Text, nullable=False)
-    color: Mapped[int] = mapped_column(
-        Integer, server_default=text("1"), nullable=False)
-    task_position: Mapped[int] = mapped_column(
-        Integer, server_default=text("0"), nullable=False)
+    color: Mapped[int] = mapped_column(Integer, server_default=text("1"), nullable=False)
+    task_position: Mapped[int] = mapped_column(Integer, server_default=text("0"), nullable=False)
 
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())

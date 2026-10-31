@@ -1,47 +1,44 @@
 from uuid import UUID
 
-from sqlalchemy import update
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm.attributes import set_committed_value
 
-from app.models import Task
-from app.services import ordering
+from app.models import Column, Task
+from app.services import crud, ordering
+
+DEFAULT_TASK_COLOR = 1
 
 TASK_ORDER = ordering.OrderedChildren(
-    id=Task.task_id, parent_id=Task.column_id, position=Task.task_position, deleted_at=Task.deleted_at
+    entity="Task",
+    id=Task.task_id,
+    parent_id=Task.column_id,
+    position=Task.task_position,
+    deleted_at=Task.deleted_at,
 )
 
 
-async def create_task(session: AsyncSession, column_id: UUID, name: str, position: int) -> Task:
-    new_task = Task(
+async def create_task(session: AsyncSession, column_id: UUID, name: str) -> Task:
+    await crud.ensure_exists(session, Column.column_id, column_id, "Column")
+    task = Task(
         column_id=column_id,
         task_name=name,
-        color=1,  # Дефолтный цвет
-        task_position=position
+        color=DEFAULT_TASK_COLOR,
+        task_position=await ordering.next_position(session, TASK_ORDER, column_id),
     )
-    session.add(new_task)
-    await session.commit()
-    await session.refresh(new_task)
-    set_committed_value(new_task, "subtasks", [])
-    return new_task
+    return await crud.insert(session, task, empty_collections=("subtasks",))
 
 
-async def rename_task(session: AsyncSession, task_id: UUID, new_name: str) -> None:
-    stmt = update(Task).where(Task.task_id ==
-                              task_id).values(task_name=new_name)
-    await session.execute(stmt)
-    await session.commit()
+async def rename_task(session: AsyncSession, task_id: UUID, name: str) -> None:
+    await crud.update_by_id(session, Task.task_id, task_id, "Task", task_name=name)
 
 
 async def change_task_color(session: AsyncSession, task_id: UUID, color: int) -> None:
-    stmt = update(Task).where(Task.task_id == task_id).values(color=color)
-    await session.execute(stmt)
-    await session.commit()
+    await crud.update_by_id(session, Task.task_id, task_id, "Task", color=color)
 
 
-async def move_task(session: AsyncSession, task_id: UUID, column_id: UUID, position: int) -> bool:
-    return await ordering.move(session, TASK_ORDER, task_id, column_id, position)
+async def move_task(session: AsyncSession, task_id: UUID, column_id: UUID, position: int) -> None:
+    await crud.ensure_exists(session, Column.column_id, column_id, "Column")
+    await ordering.move(session, TASK_ORDER, task_id, column_id, position)
 
 
-async def delete_task(session: AsyncSession, task_id: UUID) -> bool:
-    return await ordering.soft_delete(session, TASK_ORDER, task_id)
+async def delete_task(session: AsyncSession, task_id: UUID) -> None:
+    await ordering.soft_delete(session, TASK_ORDER, task_id)

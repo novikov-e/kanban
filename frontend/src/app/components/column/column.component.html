@@ -2,34 +2,62 @@
   <div class="border_container min-height-38" [style.border-color]="colors[1].firstColor">
     <div class="title-and-buttons" [style.border-color]="colors[1].firstColor">
       <div class="text_grow">
-        <textarea class="transparent_text_input column-task-title" #columnName
-          [value]="column.name" matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize"
-          appFocus cdkAutosizeMinRows="1" [style.color]="colors[1].firstColor"
-          (change)="renameColumn(columnName.value)"
-          (keydown)="keyPressed(columnName, $event, columnName.value)">
+        <textarea
+          class="transparent_text_input column-task-title"
+          #columnName
+          [value]="column.name"
+          matInput
+          cdkTextareaAutosize
+          #autosize="cdkTextareaAutosize"
+          appFocus
+          cdkAutosizeMinRows="1"
+          [style.color]="colors[1].firstColor"
+          (change)="rename(columnName.value)"
+          (keydown)="onKeydown(columnName, $event)"
+        >
         </textarea>
       </div>
 
       <div class="buttons_container">
-        <button class="custom_icon_button" appButtonHover
-          [elementRef]="newTaskIcon._elementRef" [color]="colors[1]" (click)="newTask()">
-          <mat-icon class="button_icon" #newTaskIcon [style.color]="colors[1].firstColor">assignment_add
-          </mat-icon>
+        <button
+          class="custom_icon_button"
+          appButtonHover
+          [elementRef]="newTaskIcon._elementRef"
+          [color]="colors[1]"
+          (click)="addTask()"
+        >
+          <mat-icon class="button_icon" #newTaskIcon [style.color]="colors[1].firstColor">assignment_add</mat-icon>
         </button>
 
-        <button class="custom_icon_button" appButtonHover
-          [elementRef]="removeColumnIcon._elementRef" [color]="colors[1]" (click)="deleteColumn()">
+        <button
+          class="custom_icon_button"
+          appButtonHover
+          [elementRef]="removeColumnIcon._elementRef"
+          [color]="colors[1]"
+          (click)="delete()"
+        >
           <mat-icon #removeColumnIcon [style.color]="colors[1].firstColor">remove_circle_outline</mat-icon>
         </button>
       </div>
     </div>
   </div>
-  <div class="column-drop-list" id="{{column.id}}" cdkDropList [cdkDropListData]="column.tasks"
-    [cdkDropListConnectedTo]="taskDropLists" (cdkDropListDropped)="moveTask($event)">
+  <div
+    class="column-drop-list"
+    id="{{ column.id }}"
+    cdkDropList
+    [cdkDropListData]="column.tasks"
+    [cdkDropListConnectedTo]="taskDropLists"
+    (cdkDropListDropped)="onTaskDrop($event)"
+  >
     @for (task of column.tasks; track task) {
-      <div cdkDrag>
-        <app-task [task]="task" [subtaskDropLists]="subtaskDropLists"
-        [colors]="colors" [columnComponent]="this"></app-task>
+      <div cdkDrag [cdkDragData]="task">
+        <app-task
+          [task]="task"
+          [columnId]="column.id"
+          [subtaskDropLists]="subtaskDropLists"
+          [colors]="colors"
+          (deleted)="removeTask(task)"
+        ></app-task>
       </div>
     }
   </div>

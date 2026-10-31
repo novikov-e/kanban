@@ -1,38 +1,42 @@
-from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy.ext.asyncio import AsyncSession
+from fastapi import APIRouter, status
 
-from app.db.database import get_db
+from app.api.dependencies import DbSession, not_found
 from app.schemas.column import ColumnResponse
-from app.schemas.common import CreateObjectWithNameDto, DeleteObjectDto, MoveDto, RenameDto
+from app.schemas.common import CreateChildRequest, DeleteRequest, MoveRequest, RenameRequest, StatusResponse
 from app.services import column_service
 
-router = APIRouter(prefix="/api/v1/column", tags=["Column"])
+router = APIRouter(prefix="/column", tags=["Column"])
 
 
-def _not_found() -> HTTPException:
-    return HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Column not found")
+@router.post(
+    "/create",
+    status_code=status.HTTP_201_CREATED,
+    response_model=ColumnResponse,
+    summary="Создать колонку",
+    responses=not_found("доска"),
+)
+async def create_column(request: CreateChildRequest, db: DbSession):
+    """Добавляет колонку в конец доски `parentObjectId`."""
+    return await column_service.create_column(db, request.parent_object_id, request.name)
 
 
-@router.post("/create", status_code=status.HTTP_201_CREATED, response_model=ColumnResponse)
-async def create_column(dto: CreateObjectWithNameDto, db: AsyncSession = Depends(get_db)):
-    return await column_service.create_column(db, dto.parent_object_id, dto.name, dto.position)
+@router.post("/rename", summary="Переименовать колонку", responses=not_found("колонка"))
+async def rename_column(request: RenameRequest, db: DbSession) -> StatusResponse:
+    await column_service.rename_column(db, request.object_id, request.name)
+    return StatusResponse()
 
 
-@router.post("/rename")
-async def rename_column(dto: RenameDto, db: AsyncSession = Depends(get_db)):
-    await column_service.rename_column(db, dto.object_id, dto.name)
-    return {"status": "success"}
+@router.post("/move", summary="Переместить колонку", responses=not_found("колонка", "доска"))
+async def move_column(request: MoveRequest, db: DbSession) -> StatusResponse:
+    """Меняет порядок колонки на доске или переносит её на другую доску."""
+    await column_service.move_column(
+        db, request.moved_object_id, request.current_parent_object, request.current_position
+    )
+    return StatusResponse()
 
 
-@router.post("/move")
-async def move_column(dto: MoveDto, db: AsyncSession = Depends(get_db)):
-    if not await column_service.move_column(db, dto.moved_object_id, dto.current_parent_object, dto.current_position):
-        raise _not_found()
-    return {"status": "success"}
-
-
-@router.post("/delete")
-async def delete_column(dto: DeleteObjectDto, db: AsyncSession = Depends(get_db)):
-    if not await column_service.delete_column(db, dto.object_id):
-        raise _not_found()
-    return {"status": "success"}
+@router.post("/delete", summary="Удалить колонку", responses=not_found("колонка"))
+async def delete_column(request: DeleteRequest, db: DbSession) -> StatusResponse:
+    """Удаляет колонку вместе с задачами и подзадачами."""
+    await column_service.delete_column(db, request.object_id)
+    return StatusResponse()

@@ -1,86 +1,88 @@
-import { Component, Input, OnInit, ChangeDetectionStrategy, inject } from "@angular/core";
-import {Column} from "../../models/column";
-import { CdkDragDrop, moveItemInArray, transferArrayItem, CdkDropList, CdkDrag } from "@angular/cdk/drag-drop";
-import {Task} from "../../models/task";
-import {Colors} from "../../models/colors";
-import {ColumnService} from "../../services/column.service";
-import {BoardComponent} from "../board/board.component";
-import {TaskService} from "../../services/task.service";
-import { MatInput } from "@angular/material/input";
-import { CdkTextareaAutosize } from "@angular/cdk/text-field";
-import { FocusDirective } from "../../directives/focus.directive";
-import { ButtonHoverDirective } from "../../directives/button-hover.directive";
-import { MatIcon } from "@angular/material/icon";
-import { TaskComponent } from "../task/task.component";
+import {CdkDrag, CdkDragDrop, CdkDropList} from '@angular/cdk/drag-drop'
+import {CdkTextareaAutosize} from '@angular/cdk/text-field'
+import {ChangeDetectionStrategy, Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core'
+import {MatIcon} from '@angular/material/icon'
+import {MatInput} from '@angular/material/input'
+import {ButtonHoverDirective} from '../../directives/button-hover.directive'
+import {FocusDirective} from '../../directives/focus.directive'
+import {Colors} from '../../models/colors'
+import {Column} from '../../models/column'
+import {isSaved, UNSAVED_ID} from '../../models/entity'
+import {DEFAULT_TASK_COLOR, Task} from '../../models/task'
+import {ColumnService} from '../../services/column.service'
+import {TaskService} from '../../services/task.service'
+import {applyDrop, removeItem} from '../../utils/drag-drop'
+import {TaskComponent} from '../task/task.component'
 
 @Component({
-    selector: 'app-column',
-    templateUrl: './column.component.html',
-    styleUrls: ['../../app.component.css'],
-    changeDetection: ChangeDetectionStrategy.Eager,
-    imports: [MatInput, CdkTextareaAutosize, FocusDirective, ButtonHoverDirective, MatIcon, CdkDropList, CdkDrag, TaskComponent]
+  selector: 'app-column',
+  templateUrl: './column.component.html',
+  styleUrls: ['../../app.component.css'],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  imports: [
+    MatInput,
+    CdkTextareaAutosize,
+    FocusDirective,
+    ButtonHoverDirective,
+    MatIcon,
+    CdkDropList,
+    CdkDrag,
+    TaskComponent,
+  ],
 })
 export class ColumnComponent implements OnInit {
-    private columnService = inject(ColumnService);
-    private taskService = inject(TaskService);
+  private columnService = inject(ColumnService)
+  private taskService = inject(TaskService)
 
+  @Input() column: Column
+  @Input() boardId: string
+  @Input() taskDropLists: string[]
+  @Input() subtaskDropLists: string[]
+  @Input() colors: Colors[]
+  @Output() deleted = new EventEmitter<void>()
 
-    @Input() column: Column
-    @Input() taskDropLists: string[]
-    @Input() subtaskDropLists: string[]
-    @Input() colors: Colors[]
-    @Input() boardComponent: BoardComponent
+  ngOnInit(): void {
+    this.taskDropLists.push(this.column.id)
+  }
 
-    ngOnInit(): void {
-        this.taskDropLists.push(this.column.id)
+  rename(name: string) {
+    this.column.name = name
+    if (isSaved(this.column)) {
+      this.columnService.rename(this.column.id, name)
+    } else {
+      this.columnService.create(this.boardId, name).subscribe(created => {
+        this.column.id = created.id
+        this.taskDropLists.push(created.id)
+      })
     }
+  }
 
-    renameColumn(name: string) {
-        this.column.name = name
-        if (this.column.id != "") {
-            this.columnService.renameColumn(this.column.id, name)
-        } else {
-            this.columnService.createColumn(this.boardComponent.board.id, name, this.column.position)
-                .subscribe(data => {
-                    this.column.id = data.id
-                    this.taskDropLists.push(data.id)
-                })
-        }
+  delete() {
+    if (isSaved(this.column)) {
+      this.columnService.delete(this.column.id)
     }
+    this.deleted.emit()
+  }
 
-    deleteColumn() {
-        if (this.column.id != "") {
-            this.columnService.deleteColumn(this.column.id, this.boardComponent.board.id, this.column.position)
-        }
-        this.boardComponent.board.columns.splice(this.boardComponent.board.columns.indexOf(this.column), 1)
-    }
+  addTask() {
+    this.column.tasks.push(new Task(UNSAVED_ID, '', this.column.tasks.length, DEFAULT_TASK_COLOR))
+  }
 
-    newTask() {
-        this.column.tasks.push(new Task("", "", this.column.tasks.length, 1))
-    }
+  removeTask(task: Task) {
+    removeItem(this.column.tasks, task)
+  }
 
-    moveTask(event: CdkDragDrop<Task[]>) {
-        event.previousContainer.data[event.previousIndex].position = event.currentIndex
-        this.taskService.moveTask(event.previousContainer.data[event.previousIndex].id,
-            event.previousContainer.id, event.previousIndex, this.column.id, event.currentIndex)
-        if (event.previousContainer === event.container) {
-            moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-        } else {
-            transferArrayItem(
-                event.previousContainer.data,
-                event.container.data,
-                event.previousIndex,
-                event.currentIndex,
-            );
-        }
-    }
+  onTaskDrop(event: CdkDragDrop<Task[]>) {
+    this.taskService.move(event.item.data.id, this.column.id, event.currentIndex)
+    applyDrop(event)
+  }
 
-    keyPressed(columnElement: HTMLElement, event: KeyboardEvent, value: string) {
-        if (event.key == "Escape") {
-            if (value == "") {
-                this.deleteColumn()
-            }
-            columnElement.blur()
-        }
+  onKeydown(input: HTMLTextAreaElement, event: KeyboardEvent) {
+    if (event.key === 'Escape') {
+      if (input.value === '') {
+        this.delete()
+      }
+      input.blur()
     }
+  }
 }

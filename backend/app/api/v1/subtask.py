@@ -1,44 +1,47 @@
-from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy.ext.asyncio import AsyncSession
+from fastapi import APIRouter, status
 
-from app.db.database import get_db
-from app.schemas.common import CreateObjectWithNameDto, DeleteObjectDto, MoveDto, RenameDto
-from app.schemas.subtask import ChangeStateDto, SubtaskResponse
+from app.api.dependencies import DbSession, not_found
+from app.schemas.common import CreateChildRequest, DeleteRequest, MoveRequest, RenameRequest, StatusResponse
+from app.schemas.subtask import ChangeStateRequest, SubtaskResponse
 from app.services import subtask_service
 
-router = APIRouter(prefix="/api/v1/subtask", tags=["Subtask"])
+router = APIRouter(prefix="/subtask", tags=["Subtask"])
 
 
-def _not_found() -> HTTPException:
-    return HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Subtask not found")
+@router.post(
+    "/create",
+    status_code=status.HTTP_201_CREATED,
+    response_model=SubtaskResponse,
+    summary="Создать подзадачу",
+    responses=not_found("задача"),
+)
+async def create_subtask(request: CreateChildRequest, db: DbSession):
+    """Добавляет невыполненную подзадачу в конец задачи `parentObjectId`."""
+    return await subtask_service.create_subtask(db, request.parent_object_id, request.name)
 
 
-@router.post("/create", status_code=status.HTTP_201_CREATED, response_model=SubtaskResponse)
-async def create_subtask(dto: CreateObjectWithNameDto, db: AsyncSession = Depends(get_db)):
-    return await subtask_service.create_subtask(db, dto.parent_object_id, dto.name, dto.position)
+@router.post("/rename", summary="Переименовать подзадачу", responses=not_found("подзадача"))
+async def rename_subtask(request: RenameRequest, db: DbSession) -> StatusResponse:
+    await subtask_service.rename_subtask(db, request.object_id, request.name)
+    return StatusResponse()
 
 
-@router.post("/rename")
-async def rename_subtask(dto: RenameDto, db: AsyncSession = Depends(get_db)):
-    await subtask_service.rename_subtask(db, dto.object_id, dto.name)
-    return {"status": "success"}
+@router.post("/state", summary="Отметить выполнение подзадачи", responses=not_found("подзадача"))
+async def change_subtask_state(request: ChangeStateRequest, db: DbSession) -> StatusResponse:
+    await subtask_service.change_subtask_state(db, request.subtask_id, request.state)
+    return StatusResponse()
 
 
-@router.post("/state")
-async def change_state(dto: ChangeStateDto, db: AsyncSession = Depends(get_db)):
-    await subtask_service.change_subtask_state(db, dto.subtask_id, dto.state)
-    return {"status": "success"}
+@router.post("/move", summary="Переместить подзадачу", responses=not_found("подзадача", "задача"))
+async def move_subtask(request: MoveRequest, db: DbSession) -> StatusResponse:
+    """Меняет порядок подзадачи в задаче или переносит её в другую задачу."""
+    await subtask_service.move_subtask(
+        db, request.moved_object_id, request.current_parent_object, request.current_position
+    )
+    return StatusResponse()
 
 
-@router.post("/move")
-async def move_subtask(dto: MoveDto, db: AsyncSession = Depends(get_db)):
-    if not await subtask_service.move_subtask(db, dto.moved_object_id, dto.current_parent_object, dto.current_position):
-        raise _not_found()
-    return {"status": "success"}
-
-
-@router.post("/delete")
-async def delete_subtask(dto: DeleteObjectDto, db: AsyncSession = Depends(get_db)):
-    if not await subtask_service.delete_subtask(db, dto.object_id):
-        raise _not_found()
-    return {"status": "success"}
+@router.post("/delete", summary="Удалить подзадачу", responses=not_found("подзадача"))
+async def delete_subtask(request: DeleteRequest, db: DbSession) -> StatusResponse:
+    await subtask_service.delete_subtask(db, request.object_id)
+    return StatusResponse()

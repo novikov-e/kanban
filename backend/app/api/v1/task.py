@@ -1,44 +1,46 @@
-from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy.ext.asyncio import AsyncSession
+from fastapi import APIRouter, status
 
-from app.db.database import get_db
-from app.schemas.common import CreateObjectWithNameDto, DeleteObjectDto, MoveDto, RenameDto
-from app.schemas.task import ChangeColorDto, TaskResponse
+from app.api.dependencies import DbSession, not_found
+from app.schemas.common import CreateChildRequest, DeleteRequest, MoveRequest, RenameRequest, StatusResponse
+from app.schemas.task import ChangeColorRequest, TaskResponse
 from app.services import task_service
 
-router = APIRouter(prefix="/api/v1/task", tags=["Task"])
+router = APIRouter(prefix="/task", tags=["Task"])
 
 
-def _not_found() -> HTTPException:
-    return HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Task not found")
+@router.post(
+    "/create",
+    status_code=status.HTTP_201_CREATED,
+    response_model=TaskResponse,
+    summary="Создать задачу",
+    responses=not_found("колонка"),
+)
+async def create_task(request: CreateChildRequest, db: DbSession):
+    """Добавляет задачу в конец колонки `parentObjectId` с нейтральным цветом."""
+    return await task_service.create_task(db, request.parent_object_id, request.name)
 
 
-@router.post("/create", status_code=status.HTTP_201_CREATED, response_model=TaskResponse)
-async def create_task(dto: CreateObjectWithNameDto, db: AsyncSession = Depends(get_db)):
-    return await task_service.create_task(db, dto.parent_object_id, dto.name, dto.position)
+@router.post("/rename", summary="Переименовать задачу", responses=not_found("задача"))
+async def rename_task(request: RenameRequest, db: DbSession) -> StatusResponse:
+    await task_service.rename_task(db, request.object_id, request.name)
+    return StatusResponse()
 
 
-@router.post("/rename")
-async def rename_task(dto: RenameDto, db: AsyncSession = Depends(get_db)):
-    await task_service.rename_task(db, dto.object_id, dto.name)
-    return {"status": "success"}
+@router.post("/color", summary="Изменить цвет задачи", responses=not_found("задача"))
+async def change_task_color(request: ChangeColorRequest, db: DbSession) -> StatusResponse:
+    await task_service.change_task_color(db, request.task_id, request.color)
+    return StatusResponse()
 
 
-@router.post("/color")
-async def change_task_color(dto: ChangeColorDto, db: AsyncSession = Depends(get_db)):
-    await task_service.change_task_color(db, dto.task_id, dto.color)
-    return {"status": "success"}
+@router.post("/move", summary="Переместить задачу", responses=not_found("задача", "колонка"))
+async def move_task(request: MoveRequest, db: DbSession) -> StatusResponse:
+    """Меняет порядок задачи в колонке или переносит её в другую колонку."""
+    await task_service.move_task(db, request.moved_object_id, request.current_parent_object, request.current_position)
+    return StatusResponse()
 
 
-@router.post("/move")
-async def move_task(dto: MoveDto, db: AsyncSession = Depends(get_db)):
-    if not await task_service.move_task(db, dto.moved_object_id, dto.current_parent_object, dto.current_position):
-        raise _not_found()
-    return {"status": "success"}
-
-
-@router.post("/delete")
-async def delete_task(dto: DeleteObjectDto, db: AsyncSession = Depends(get_db)):
-    if not await task_service.delete_task(db, dto.object_id):
-        raise _not_found()
-    return {"status": "success"}
+@router.post("/delete", summary="Удалить задачу", responses=not_found("задача"))
+async def delete_task(request: DeleteRequest, db: DbSession) -> StatusResponse:
+    """Удаляет задачу вместе с подзадачами."""
+    await task_service.delete_task(db, request.object_id)
+    return StatusResponse()

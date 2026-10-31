@@ -1,293 +1,277 @@
-/*@font-face {*/
-/*  font-family: "JetBrains Mono";*/
-/*  font-style: normal;*/
-/*  font-weight: 400;*/
-/*  src: local("JetBrainsMono"),*/
-/*  url("src/fonts/JetBrainsMono-Medium.woff2") format("woff2")*/
-/*  url("/fonts/roboto.woff") format("woff");*/
-/*}*/
-
-* {
-    font-family: sans-serif;
-    font-size: 15px;
+*:not(mat-icon) {
+  font-family: sans-serif;
+  font-size: 15px;
 }
 
-html {
-    height: 100%;
+.app {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
-body {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-}
-
-/* Хедер */
 .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    box-sizing: border-box;
-    height: 38px;
-    margin: 1px 1px 2px 1px;
-    border: solid 2px #bcbcbc;
-    border-radius: 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  box-sizing: border-box;
+  height: 38px;
+  margin: 1px 1px 2px 1px;
+  border: solid 2px #bcbcbc;
+  border-radius: 18px;
 }
 
 .background_transparent {
-    background-color: transparent;
-    border: none;
-    height: 100%;
+  background-color: transparent;
+  border: none;
+  height: 100%;
 }
 
 .user_details {
-    margin-right: 1px;
-    min-width: 250px;
-    height: 100%;
-    border: solid 2px #171A1C;
-    border-radius: 16px;
-    display: flex;
-    flex-direction: column;
-    box-sizing: border-box;
-    align-items: flex-start;
+  margin-right: 1px;
+  min-width: 250px;
+  height: 100%;
+  border: solid 2px #171a1c;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  align-items: flex-start;
 }
 
-/* Список проектов */
 .list_boards {
-    flex: 1;
-    width: 100%;
-    border-bottom: 1px solid silver;
-    border-top: 1px solid silver;
-    overflow-y: auto;
+  flex: 1;
+  width: 100%;
+  border-bottom: 1px solid silver;
+  border-top: 1px solid silver;
+  overflow-y: auto;
 }
 
 .board_item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    padding-right: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  padding-right: 8px;
 }
 
-/* Рабочее пространство */
-
 .workspace_container {
-    flex: 1;
-    display: flex;
-    overflow: hidden;
+  flex: 1;
+  display: flex;
+  overflow: hidden;
 }
 
 .columns {
-    height: 100%;
-    display: flex;
-    overflow-x: auto;
+  height: 100%;
+  display: flex;
+  overflow-x: auto;
 }
 
-.columns::-webkit-scrollbar, .list_boards::-webkit-scrollbar {
-    width: 10px;
-    background-color: transparent;
+.columns::-webkit-scrollbar,
+.list_boards::-webkit-scrollbar {
+  width: 10px;
+  background-color: transparent;
 }
 
-.columns::-webkit-scrollbar-thumb, .list_boards::-webkit-scrollbar-thumb {
-    border: 2px solid #bcbcbc;
-    border-radius: 10px;
-    background-color: transparent;
+.columns::-webkit-scrollbar-thumb,
+.list_boards::-webkit-scrollbar-thumb {
+  border: 2px solid #bcbcbc;
+  border-radius: 10px;
+  background-color: transparent;
 }
 
-.columns::-webkit-scrollbar-track, .list_boards::-webkit-scrollbar-track {
-    border-radius: 10px;
-    background-color: transparent;
+.columns::-webkit-scrollbar-track,
+.list_boards::-webkit-scrollbar-track {
+  border-radius: 10px;
+  background-color: transparent;
 }
 
 .column {
-    width: 320px;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
+  width: 320px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .column-drop-list {
-    height: 100%;
-    box-sizing: border-box;
-    flex: 1;
-    overflow-y: auto;
+  height: 100%;
+  box-sizing: border-box;
+  flex: 1;
+  overflow-y: auto;
 }
 
 .column-drop-list::-webkit-scrollbar {
-    width: 0;
+  width: 0;
 }
 
 .title-and-buttons {
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    align-items: start;
-    box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  align-items: start;
+  box-sizing: border-box;
 }
 
 .text_grow {
-    display: flex;
-    height: 100%;
-    flex-grow: 1;
+  display: flex;
+  height: 100%;
+  flex-grow: 1;
 }
 
 .transparent_text_input {
-    width: 100%;
-    border: none;
-    outline: none;
-    background-color: transparent;
-    overflow: hidden;
-    margin-left: 3px;
-    padding: 3px;
+  width: 100%;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  overflow: hidden;
+  margin-left: 3px;
+  padding: 3px;
 }
 
 .transparent_text_input:active {
-    outline: none;
+  outline: none;
 }
 
 .border_container {
-    box-sizing: border-box;
-    border: solid 2px #bcbcbc;
-    border-radius: 18px;
-    margin: 0px 1px 2px 1px;
-    padding: 5px;
+  box-sizing: border-box;
+  border: solid 2px #bcbcbc;
+  border-radius: 18px;
+  margin: 0px 1px 2px 1px;
+  padding: 5px;
 
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 .colors-menu {
-    display: flex;
-    background-color: #171A1C;
-    border-radius: 16px;
-    border: solid 2px #bcbcbc;
+  display: flex;
+  background-color: #171a1c;
+  border-radius: 16px;
+  border: solid 2px #bcbcbc;
 }
 
-/* Кнопки */
-
 .mat-icon {
-    height: 24px;
-    width: 24px;
-    font-size: 24px;
-    position: relative;
-    top: 0;
-    left: 0;
-    color: #bcbcbc;
+  height: 24px;
+  width: 24px;
+  font-size: 24px;
+  position: relative;
+  top: 0;
+  left: 0;
+  color: #bcbcbc;
 }
 
 .buttons_container {
-    display: flex;
+  display: flex;
 }
 
 .text_button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: none;
-    background-color: transparent;
-    font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background-color: transparent;
+  font-size: 16px;
 }
 
 .text_in_button {
-    margin: 5px;
-    max-width: 210px;
-    text-align: left;
-    font-weight: bold;
+  margin: 5px;
+  max-width: 210px;
+  text-align: left;
+  font-weight: bold;
 }
 
 .text_in_header_button {
-    margin: 5px;
-    text-align: left;
-    font-weight: bold;
+  margin: 5px;
+  text-align: left;
+  font-weight: bold;
 }
 
 .custom_icon_button {
-    width: 24px;
-    height: 24px;
-    border: none;
-    background-color: transparent;
-    position: relative;
-    padding: 0px;
+  width: 24px;
+  height: 24px;
+  border: none;
+  background-color: transparent;
+  position: relative;
+  padding: 0px;
 }
 
 .custom_icon_button:hover .mat-icon {
-    color: #797b7a;
+  color: #797b7a;
 }
 
 .custom_checkbox {
-    position: relative;
-    width: 24px;
-    height: 24px;
+  position: relative;
+  width: 24px;
+  height: 24px;
 }
 
 .custom_checkbox_size {
-    height: 24px;
-    width: 24px;
-    position: absolute;
+  height: 24px;
+  width: 24px;
+  position: absolute;
 }
 
 .custom_checkbox_focused {
-    display: none;
+  display: none;
 }
 
 .custom_checkbox:hover .custom_checkbox_focused {
-    display: block;
-    z-index: 1;
+  display: block;
+  z-index: 1;
 }
 
 .min-height-38 {
-    min-height: 38px;
-    align-items: center;
+  min-height: 38px;
+  align-items: center;
 }
 
 .nothing {
-    height: 100%;
+  height: 100%;
 }
 
 .column-task-title {
-    margin-left: 6px;
-    font-size: 15px;
-    font-weight: bold;
-    padding: 3px;
+  margin-left: 6px;
+  font-size: 15px;
+  font-weight: bold;
+  padding: 3px;
 }
 
 .m-5 {
-    margin: 5px;
+  margin: 5px;
 }
 
 .mt-2 {
-    margin-top: 2px;
+  margin-top: 2px;
 }
 
 .ml-5 {
-    margin-left: 5px;
+  margin-left: 5px;
 }
 
 .mr-5 {
-    margin-right: 5px;
+  margin-right: 5px;
 }
 
 .subtask_drag_list {
-    min-height: 1px;
+  min-height: 1px;
 }
 
 .text_align_center {
-    text-align: center;
+  text-align: center;
 }
 
 .gr {
-    flex-grow: 1;
+  flex-grow: 1;
 }
 
 .pl-1 {
-    padding-left: 1px;
+  padding-left: 1px;
 }
 
 .font-size-17 {
-    font-size: 17px;
+  font-size: 17px;
 }

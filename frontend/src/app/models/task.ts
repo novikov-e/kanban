@@ -1,4 +1,6 @@
-import {Subtask} from "./subtask";
+import {Subtask} from './subtask'
+
+export const DEFAULT_TASK_COLOR = 1
 
 export class Task {
   id: string

@@ -1,4 +1,6 @@
-import {Column} from "./column";
+import {Column} from './column'
+
+export const NEW_BOARD_NAME = 'Новый проект'
 
 export class Board {
   id: string

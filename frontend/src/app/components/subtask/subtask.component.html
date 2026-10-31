@@ -2,18 +2,15 @@
   <div class="buttons_container">
     <div class="custom_checkbox">
       @if (subtask.state) {
-        <div (click)="changeSubtaskState()">
+        <div (click)="toggleState()">
           <mat-icon class="custom_checkbox_size" [style.color]="color.firstColor">check_circle</mat-icon>
         </div>
-      }
-
-      @if (!subtask.state) {
-        <div (click)="changeSubtaskState()">
-          <mat-icon class="custom_checkbox_focused custom_checkbox_size" [style.color]="color.firstColor">circle</mat-icon>
+      } @else {
+        <div (click)="toggleState()">
+          <mat-icon class="custom_checkbox_focused custom_checkbox_size" [style.color]="color.firstColor"
+            >circle</mat-icon
+          >
         </div>
-      }
-
-      @if (!subtask.state) {
         <div>
           <mat-icon class="custom_checkbox_size" [style.color]="color.firstColor">radio_button_unchecked</mat-icon>
         </div>
@@ -22,17 +19,30 @@
   </div>
 
   <div class="text_grow">
-    <textarea class="transparent_text_input" matInput cdkTextareaAutosize appFocus
-      #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1"
-      #subtaskName [style.color]="color.firstColor" [value]="subtask.name"
-      (change)="renameSubtask(subtaskName.value)"
-      (keydown)="keyPressed(subtaskName, $event, subtaskName.value)">
+    <textarea
+      class="transparent_text_input"
+      matInput
+      cdkTextareaAutosize
+      appFocus
+      #autosize="cdkTextareaAutosize"
+      cdkAutosizeMinRows="1"
+      #subtaskName
+      [style.color]="color.firstColor"
+      [value]="subtask.name"
+      (change)="rename(subtaskName.value)"
+      (keydown)="onKeydown(subtaskName, $event)"
+    >
     </textarea>
   </div>
 
   <div class="buttons_container">
-    <button class="custom_icon_button" appButtonHover
-      [elementRef]="removeSubtaskIcon._elementRef" [color]="color" (click)="deleteSubtask()">
+    <button
+      class="custom_icon_button"
+      appButtonHover
+      [elementRef]="removeSubtaskIcon._elementRef"
+      [color]="color"
+      (click)="delete()"
+    >
       <mat-icon #removeSubtaskIcon [style.color]="color.firstColor">remove_circle_outline</mat-icon>
     </button>
   </div>

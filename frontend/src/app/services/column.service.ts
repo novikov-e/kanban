@@ -1,44 +1,27 @@
-import { Injectable, inject } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from "@angular/common/http";
-import {catchError, Observable, throwError} from "rxjs";
-import {ErrorService} from "./error.service";
-import {Column} from "../models/column";
-import {url} from "../data/url";
+import {HttpClient} from '@angular/common/http'
+import {inject, Injectable} from '@angular/core'
+import {Observable} from 'rxjs'
+import {API_URL} from '../data/url'
+import {Column} from '../models/column'
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({providedIn: 'root'})
 export class ColumnService {
-  private http = inject(HttpClient);
-  private errorService = inject(ErrorService);
+  private http = inject(HttpClient)
 
-
-  createColumn(boardId: string, name: string, position: number): Observable<Column> {
-    const data = {parentObjectId: boardId, name: name, position: position}
-    return this.http.post<Column>(`${url}/column/create`, data).pipe(catchError(this.errorHandler.bind(this)))
+  create(boardId: string, name: string): Observable<Column> {
+    return this.http.post<Column>(`${API_URL}/column/create`, {parentObjectId: boardId, name})
   }
 
-  renameColumn(columnId: string, name: string): void {
-    const data = {objectId: columnId, name: name}
-    this.http.post(`${url}/column/rename`, data).pipe(catchError(this.errorHandler.bind(this))).subscribe()
+  rename(columnId: string, name: string): void {
+    this.http.post(`${API_URL}/column/rename`, {objectId: columnId, name}).subscribe()
   }
 
-  moveColumn(columnId: string, previousBoardId: string,
-             previousPosition: number, currentBoardId: string, currentPosition: number): void {
-    const data = {
-      movedObjectId: columnId, previousParentObject: previousBoardId, previousPosition: previousPosition,
-      currentParentObject: currentBoardId, currentPosition: currentPosition
-    }
-    this.http.post(`${url}/column/move`, data).pipe(catchError(this.errorHandler.bind(this))).subscribe()
+  move(columnId: string, boardId: string, position: number): void {
+    const body = {movedObjectId: columnId, currentParentObject: boardId, currentPosition: position}
+    this.http.post(`${API_URL}/column/move`, body).subscribe()
   }
 
-  deleteColumn(columnId: string, boardId: string, columnPosition: number): void {
-    const data = {objectId: columnId, parentObjectId: boardId, position: columnPosition}
-    this.http.post(`${url}/column/delete`, data).pipe(catchError(this.errorHandler.bind(this))).subscribe()
-  }
-
-  private errorHandler(error: HttpErrorResponse) {
-    this.errorService.handle(error.message)
-    return throwError(() => error.message)
+  delete(columnId: string): void {
+    this.http.post(`${API_URL}/column/delete`, {objectId: columnId}).subscribe()
   }
 }

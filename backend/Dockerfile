@@ -18,5 +18,4 @@ USER app
 
 EXPOSE 8000
 
-# Миграции применяются при каждом старте контейнера, до запуска API
 CMD ["sh", "-c", "alembic upgrade head && exec uvicorn app.main:app --host 0.0.0.0 --port 8000 --proxy-headers"]

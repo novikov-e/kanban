@@ -2,16 +2,18 @@ from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, Field
 
+from app.schemas.common import ApiRequest
 
-class ChangeStateDto(BaseModel):
-    subtask_id: UUID = Field(alias="subtaskId")
-    state: bool
-    model_config = ConfigDict(populate_by_name=True)
+
+class ChangeStateRequest(ApiRequest):
+    subtask_id: UUID = Field(description="Идентификатор подзадачи")
+    state: bool = Field(description="Выполнена ли подзадача")
 
 
 class SubtaskResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     id: UUID = Field(validation_alias="subtask_id")
     name: str = Field(validation_alias="subtask_name")
-    state: bool = Field(validation_alias="subtask_state")
-    position: int = Field(validation_alias="subtask_position")
-    model_config = ConfigDict(from_attributes=True)
+    state: bool = Field(validation_alias="subtask_state", description="Выполнена ли подзадача")
+    position: int = Field(validation_alias="subtask_position", description="Позиция в задаче, с нуля")

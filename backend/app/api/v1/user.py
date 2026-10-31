@@ -1,31 +1,28 @@
-from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy.ext.asyncio import AsyncSession
+from fastapi import APIRouter
 
-from app.db.database import get_db
-from app.schemas.user import LastBoardUpdate, ThemeUpdate, UserResponse
+from app.api.dependencies import DbSession, not_found
+from app.core.config import settings
+from app.schemas.common import StatusResponse
+from app.schemas.user import LastBoardUpdateRequest, ThemeUpdateRequest, UserResponse
 from app.services import user_service
 
-router = APIRouter(prefix="/api/v1/user", tags=["User"])
+router = APIRouter(prefix="/user", tags=["User"])
 
 
-@router.get("", response_model=UserResponse)
-async def get_user(db: AsyncSession = Depends(get_db)):
-    # Временно захардкожено: email должен извлекаться из JWT токена авторизации.
-    email = "noved256@gmail.com"
-    user = await user_service.get_user_by_email(db, email)
-    if not user:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
-    return user
+@router.get("", response_model=UserResponse, summary="Текущий пользователь", responses=not_found("пользователь"))
+async def get_user(db: DbSession):
+    """Профиль пользователя, его настройки и список досок без содержимого."""
+    return await user_service.get_user_by_email(db, settings.DEFAULT_USER_EMAIL)
 
 
-@router.post("/theme")
-async def update_dark_theme(theme_dto: ThemeUpdate, db: AsyncSession = Depends(get_db)):
-    await user_service.update_theme(db, theme_dto.id, theme_dto.dark_theme)
-    return {"status": "success"}
+@router.post("/theme", summary="Переключить тему", responses=not_found("пользователь"))
+async def update_theme(request: ThemeUpdateRequest, db: DbSession) -> StatusResponse:
+    await user_service.update_theme(db, request.id, request.dark_theme)
+    return StatusResponse()
 
 
-@router.post("/last_board")
-async def update_last_board(dto: LastBoardUpdate, db: AsyncSession = Depends(get_db)):
-    await user_service.update_last_board(db, dto.user_id, dto.board_id)
-    return {"status": "success"}
+@router.post("/last_board", summary="Запомнить открытую доску", responses=not_found("пользователь"))
+async def update_last_board(request: LastBoardUpdateRequest, db: DbSession) -> StatusResponse:
+    """Доска откроется автоматически при следующем входе."""
+    await user_service.update_last_board(db, request.user_id, request.board_id)
+    return StatusResponse()

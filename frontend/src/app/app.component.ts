@@ -1,143 +1,115 @@
-import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
-import {Board} from "./models/board";
-import {UserService} from "./services/user.service";
-import { CdkDragDrop, moveItemInArray, CdkDropList, CdkDrag } from "@angular/cdk/drag-drop";
-import {User} from "./models/user";
-import {Colors} from "./models/colors";
-import {lightTheme} from "./data/light-theme";
-import {darkTheme} from "./data/dark-theme";
-import {BoardService} from "./services/board.service";
-import {Column} from "./models/column";
-import {Observable} from "rxjs";
-import {ErrorService} from "./services/error.service";
-import {MatSnackBar} from "@angular/material/snack-bar";
-import { TextButtonDirective } from './directives/text-button.directive';
-import { MatIcon } from '@angular/material/icon';
-import { MatInput } from '@angular/material/input';
-import { SelectDirective } from './directives/select.directive';
-import { MatDrawerContainer, MatDrawer } from '@angular/material/sidenav';
-import { BoardComponent } from './components/board/board.component';
-
+import {CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray} from '@angular/cdk/drag-drop'
+import {ChangeDetectionStrategy, Component, inject, OnInit} from '@angular/core'
+import {MatIcon} from '@angular/material/icon'
+import {MatInput} from '@angular/material/input'
+import {MatDrawer, MatDrawerContainer} from '@angular/material/sidenav'
+import {BoardComponent} from './components/board/board.component'
+import {darkTheme} from './data/dark-theme'
+import {lightTheme} from './data/light-theme'
+import {SelectDirective} from './directives/select.directive'
+import {TextButtonDirective} from './directives/text-button.directive'
+import {Board} from './models/board'
+import {Colors} from './models/colors'
+import {Column} from './models/column'
+import {UNSAVED_ID} from './models/entity'
+import {User} from './models/user'
+import {BoardService} from './services/board.service'
+import {UserService} from './services/user.service'
 
 @Component({
-    selector: 'app-root',
-    templateUrl: './app.component.html',
-    styleUrls: ['./app.component.css'],
-    changeDetection: ChangeDetectionStrategy.Eager,
-    imports: [TextButtonDirective, MatIcon, MatInput, SelectDirective, MatDrawerContainer, MatDrawer, CdkDropList, CdkDrag, BoardComponent]
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css'],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  imports: [
+    TextButtonDirective,
+    MatIcon,
+    MatInput,
+    SelectDirective,
+    MatDrawerContainer,
+    MatDrawer,
+    CdkDropList,
+    CdkDrag,
+    BoardComponent,
+  ],
 })
 export class AppComponent implements OnInit {
-  private userService = inject(UserService);
-  private boardService = inject(BoardService);
-  errorService = inject(ErrorService);
-  private _snackBar = inject(MatSnackBar);
+  private userService = inject(UserService)
+  private boardService = inject(BoardService)
 
-
-  title: string = "Kanban"
   user: User
-  board: Board | null
+  board: Board | null = null
   colors: Colors[] = lightTheme
   columnDropLists: string[] = []
   taskDropLists: string[] = []
   subtaskDropLists: string[] = []
 
-  constructor() {
-    this.errorService.error$.subscribe({next: (message) => {
-      if (message) {
-        this.openSnackBar("Произошла ошибка, пожалуйста перезагрузите страницу.", "Закрыть")
-      }
-    }})
-  }
-
   ngOnInit(): void {
-    this.userService.getUser().subscribe(data => {
-      this.user = data
-      if (data.darkTheme) {
-        this.colors = darkTheme
-      }
-      if (data.lastBoard != null) {
-        this.openBoard(data.lastBoard)
+    this.userService.getUser().subscribe(user => {
+      this.user = user
+      this.colors = user.darkTheme ? darkTheme : lightTheme
+      if (user.lastBoard !== null) {
+        this.openBoard(user.lastBoard)
       }
     })
   }
 
-  newBoard() {
-    let board: Observable<Board> = this.boardService.createBoard(this.user.id, this.user.boards.length)
-    board.subscribe(data => {
-      this.user.boards.push(data)
-      this.board = data
-      this.user.lastBoard = data.id
-      this.userService.lastBoard(this.user.id, data.id)
+  createBoard() {
+    this.boardService.create(this.user.id).subscribe(board => {
+      this.user.boards.push(board)
+      this.board = board
+      this.rememberLastBoard(board.id)
     })
   }
 
-  openBoard(id: string) {
-    if (this.board?.id != id) {
-      this.board = null
-      this.boardService.getBoardById(id).subscribe(data => this.board = data)
-      this.user.lastBoard = id
-      this.userService.lastBoard(this.user.id, id)
+  openBoard(boardId: string) {
+    if (this.board?.id === boardId) {
+      return
     }
+    this.board = null
+    this.boardService.get(boardId).subscribe(board => (this.board = board))
+    this.rememberLastBoard(boardId)
   }
 
   closeBoard() {
     this.board = null
-    this.user.lastBoard = null
-    this.userService.lastBoard(this.user.id, null)
     this.columnDropLists = []
+    this.rememberLastBoard(null)
   }
 
-  renameBoard(boardId: string, boardName: string) {
-    for (let i = 0; i < this.user.boards.length; i++) {
-      if (this.user.boards[i].id == boardId) {
-        this.user.boards[i].name = boardName
-      }
+  renameBoard(boardId: string, name: string) {
+    const board = this.user.boards.find(userBoard => userBoard.id === boardId)
+    if (board) {
+      board.name = name
     }
-    this.boardService.renameBoard(boardId, boardName)
+    this.boardService.rename(boardId, name)
   }
 
-  moveBoard(event: CdkDragDrop<Board[]>) {
-    this.boardService.moveBoard(this.user.boards[event.previousIndex].id,
-      this.user.id, event.previousIndex, this.user.id, event.currentIndex)
-    moveItemInArray(this.user.boards, event.previousIndex, event.currentIndex);
+  onBoardDrop(event: CdkDragDrop<Board[]>) {
+    this.boardService.move(event.item.data.id, this.user.id, event.currentIndex)
+    moveItemInArray(this.user.boards, event.previousIndex, event.currentIndex)
   }
 
-  deleteBoard(boardId: string, boardPosition: number) {
-    if (this.board?.id == boardId) {
-      this.board = null
-      this.user.lastBoard = null
-      this.userService.lastBoard(this.user.id, null)
+  deleteBoard(boardId: string) {
+    if (this.board?.id === boardId) {
+      this.closeBoard()
     }
-    this.boardService.deleteBoard(this.user.id, boardId, boardPosition)
-    for (let i = 0; i < this.user.boards.length; i++) {
-      if (this.user.boards[i].id == boardId) {
-        this.user.boards.splice(i, 1)
-      }
-    }
+    this.boardService.delete(boardId)
+    this.user.boards = this.user.boards.filter(board => board.id !== boardId)
   }
 
-  newColumn() {
-    this.board?.columns.push(new Column("", "", this.board?.columns.length))
+  addColumn() {
+    this.board?.columns.push(new Column(UNSAVED_ID, '', this.board.columns.length))
   }
 
-  changeTheme() {
-    if (!this.user.darkTheme) {
-      this.colors = darkTheme
-    } else {
-      this.colors = lightTheme
-    }
+  toggleTheme() {
     this.user.darkTheme = !this.user.darkTheme
-    this.userService.darkTheme(this.user.id, this.user.darkTheme)
+    this.colors = this.user.darkTheme ? darkTheme : lightTheme
+    this.userService.setDarkTheme(this.user.id, this.user.darkTheme)
   }
 
-  openSnackBar(message: string, action: string) {
-    this._snackBar.open(message, action, {
-      horizontalPosition: 'end',
-      verticalPosition: 'top'});
-    this._snackBar._openedSnackBarRef?.afterDismissed().subscribe(() => this.actionSnackBar())
-  }
-
-  actionSnackBar() {
-    console.log("ACTION!!!")
+  private rememberLastBoard(boardId: string | null) {
+    this.user.lastBoard = boardId
+    this.userService.setLastBoard(this.user.id, boardId)
   }
 }

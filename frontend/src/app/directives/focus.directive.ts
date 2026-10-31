@@ -1,18 +1,12 @@
-import { AfterViewInit, Directive, ElementRef, HostListener, OnInit, inject } from '@angular/core';
+import {AfterViewInit, Directive, ElementRef, inject} from '@angular/core'
 
-@Directive({ selector: '[appFocus]' })
+@Directive({selector: '[appFocus]'})
 export class FocusDirective implements AfterViewInit {
-    private el = inject(ElementRef);
+  private element = inject<ElementRef<HTMLTextAreaElement>>(ElementRef)
 
-
-    // @HostListener('document:click')
-    // clickout() {
-    //     console.log("Click outside")
-    // }
-
-    ngAfterViewInit(): void {
-        if (this.el.nativeElement.value == "") {
-            this.el.nativeElement.focus()
-        }
+  ngAfterViewInit(): void {
+    if (this.element.nativeElement.value === '') {
+      this.element.nativeElement.focus()
     }
+  }
 }

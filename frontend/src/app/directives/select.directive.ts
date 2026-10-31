@@ -1,12 +1,13 @@
-import { AfterViewInit, Directive, ElementRef, OnInit, inject } from '@angular/core';
+import {AfterViewInit, Directive, ElementRef, inject} from '@angular/core'
+import {NEW_BOARD_NAME} from '../models/board'
 
-@Directive({ selector: '[appSelect]' })
+@Directive({selector: '[appSelect]'})
 export class SelectDirective implements AfterViewInit {
-  private el = inject(ElementRef);
-
+  private element = inject<ElementRef<HTMLInputElement>>(ElementRef)
 
   ngAfterViewInit(): void {
-    if (this.el.nativeElement.value == "Новый проект")
-    this.el.nativeElement.select()
+    if (this.element.nativeElement.value === NEW_BOARD_NAME) {
+      this.element.nativeElement.select()
+    }
   }
 }

@@ -1,49 +1,31 @@
-import { Injectable, inject } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from "@angular/common/http";
-import {catchError, Observable, throwError} from "rxjs";
-import {ErrorService} from "./error.service";
-import {Task} from "../models/task";
-import {url} from "../data/url";
+import {HttpClient} from '@angular/common/http'
+import {inject, Injectable} from '@angular/core'
+import {Observable} from 'rxjs'
+import {API_URL} from '../data/url'
+import {Task} from '../models/task'
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({providedIn: 'root'})
 export class TaskService {
-  private http = inject(HttpClient);
-  private errorService = inject(ErrorService);
+  private http = inject(HttpClient)
 
-
-  createTask(columnId: string, name: string, position: number): Observable<Task> {
-    const data = {parentObjectId: columnId, name: name, position: position}
-    return this.http.post<Task>(`${url}/task/create`, data).pipe(catchError(this.errorHandler.bind(this)))
+  create(columnId: string, name: string): Observable<Task> {
+    return this.http.post<Task>(`${API_URL}/task/create`, {parentObjectId: columnId, name})
   }
 
-  renameTask(taskId: string, name: string): void {
-    const data = {objectId: taskId, name: name}
-    this.http.post(`${url}/task/rename`, data).pipe(catchError(this.errorHandler.bind(this))).subscribe()
+  rename(taskId: string, name: string): void {
+    this.http.post(`${API_URL}/task/rename`, {objectId: taskId, name}).subscribe()
   }
 
-  changeTaskColor(taskId: string, color: number): void {
-    const data = {taskId: taskId, color: color}
-    this.http.post(`${url}/task/color`, data).pipe(catchError(this.errorHandler.bind(this))).subscribe()
+  changeColor(taskId: string, color: number): void {
+    this.http.post(`${API_URL}/task/color`, {taskId, color}).subscribe()
   }
 
-  moveTask(taskId: string, previousColumnId: string,
-           previousPosition: number, currentColumnId: string, currentPosition: number): void {
-    const data = {
-      movedObjectId: taskId, previousParentObject: previousColumnId, previousPosition: previousPosition,
-      currentParentObject: currentColumnId, currentPosition: currentPosition
-    }
-    this.http.post(`${url}/task/move`, data).pipe(catchError(this.errorHandler.bind(this))).subscribe()
+  move(taskId: string, columnId: string, position: number): void {
+    const body = {movedObjectId: taskId, currentParentObject: columnId, currentPosition: position}
+    this.http.post(`${API_URL}/task/move`, body).subscribe()
   }
 
-  deleteTask(taskId: string, columnId: string, position: number): void {
-    const data = {objectId: taskId, parentObjectId: columnId, position: position}
-    this.http.post(`${url}/task/delete`, data).pipe(catchError(this.errorHandler.bind(this))).subscribe()
-  }
-
-  private errorHandler(error: HttpErrorResponse) {
-    this.errorService.handle(error.message)
-    return throwError(() => error.message)
+  delete(taskId: string): void {
+    this.http.post(`${API_URL}/task/delete`, {objectId: taskId}).subscribe()
   }
 }
