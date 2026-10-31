@@ -9,6 +9,8 @@
         #autosize="cdkTextareaAutosize"
         cdkAutosizeMinRows="1"
         [value]="task().name"
+        aria-label="Название списка"
+        i18n-aria-label="@@task.name"
         (change)="rename(taskName.value)"
         appFocus
         (keydown)="onKeydown(taskName, $event)"
@@ -17,11 +19,21 @@
     </div>
 
     <div class="buttons_container">
-      <button class="custom_icon_button" (click)="addSubtask()">
+      <button
+        class="custom_icon_button"
+        aria-label="Добавить задачу"
+        i18n-aria-label="@@task.addSubtask"
+        (click)="addSubtask()"
+      >
         <mat-icon>add_circle_outline</mat-icon>
       </button>
 
-      <button class="custom_icon_button" [cdkMenuTriggerFor]="menu" aria-label="Цвет списка">
+      <button
+        class="custom_icon_button"
+        [cdkMenuTriggerFor]="menu"
+        aria-label="Цвет списка"
+        i18n-aria-label="@@task.color"
+      >
         <mat-icon>circle</mat-icon>
       </button>
 
@@ -41,7 +53,7 @@
         </div>
       </ng-template>
 
-      <button class="custom_icon_button" (click)="delete()">
+      <button class="custom_icon_button" aria-label="Удалить список" i18n-aria-label="@@task.delete" (click)="delete()">
         <mat-icon>remove_circle_outline</mat-icon>
       </button>
     </div>

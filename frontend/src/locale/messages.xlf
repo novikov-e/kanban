@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="ru" datatype="plaintext" original="ng2.template">
+    <body>
+      <trans-unit id="column.name" datatype="html">
+        <source>Название колонки</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/column/column.component.html</context>
+          <context context-type="linenumber">14,15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="column.addTask" datatype="html">
+        <source>Добавить список</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/column/column.component.html</context>
+          <context context-type="linenumber">25,26</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="column.delete" datatype="html">
+        <source>Удалить колонку</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/column/column.component.html</context>
+          <context context-type="linenumber">34,35</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="login.registerTitle" datatype="html">
+        <source>Регистрация</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/login/login.component.html</context>
+          <context context-type="linenumber">4,6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="login.loginTitle" datatype="html">
+        <source>Вход</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/login/login.component.html</context>
+          <context context-type="linenumber">6,10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="login.email" datatype="html">
+        <source>Email</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/login/login.component.html</context>
+          <context context-type="linenumber">11,12</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="login.password" datatype="html">
+        <source>Пароль</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/login/login.component.html</context>
+          <context context-type="linenumber">16,18</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="login.passwordHint" datatype="html">
+        <source>Не короче <x id="INTERPOLATION" equiv-text="{{ minPasswordLength }}"/> символов</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/login/login.component.html</context>
+          <context context-type="linenumber">24,26</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="login.register" datatype="html">
+        <source>Зарегистрироваться</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/login/login.component.html</context>
+          <context context-type="linenumber">34,35</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="login.submit" datatype="html">
+        <source>Войти</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/login/login.component.html</context>
+          <context context-type="linenumber">36,38</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="login.haveAccount" datatype="html">
+        <source>У меня уже есть аккаунт</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/login/login.component.html</context>
+          <context context-type="linenumber">41,43</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="login.createAccount" datatype="html">
+        <source>Создать аккаунт</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/login/login.component.html</context>
+          <context context-type="linenumber">43,46</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="login.invalidCredentials" datatype="html">
+        <source>Неверный email или пароль</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/login/login.component.ts</context>
+          <context context-type="linenumber">10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="login.emailTaken" datatype="html">
+        <source>Этот email уже зарегистрирован</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/login/login.component.ts</context>
+          <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="login.failed" datatype="html">
+        <source>Не удалось выполнить вход</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/login/login.component.ts</context>
+          <context context-type="linenumber">13</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="subtask.done" datatype="html">
+        <source>Выполнена</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/subtask/subtask.component.html</context>
+          <context context-type="linenumber">8,9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="subtask.name" datatype="html">
+        <source>Название задачи</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/subtask/subtask.component.html</context>
+          <context context-type="linenumber">31,32</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="subtask.delete" datatype="html">
+        <source>Удалить задачу</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/subtask/subtask.component.html</context>
+          <context context-type="linenumber">42,43</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="task.name" datatype="html">
+        <source>Название списка</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/task/task.component.html</context>
+          <context context-type="linenumber">12,13</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="task.addSubtask" datatype="html">
+        <source>Добавить задачу</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/task/task.component.html</context>
+          <context context-type="linenumber">24,25</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="task.color" datatype="html">
+        <source>Цвет списка</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/task/task.component.html</context>
+          <context context-type="linenumber">34,35</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="task.delete" datatype="html">
+        <source>Удалить список</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/task/task.component.html</context>
+          <context context-type="linenumber">56</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="workspace.menu" datatype="html">
+        <source>Меню</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/workspace/workspace.component.html</context>
+          <context context-type="linenumber">8,10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="board.name" datatype="html">
+        <source>Название проекта</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/workspace/workspace.component.html</context>
+          <context context-type="linenumber">21,22</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="board.addColumn" datatype="html">
+        <source>Добавить колонку</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/workspace/workspace.component.html</context>
+          <context context-type="linenumber">30,32</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="board.close" datatype="html">
+        <source>Выйти из проекта</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/workspace/workspace.component.html</context>
+          <context context-type="linenumber">34,36</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="board.delete" datatype="html">
+        <source>Удалить проект</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/workspace/workspace.component.html</context>
+          <context context-type="linenumber">38,40</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="workspace.createBoard" datatype="html">
+        <source>Создать проект</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/workspace/workspace.component.html</context>
+          <context context-type="linenumber">51,54</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="workspace.settings" datatype="html">
+        <source>Настройки</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/workspace/workspace.component.html</context>
+          <context context-type="linenumber">72,75</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="workspace.lightTheme" datatype="html">
+        <source>Светлая тема</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/workspace/workspace.component.html</context>
+          <context context-type="linenumber">79,80</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="workspace.darkTheme" datatype="html">
+        <source>Тёмная тема</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/workspace/workspace.component.html</context>
+          <context context-type="linenumber">81,83</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="workspace.logout" datatype="html">
+        <source>Выйти</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/workspace/workspace.component.html</context>
+          <context context-type="linenumber">88,90</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="error.request" datatype="html">
+        <source>Не удалось выполнить запрос к серверу.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/interceptors/http-error.interceptor.ts</context>
+          <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="error.close" datatype="html">
+        <source>Закрыть</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/interceptors/http-error.interceptor.ts</context>
+          <context context-type="linenumber">8</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="color.main" datatype="html">
+        <source>Основной</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/models/task.ts</context>
+          <context context-type="linenumber">8</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="color.red" datatype="html">
+        <source>Красный</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/models/task.ts</context>
+          <context context-type="linenumber">9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="color.pink" datatype="html">
+        <source>Розовый</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/models/task.ts</context>
+          <context context-type="linenumber">10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="color.orange" datatype="html">
+        <source>Оранжевый</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/models/task.ts</context>
+          <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="color.green" datatype="html">
+        <source>Зелёный</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/models/task.ts</context>
+          <context context-type="linenumber">12</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="color.teal" datatype="html">
+        <source>Сине-зелёный</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/models/task.ts</context>
+          <context context-type="linenumber">13</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="color.blue" datatype="html">
+        <source>Синий</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/models/task.ts</context>
+          <context context-type="linenumber">14</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="color.purple" datatype="html">
+        <source>Фиолетовый</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/models/task.ts</context>
+          <context context-type="linenumber">15</context>
+        </context-group>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

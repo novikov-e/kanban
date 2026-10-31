@@ -1,19 +1,21 @@
 <div class="title-and-buttons subtask">
   <div class="buttons_container">
-    <div class="custom_checkbox">
+    <button
+      type="button"
+      class="custom_checkbox"
+      role="checkbox"
+      [attr.aria-checked]="subtask().state"
+      aria-label="Выполнена"
+      i18n-aria-label="@@subtask.done"
+      (click)="toggleState()"
+    >
       @if (subtask().state) {
-        <div (click)="toggleState()">
-          <mat-icon class="custom_checkbox_size">check_circle</mat-icon>
-        </div>
+        <mat-icon class="custom_checkbox_size">check_circle</mat-icon>
       } @else {
-        <div (click)="toggleState()">
-          <mat-icon class="custom_checkbox_focused custom_checkbox_size">circle</mat-icon>
-        </div>
-        <div>
-          <mat-icon class="custom_checkbox_size">radio_button_unchecked</mat-icon>
-        </div>
+        <mat-icon class="custom_checkbox_focused custom_checkbox_size">circle</mat-icon>
+        <mat-icon class="custom_checkbox_size">radio_button_unchecked</mat-icon>
       }
-    </div>
+    </button>
   </div>
 
   <div class="text_grow">
@@ -26,6 +28,8 @@
       cdkAutosizeMinRows="1"
       #subtaskName
       [value]="subtask().name"
+      aria-label="Название задачи"
+      i18n-aria-label="@@subtask.name"
       (change)="rename(subtaskName.value)"
       (keydown)="onKeydown(subtaskName, $event)"
     >
@@ -33,7 +37,12 @@
   </div>
 
   <div class="buttons_container">
-    <button class="custom_icon_button" (click)="delete()">
+    <button
+      class="custom_icon_button"
+      aria-label="Удалить задачу"
+      i18n-aria-label="@@subtask.delete"
+      (click)="delete()"
+    >
       <mat-icon>remove_circle_outline</mat-icon>
     </button>
   </div>

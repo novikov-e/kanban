@@ -11,6 +11,8 @@
           #autosize="cdkTextareaAutosize"
           appFocus
           cdkAutosizeMinRows="1"
+          aria-label="Название колонки"
+          i18n-aria-label="@@column.name"
           (change)="rename(columnName.value)"
           (keydown)="onKeydown(columnName, $event)"
         >
@@ -18,11 +20,21 @@
       </div>
 
       <div class="buttons_container">
-        <button class="custom_icon_button" (click)="addTask()">
+        <button
+          class="custom_icon_button"
+          aria-label="Добавить список"
+          i18n-aria-label="@@column.addTask"
+          (click)="addTask()"
+        >
           <mat-icon>assignment_add</mat-icon>
         </button>
 
-        <button class="custom_icon_button" (click)="delete()">
+        <button
+          class="custom_icon_button"
+          aria-label="Удалить колонку"
+          i18n-aria-label="@@column.delete"
+          (click)="delete()"
+        >
           <mat-icon>remove_circle_outline</mat-icon>
         </button>
       </div>

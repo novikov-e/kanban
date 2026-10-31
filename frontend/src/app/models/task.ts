@@ -5,14 +5,14 @@ export const DEFAULT_TASK_COLOR = 1
 
 /** Цвета задач; значение — номер цвета палитры (--task-color-N в styles.css). */
 export const TASK_COLORS: readonly {value: number; name: string}[] = [
-  {value: 1, name: 'Основной'},
-  {value: 2, name: 'Красный'},
-  {value: 3, name: 'Розовый'},
-  {value: 4, name: 'Оранжевый'},
-  {value: 5, name: 'Зелёный'},
-  {value: 6, name: 'Сине-зелёный'},
-  {value: 7, name: 'Синий'},
-  {value: 8, name: 'Фиолетовый'},
+  {value: 1, name: $localize`:@@color.main:Основной`},
+  {value: 2, name: $localize`:@@color.red:Красный`},
+  {value: 3, name: $localize`:@@color.pink:Розовый`},
+  {value: 4, name: $localize`:@@color.orange:Оранжевый`},
+  {value: 5, name: $localize`:@@color.green:Зелёный`},
+  {value: 6, name: $localize`:@@color.teal:Сине-зелёный`},
+  {value: 7, name: $localize`:@@color.blue:Синий`},
+  {value: 8, name: $localize`:@@color.purple:Фиолетовый`},
 ]
 
 export interface Task {

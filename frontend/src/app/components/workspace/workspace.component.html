@@ -5,7 +5,7 @@
     <div class="buttons_container ml-5">
       <button class="text_button" (click)="drawer.toggle()">
         <mat-icon>menu</mat-icon>
-        <div class="text_in_header_button">Меню</div>
+        <div class="text_in_header_button" i18n="@@workspace.menu">Меню</div>
       </button>
     </div>
 
@@ -18,6 +18,8 @@
           [value]="board.name"
           matInput
           appSelect
+          aria-label="Название проекта"
+          i18n-aria-label="@@board.name"
           (change)="renameBoard(board.id, boardName.value)"
         />
       </div>
@@ -25,15 +27,15 @@
       <div class="buttons_container mr-5">
         <button class="text_button" (click)="boardStore.addColumn()">
           <mat-icon>add_circle_outline</mat-icon>
-          <div class="text_in_header_button">Добавить колонку</div>
+          <div class="text_in_header_button" i18n="@@board.addColumn">Добавить колонку</div>
         </button>
         <button class="text_button" (click)="closeBoard()">
           <mat-icon>logout</mat-icon>
-          <div class="text_in_header_button">Выйти из проекта</div>
+          <div class="text_in_header_button" i18n="@@board.close">Выйти из проекта</div>
         </button>
         <button class="text_button danger" (click)="deleteBoard(board.id)">
           <mat-icon>remove_circle_outline</mat-icon>
-          <div class="text_in_header_button">Удалить проект</div>
+          <div class="text_in_header_button" i18n="@@board.delete">Удалить проект</div>
         </button>
       </div>
     }
@@ -46,7 +48,7 @@
           <div class="user_details">
             <button class="text_button m-5" (click)="createBoard()">
               <mat-icon>add_circle_outline</mat-icon>
-              <div class="text_in_button">Создать проект</div>
+              <div class="text_in_button" i18n="@@workspace.createBoard">Создать проект</div>
             </button>
 
             <div
@@ -67,17 +69,23 @@
 
             <button class="text_button m-5">
               <mat-icon>settings</mat-icon>
-              <div class="text_in_button">Настройки</div>
+              <div class="text_in_button" i18n="@@workspace.settings">Настройки</div>
             </button>
 
             <button class="text_button m-5" (click)="userStore.toggleTheme()">
               <mat-icon>{{ user.darkTheme ? 'light_mode' : 'dark_mode' }}</mat-icon>
-              <div class="text_in_button">{{ user.darkTheme ? 'Светлая тема' : 'Тёмная тема' }}</div>
+              <div class="text_in_button">
+                @if (user.darkTheme) {
+                  <ng-container i18n="@@workspace.lightTheme">Светлая тема</ng-container>
+                } @else {
+                  <ng-container i18n="@@workspace.darkTheme">Тёмная тема</ng-container>
+                }
+              </div>
             </button>
 
             <button class="text_button m-5" (click)="logout()">
               <mat-icon>logout</mat-icon>
-              <div class="text_in_button">Выйти</div>
+              <div class="text_in_button" i18n="@@workspace.logout">Выйти</div>
             </button>
           </div>
         }

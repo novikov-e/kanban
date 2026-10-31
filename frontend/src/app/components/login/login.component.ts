@@ -7,9 +7,10 @@ import {AuthService} from '../../services/auth.service'
 const MIN_PASSWORD_LENGTH = 8
 
 const ERRORS: Partial<Record<number, string>> = {
-  [HttpStatusCode.Unauthorized]: 'Неверный email или пароль',
-  [HttpStatusCode.Conflict]: 'Этот email уже зарегистрирован',
+  [HttpStatusCode.Unauthorized]: $localize`:@@login.invalidCredentials:Неверный email или пароль`,
+  [HttpStatusCode.Conflict]: $localize`:@@login.emailTaken:Этот email уже зарегистрирован`,
 }
+const UNKNOWN_ERROR = $localize`:@@login.failed:Не удалось выполнить вход`
 
 @Component({
   selector: 'app-login',
@@ -46,7 +47,7 @@ export class LoginComponent {
     const request$ = this.registering() ? this.auth.register(credentials) : this.auth.login(credentials)
     request$.subscribe({
       next: () => void this.router.navigateByUrl(this.returnUrl()),
-      error: (error: HttpErrorResponse) => this.error.set(ERRORS[error.status] ?? 'Не удалось выполнить вход'),
+      error: (error: HttpErrorResponse) => this.error.set(ERRORS[error.status] ?? UNKNOWN_ERROR),
     })
   }
 }
