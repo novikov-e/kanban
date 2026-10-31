@@ -71,7 +71,6 @@ async def move(
         .values({spec.parent_id.key: parent_id, spec.position.key: position})
     )
     await session.execute(stmt)
-    await session.commit()
 
 
 async def soft_delete(session: AsyncSession, spec: OrderedChildren, user_id: UUID, object_id: UUID) -> None:
@@ -79,7 +78,6 @@ async def soft_delete(session: AsyncSession, spec: OrderedChildren, user_id: UUI
     # Дочерние сущности помечают удалёнными триггеры БД
     stmt = update(spec.model).where(spec.id == object_id).values({spec.deleted_at.key: func.now()})
     await session.execute(stmt)
-    await session.commit()
 
 
 async def rebalance_parent(session: AsyncSession, spec: OrderedChildren, parent_id: UUID) -> None:

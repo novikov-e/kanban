@@ -15,5 +15,6 @@ class Base(DeclarativeBase):
 
 
 async def get_db() -> AsyncIterator[AsyncSession]:
-    async with SessionFactory() as session:
+    """Одна транзакция на запрос: коммит после обработчика, откат при исключении."""
+    async with SessionFactory() as session, session.begin():
         yield session

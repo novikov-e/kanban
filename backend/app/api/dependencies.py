@@ -10,7 +10,8 @@ from app.core.security import TokenType, decode_token
 from app.db.database import get_db
 from app.schemas.common import ErrorResponse
 
-DbSession = Annotated[AsyncSession, Depends(get_db)]
+# scope="function": транзакция коммитится до отправки ответа, иначе клиент увидит успех упавшего коммита
+DbSession = Annotated[AsyncSession, Depends(get_db, scope="function")]
 
 _bearer = HTTPBearer(auto_error=False, description="Access-токен из `/api/v1/auth/login` или `/refresh`")
 

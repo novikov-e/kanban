@@ -6,6 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.errors import AuthError, ConflictError
 from app.core.security import IssuedToken, TokenType, create_token, decode_token, hash_password, verify_password
+from app.db.database import SessionFactory
 from app.models import RefreshToken, User
 
 # Хеш для сравнения, когда пользователь не найден: иначе по времени ответа можно узнать, зарегистрирован ли email
@@ -55,9 +56,10 @@ async def refresh(session: AsyncSession, refresh_token: str) -> TokenPair:
     )
     if (await session.execute(stmt)).rowcount == 0:
         if await _is_revoked(session, claims.token_id):
-            # Повторное использование отозванного токена означает его утечку: отзываем все сессии пользователя
-            await _revoke_all(session, claims.user_id)
-            await session.commit()
+            # Повторное использование отозванного токена означает его утечку: отзываем все сессии пользователя.
+            # Отдельная транзакция: транзакция запроса откатится вместе с AuthError
+            async with SessionFactory() as revoke_session, revoke_session.begin():
+                await _revoke_all(revoke_session, claims.user_id)
         raise AuthError("Refresh token is revoked or expired")
     return await _issue_tokens(session, claims.user_id)
 
@@ -73,13 +75,12 @@ async def logout(session: AsyncSession, refresh_token: str) -> None:
         .values(revoked_at=func.now())
     )
     await session.execute(stmt)
-    await session.commit()
 
 
 async def _issue_tokens(session: AsyncSession, user_id: UUID) -> TokenPair:
     tokens = TokenPair(access=create_token(user_id, TokenType.ACCESS), refresh=create_token(user_id, TokenType.REFRESH))
     session.add(RefreshToken(token_id=tokens.refresh.token_id, user_id=user_id, expires_at=tokens.refresh.expires_at))
-    await session.commit()
+    await session.flush()
     return tokens
 
 

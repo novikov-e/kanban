@@ -40,12 +40,11 @@ async def update_by_id(
     result = await session.execute(stmt)
     if result.rowcount == 0:
         raise NotFoundError(entity)
-    await session.commit()
 
 
 async def insert[ModelT: Base](session: AsyncSession, obj: ModelT, empty_collections: tuple[str, ...] = ()) -> ModelT:
     session.add(obj)
-    await session.commit()
+    await session.flush()
     await session.refresh(obj)
     # Без явного значения сериализатор попытается лениво загрузить коллекции вне async-контекста
     for collection in empty_collections:
