@@ -8,6 +8,7 @@ import {BoardComponent} from './components/board/board.component'
 import {LoginComponent} from './components/login/login.component'
 import {SelectDirective} from './directives/select.directive'
 import {TextButtonDirective} from './directives/text-button.directive'
+import {errorAlreadyReported} from './interceptors/http-error.interceptor'
 import {Board} from './models/board'
 import {AuthService} from './services/auth.service'
 import {BoardStore} from './state/board.store'
@@ -49,10 +50,13 @@ export class AppComponent implements OnInit {
     this.userStore
       .load()
       .pipe(finalize(() => this.sessionChecked.set(true)))
-      .subscribe(user => {
-        if (user.lastBoard !== null) {
-          this.boardStore.open(user.lastBoard)
-        }
+      .subscribe({
+        next: user => {
+          if (user.lastBoard !== null) {
+            this.boardStore.open(user.lastBoard)
+          }
+        },
+        error: errorAlreadyReported,
       })
   }
 
@@ -63,9 +67,12 @@ export class AppComponent implements OnInit {
   }
 
   createBoard() {
-    this.userStore.createBoard().subscribe(board => {
-      this.boardStore.show({board, etag: null})
-      this.userStore.rememberLastBoard(board.id)
+    this.userStore.createBoard().subscribe({
+      next: board => {
+        this.boardStore.show({board, etag: null})
+        this.userStore.rememberLastBoard(board.id)
+      },
+      error: errorAlreadyReported,
     })
   }
 

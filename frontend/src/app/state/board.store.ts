@@ -5,6 +5,7 @@ import {Column} from '../models/column'
 import {Entity, hasUnsavedItems, isSaved, newLocalId} from '../models/entity'
 import {Subtask} from '../models/subtask'
 import {DEFAULT_TASK_COLOR, Task} from '../models/task'
+import {errorAlreadyReported} from '../interceptors/http-error.interceptor'
 import {BoardService, VersionedBoard} from '../services/board.service'
 import {ColumnService} from '../services/column.service'
 import {SubtaskService} from '../services/subtask.service'
@@ -30,8 +31,11 @@ export class BoardStore {
   private subtaskService = inject(SubtaskService)
 
   private readonly state = signal<Board | null>(null)
+  private openBoardId: string | null = null
   private etag: string | null = null
   private readonly creating = new Set<string>()
+  /** Элементы, удалённые пользователем, пока сервер их создавал. */
+  private readonly discarded = new Set<string>()
 
   readonly board = this.state.asReadonly()
 
@@ -49,15 +53,18 @@ export class BoardStore {
 
   open(boardId: string): void {
     this.close()
-    this.boardService.get(boardId).subscribe(loaded => this.show(loaded))
+    this.openBoardId = boardId
+    this.load(boardId)
   }
 
   show({board, etag}: VersionedBoard): void {
+    this.openBoardId = board.id
     this.state.set(board)
     this.etag = etag
   }
 
   close(): void {
+    this.openBoardId = null
     this.state.set(null)
     this.etag = null
   }
@@ -68,10 +75,13 @@ export class BoardStore {
     if (!board || !this.etag || hasUnsavedItems(board)) {
       return
     }
-    this.boardService.getIfChanged(board.id, this.etag).subscribe(changed => {
-      if (changed && this.state()?.id === board.id) {
-        this.show(changed)
-      }
+    this.boardService.getIfChanged(board.id, this.etag).subscribe({
+      next: changed => {
+        if (changed && this.openBoardId === board.id) {
+          this.show(changed)
+        }
+      },
+      error: errorAlreadyReported,
     })
   }
 
@@ -212,24 +222,61 @@ export class BoardStore {
     if (!create$) {
       return
     }
+    const boardId = this.openBoardId
     this.creating.add(id)
-    create$.pipe(finalize(() => this.creating.delete(id))).subscribe(created => {
-      const board = this.state()
-      const local = board && items.find(board, id)
-      if (!local) {
-        this.send(items.remove(created.id))
-        return
-      }
-      this.update(current => items.replaceId(current, id, created.id))
-      if (local.name !== name) {
-        this.send(items.rename(created.id, local.name))
-      }
-    })
+    create$
+      .pipe(
+        finalize(() => {
+          this.creating.delete(id)
+          this.discarded.delete(id)
+        }),
+      )
+      .subscribe({
+        next: created => {
+          if (this.discarded.has(id)) {
+            this.send(items.remove(created.id))
+            return
+          }
+          const board = this.state()
+          const local = board && items.find(board, id)
+          if (!local) {
+            if (this.openBoardId === boardId) {
+              this.reload()
+            }
+            return
+          }
+          this.update(current => items.replaceId(current, id, created.id))
+          if (local.name !== name) {
+            this.send(items.rename(created.id, local.name))
+          }
+        },
+        error: () => this.reload(),
+      })
   }
 
   private removeOnServer(items: NamedItems, id: string): void {
     if (isSaved({id})) {
       this.send(items.remove(id))
+    } else if (this.creating.has(id)) {
+      this.discarded.add(id)
+    }
+  }
+
+  private load(boardId: string): void {
+    this.boardService.get(boardId).subscribe({
+      next: loaded => {
+        if (this.openBoardId === boardId) {
+          this.show(loaded)
+        }
+      },
+      error: errorAlreadyReported,
+    })
+  }
+
+  /** Возвращает доску к состоянию сервера: локальные изменения, которые не удалось сохранить, отбрасываются. */
+  private reload(): void {
+    if (this.openBoardId) {
+      this.load(this.openBoardId)
     }
   }
 
@@ -238,6 +285,6 @@ export class BoardStore {
   }
 
   private send(request$: Observable<void>): void {
-    request$.subscribe()
+    request$.subscribe({error: () => this.reload()})
   }
 }

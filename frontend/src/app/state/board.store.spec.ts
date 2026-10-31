@@ -70,6 +70,43 @@ describe('BoardStore', () => {
     expect(localColumn().tasks[0].name).toBe('Задача')
   })
 
+  it('restores the board from the server when a change is rejected', () => {
+    store.renameColumn('column-1', 'Не сохранится')
+    httpMock
+      .expectOne({method: 'PATCH', url: '/api/v1/columns/column-1'})
+      .flush(null, {status: 500, statusText: 'Server Error'})
+
+    const serverBoard = new Board('board-1', 'Доска', 1)
+    serverBoard.columns = [new Column('column-1', 'Колонка', 1)]
+    httpMock.expectOne({method: 'GET', url: '/api/v1/boards/board-1'}).flush(serverBoard)
+
+    expect(store.board()!.columns[0].name).toBe('Колонка')
+  })
+
+  it('keeps on the server a column whose creation finished after another board was opened', () => {
+    store.addColumn()
+    store.renameColumn(localColumn().id, 'Новая')
+    const create = httpMock.expectOne('/api/v1/boards/board-1/columns')
+
+    store.open('board-2')
+    httpMock.expectOne('/api/v1/boards/board-2').flush(new Board('board-2', 'Другая доска', 2))
+    create.flush(new Column('column-2', 'Новая', 2))
+
+    httpMock.expectNone({method: 'DELETE'})
+    expect(store.board()!.id).toBe('board-2')
+  })
+
+  it('ignores a board that finished loading after another board was opened', () => {
+    store.open('board-2')
+    const slow = httpMock.expectOne('/api/v1/boards/board-2')
+    store.open('board-3')
+    httpMock.expectOne('/api/v1/boards/board-3').flush(new Board('board-3', 'Третья', 3))
+
+    slow.flush(new Board('board-2', 'Вторая', 2))
+
+    expect(store.board()!.id).toBe('board-3')
+  })
+
   it('connects the drop lists of all columns and tasks and keeps them stable on unrelated changes', () => {
     store.addTask('column-1')
     const taskId = store.board()!.columns[0].tasks[0].id

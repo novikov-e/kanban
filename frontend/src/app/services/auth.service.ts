@@ -1,6 +1,6 @@
 import {HttpClient} from '@angular/common/http'
 import {computed, inject, Injectable, signal} from '@angular/core'
-import {finalize, map, Observable, shareReplay, tap} from 'rxjs'
+import {catchError, EMPTY, finalize, map, Observable, shareReplay, tap} from 'rxjs'
 import {API_URL} from '../data/url'
 
 interface TokenResponse {
@@ -41,8 +41,12 @@ export class AuthService {
     return this.refreshing$
   }
 
+  /** Сессия завершается локально, даже если сервер недоступен. */
   logout(): Observable<void> {
-    return this.http.post<void>(`${AUTH_URL}/logout`, null).pipe(finalize(() => this.token.set(null)))
+    return this.http.post<void>(`${AUTH_URL}/logout`, null).pipe(
+      catchError(() => EMPTY),
+      finalize(() => this.token.set(null)),
+    )
   }
 
   private authenticate(url: string, credentials: Credentials): Observable<void> {

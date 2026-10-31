@@ -2,6 +2,7 @@ import {computed, inject, Injectable, signal} from '@angular/core'
 import {Observable, tap} from 'rxjs'
 import {darkTheme} from '../data/dark-theme'
 import {lightTheme} from '../data/light-theme'
+import {errorAlreadyReported} from '../interceptors/http-error.interceptor'
 import {Board} from '../models/board'
 import {User} from '../models/user'
 import {BoardService} from '../services/board.service'
@@ -73,7 +74,8 @@ export class UserStore {
     this.state.update(user => (user ? change(user) : user))
   }
 
+  /** При ошибке возвращает пользователя к состоянию сервера, отменяя локальное изменение. */
   private send(request$: Observable<void>): void {
-    request$.subscribe()
+    request$.subscribe({error: () => this.load().subscribe({error: errorAlreadyReported})})
   }
 }
