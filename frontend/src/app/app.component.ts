@@ -1,7 +1,7 @@
 import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {Board} from "./models/board";
 import {UserService} from "./services/user.service";
-import {CdkDragDrop, moveItemInArray} from "@angular/cdk/drag-drop";
+import { CdkDragDrop, moveItemInArray, CdkDropList, CdkDrag } from "@angular/cdk/drag-drop";
 import {User} from "./models/user";
 import {Colors} from "./models/colors";
 import {lightTheme} from "./data/light-theme";
@@ -11,6 +11,12 @@ import {Column} from "./models/column";
 import {Observable} from "rxjs";
 import {ErrorService} from "./services/error.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import { TextButtonDirective } from './directives/text-button.directive';
+import { MatIcon } from '@angular/material/icon';
+import { MatInput } from '@angular/material/input';
+import { SelectDirective } from './directives/select.directive';
+import { MatDrawerContainer, MatDrawer } from '@angular/material/sidenav';
+import { BoardComponent } from './components/board/board.component';
 
 
 @Component({
@@ -18,7 +24,7 @@ import {MatSnackBar} from "@angular/material/snack-bar";
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.css'],
     changeDetection: ChangeDetectionStrategy.Eager,
-    standalone: false
+    imports: [TextButtonDirective, MatIcon, MatInput, SelectDirective, MatDrawerContainer, MatDrawer, CdkDropList, CdkDrag, BoardComponent]
 })
 export class AppComponent implements OnInit {
 

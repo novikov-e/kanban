@@ -1,18 +1,25 @@
 import {Component, Input, OnInit, ChangeDetectionStrategy} from "@angular/core";
 import {Task} from "../../models/task";
-import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
+import { CdkDragDrop, moveItemInArray, transferArrayItem, CdkDropList, CdkDrag } from '@angular/cdk/drag-drop';
 import {Subtask} from "../../models/subtask";
 import {Colors} from "../../models/colors";
 import {TaskService} from "../../services/task.service";
 import {ColumnComponent} from "../column/column.component";
 import {SubtaskService} from "../../services/subtask.service";
+import { MatInput } from "@angular/material/input";
+import { CdkTextareaAutosize } from "@angular/cdk/text-field";
+import { FocusDirective } from "../../directives/focus.directive";
+import { ButtonHoverDirective } from "../../directives/button-hover.directive";
+import { MatIcon } from "@angular/material/icon";
+import { CdkMenuTrigger, CdkMenu, CdkMenuItem } from "@angular/cdk/menu";
+import { SubtaskComponent } from "../subtask/subtask.component";
 
 @Component({
     selector: 'app-task',
     templateUrl: './task.component.html',
     styleUrls: ['../../app.component.css'],
     changeDetection: ChangeDetectionStrategy.Eager,
-    standalone: false
+    imports: [MatInput, CdkTextareaAutosize, FocusDirective, ButtonHoverDirective, MatIcon, CdkMenuTrigger, CdkMenu, CdkMenuItem, CdkDropList, CdkDrag, SubtaskComponent]
 })
 export class TaskComponent implements OnInit {
 

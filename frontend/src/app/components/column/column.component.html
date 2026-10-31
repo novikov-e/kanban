@@ -28,7 +28,6 @@
     [cdkDropListConnectedTo]="taskDropLists" (cdkDropListDropped)="moveTask($event)">
     @for (task of column.tasks; track task) {
       <div cdkDrag>
-        <div *cdkDragPlaceholder></div>
         <app-task [task]="task" [subtaskDropLists]="subtaskDropLists"
         [colors]="colors" [columnComponent]="this"></app-task>
       </div>

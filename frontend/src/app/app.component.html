@@ -75,7 +75,6 @@
               (cdkDropListDropped)="moveBoard($event)" cdkDropListOrientation="vertical">
               @for (userBoard of user.boards; track userBoard) {
                 <div class="board_item" cdkDrag>
-                  <div class="example-custom-placeholder" *cdkDragPlaceholder></div>
                   <button class="text_button m-5" appTextButton [matIcon]="dashboardIcon._elementRef"
                     [text]="dashboardButton" [color]="colors[1]" (click)="openBoard(userBoard.id)">
                     <mat-icon #dashboardIcon [style.color]="colors[1].firstColor">dashboard</mat-icon>

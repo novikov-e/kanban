@@ -1,10 +1,7 @@
 import {Directive, ElementRef, HostListener, Input} from '@angular/core';
 import {Colors} from "../models/colors";
 
-@Directive({
-    selector: '[appTextButton]',
-    standalone: false
-})
+@Directive({ selector: '[appTextButton]' })
 export class TextButtonDirective {
 
   @Input('matIcon') matIcon: ElementRef

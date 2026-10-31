@@ -1,10 +1,7 @@
 import {Directive, ElementRef, HostListener, Input} from '@angular/core';
 import {Colors} from "../models/colors";
 
-@Directive({
-    selector: '[appButtonHover]',
-    standalone: false
-})
+@Directive({ selector: '[appButtonHover]' })
 export class ButtonHoverDirective {
 
   @Input('elementRef') elementRef: ElementRef

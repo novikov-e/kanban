@@ -3,7 +3,6 @@
   (cdkDropListDropped)="moveColumn($event)">
   @for (column of board.columns; track column) {
     <div class="nothing" cdkDrag>
-      <div class="" *cdkDragPlaceholder></div>
       <app-column [column]="column" [taskDropLists]="taskDropLists" [boardComponent]="this"
       [subtaskDropLists]="subtaskDropLists" [colors]="colors"></app-column>
     </div>
