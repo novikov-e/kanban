@@ -18,7 +18,7 @@ class Subtask(Base):
     __table_args__ = (Index("task_subtasks_index", "task_id"),)
 
     subtask_id: Mapped[uuid.UUID] = mapped_column(primary_key=True, server_default=text("gen_random_uuid()"))
-    task_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("tasks.task_id"))
+    task_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("tasks.task_id"))
     subtask_name: Mapped[str] = mapped_column(Text, nullable=False)
     subtask_state: Mapped[bool] = mapped_column(Boolean, server_default=text("false"))
     subtask_position: Mapped[float] = mapped_column(Double, server_default=text("0"), nullable=False)
