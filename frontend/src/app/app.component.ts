@@ -1,4 +1,4 @@
-import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
 import {Board} from "./models/board";
 import {UserService} from "./services/user.service";
 import { CdkDragDrop, moveItemInArray, CdkDropList, CdkDrag } from "@angular/cdk/drag-drop";
@@ -27,6 +27,11 @@ import { BoardComponent } from './components/board/board.component';
     imports: [TextButtonDirective, MatIcon, MatInput, SelectDirective, MatDrawerContainer, MatDrawer, CdkDropList, CdkDrag, BoardComponent]
 })
 export class AppComponent implements OnInit {
+  private userService = inject(UserService);
+  private boardService = inject(BoardService);
+  errorService = inject(ErrorService);
+  private _snackBar = inject(MatSnackBar);
+
 
   title: string = "stack check"
   user: User
@@ -36,10 +41,7 @@ export class AppComponent implements OnInit {
   taskDropLists: string[] = []
   subtaskDropLists: string[] = []
 
-  constructor(private userService: UserService,
-              private boardService: BoardService,
-              public errorService: ErrorService,
-              private _snackBar: MatSnackBar) {
+  constructor() {
     this.errorService.error$.subscribe({next: (message) => {
       if (message) {
         this.openSnackBar("Произошла ошибка, пожалуйста перезагрузите страницу.", "Закрыть")

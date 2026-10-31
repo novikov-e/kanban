@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, ChangeDetectionStrategy} from '@angular/core';
+import { Component, Input, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
 import {Board} from "../../models/board";
 import {Colors} from "../../models/colors";
 import {Column} from "../../models/column";
@@ -15,6 +15,8 @@ import { ColumnComponent } from '../column/column.component';
     imports: [CdkDropList, CdkDrag, ColumnComponent]
 })
 export class BoardComponent implements OnInit {
+  private columnService = inject(ColumnService);
+
 
   @Input() board: Board
   @Input() colors: Colors[]
@@ -22,8 +24,6 @@ export class BoardComponent implements OnInit {
   @Input() taskDropLists: string[]
   @Input() subtaskDropLists: string[]
   @Input() appComponent: AppComponent
-
-  constructor(private columnService: ColumnService) {}
 
   ngOnInit(): void {
     this.columnDropLists.push(this.board.id)

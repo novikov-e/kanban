@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import {catchError, Observable, throwError} from "rxjs";
 import {ErrorService} from "./error.service";
@@ -9,9 +9,9 @@ import {url} from "../data/url";
   providedIn: 'root'
 })
 export class TaskService {
+  private http = inject(HttpClient);
+  private errorService = inject(ErrorService);
 
-  constructor(private http: HttpClient, private errorService: ErrorService) {
-  }
 
   createTask(columnId: string, name: string, position: number): Observable<Task> {
     const data = {parentObjectId: columnId, name: name, position: position}

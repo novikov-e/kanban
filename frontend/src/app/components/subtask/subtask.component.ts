@@ -1,4 +1,4 @@
-import {Component, Input, ChangeDetectionStrategy} from "@angular/core";
+import { Component, Input, ChangeDetectionStrategy, inject } from "@angular/core";
 import {Subtask} from "../../models/subtask";
 import {Colors} from "../../models/colors";
 import {SubtaskService} from "../../services/subtask.service";
@@ -17,13 +17,12 @@ import { ButtonHoverDirective } from "../../directives/button-hover.directive";
     imports: [MatIcon, MatInput, CdkTextareaAutosize, FocusDirective, ButtonHoverDirective]
 })
 export class SubtaskComponent {
+    private subtaskService = inject(SubtaskService);
+
 
     @Input() subtask: Subtask
     @Input() color: Colors
     @Input() taskComponent: TaskComponent
-
-    constructor(private subtaskService: SubtaskService) {
-    }
 
     renameSubtask(name: string) {
         this.subtask.name = name

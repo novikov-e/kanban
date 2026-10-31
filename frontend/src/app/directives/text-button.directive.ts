@@ -8,8 +8,6 @@ export class TextButtonDirective {
   @Input('text') text: any
   @Input('color') color: Colors
 
-  constructor() { }
-
   @HostListener('mouseenter') onMouseEnter() {
     this.matIcon.nativeElement.style.color = this.color.secondColor
     this.text.style.color = this.color.secondColor

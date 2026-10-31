@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, ChangeDetectionStrategy} from "@angular/core";
+import { Component, Input, OnInit, ChangeDetectionStrategy, inject } from "@angular/core";
 import {Task} from "../../models/task";
 import { CdkDragDrop, moveItemInArray, transferArrayItem, CdkDropList, CdkDrag } from '@angular/cdk/drag-drop';
 import {Subtask} from "../../models/subtask";
@@ -22,15 +22,14 @@ import { SubtaskComponent } from "../subtask/subtask.component";
     imports: [MatInput, CdkTextareaAutosize, FocusDirective, ButtonHoverDirective, MatIcon, CdkMenuTrigger, CdkMenu, CdkMenuItem, CdkDropList, CdkDrag, SubtaskComponent]
 })
 export class TaskComponent implements OnInit {
+    private taskService = inject(TaskService);
+    private subtaskService = inject(SubtaskService);
+
 
     @Input() task: Task
     @Input() subtaskDropLists: string[]
     @Input() colors: Colors[]
     @Input() columnComponent: ColumnComponent
-
-    constructor(private taskService: TaskService,
-                private subtaskService: SubtaskService) {
-    }
 
     ngOnInit(): void {
         this.subtaskDropLists.push(this.task.id)

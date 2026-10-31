@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, ChangeDetectionStrategy} from "@angular/core";
+import { Component, Input, OnInit, ChangeDetectionStrategy, inject } from "@angular/core";
 import {Column} from "../../models/column";
 import { CdkDragDrop, moveItemInArray, transferArrayItem, CdkDropList, CdkDrag } from "@angular/cdk/drag-drop";
 import {Task} from "../../models/task";
@@ -21,16 +21,15 @@ import { TaskComponent } from "../task/task.component";
     imports: [MatInput, CdkTextareaAutosize, FocusDirective, ButtonHoverDirective, MatIcon, CdkDropList, CdkDrag, TaskComponent]
 })
 export class ColumnComponent implements OnInit {
+    private columnService = inject(ColumnService);
+    private taskService = inject(TaskService);
+
 
     @Input() column: Column
     @Input() taskDropLists: string[]
     @Input() subtaskDropLists: string[]
     @Input() colors: Colors[]
     @Input() boardComponent: BoardComponent
-
-    constructor(private columnService: ColumnService,
-                private taskService: TaskService) {
-    }
 
     ngOnInit(): void {
         this.taskDropLists.push(this.column.id)

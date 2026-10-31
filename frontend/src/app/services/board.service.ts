@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams } from "@angular/common/http";
 import {catchError, Observable, throwError} from "rxjs";
 import {Board} from "../models/board";
@@ -9,8 +9,9 @@ import {url} from "../data/url";
   providedIn: 'root'
 })
 export class BoardService {
+  private http = inject(HttpClient);
+  private errorService = inject(ErrorService);
 
-  constructor(private http: HttpClient, private errorService: ErrorService) {}
 
   createBoard(userId: string, position: number): Observable<Board> {
     const data = {parentObjectId: userId, position: position}
