@@ -8,14 +8,15 @@ import {
   ElementRef,
   HostListener,
   inject,
+  signal,
   viewChild,
 } from '@angular/core'
 import {MatIcon} from '@angular/material/icon'
-import {MatInput} from '@angular/material/input'
-import {MatDrawer, MatDrawerContainer} from '@angular/material/sidenav'
 import {Router, RouterLink, RouterOutlet} from '@angular/router'
 import {SelectDirective} from '../../directives/select.directive'
 import {LOGIN_PATH} from '../../guards/session.guards'
+import {TASK_COLORS} from '../../models/task'
+import {User} from '../../models/user'
 import {errorAlreadyReported} from '../../interceptors/http-error.interceptor'
 import {AuthService} from '../../services/auth.service'
 import {BoardStore} from '../../state/board.store'
@@ -29,18 +30,7 @@ const DARK_THEME_CLASS = 'theme-dark'
   templateUrl: './workspace.component.html',
   styleUrl: './workspace.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    MatIcon,
-    MatInput,
-    SelectDirective,
-    MatDrawerContainer,
-    MatDrawer,
-    CdkMenuTrigger,
-    CdkMenu,
-    CdkMenuItem,
-    RouterLink,
-    RouterOutlet,
-  ],
+  imports: [MatIcon, SelectDirective, CdkMenuTrigger, CdkMenu, CdkMenuItem, RouterLink, RouterOutlet],
 })
 export class WorkspaceComponent {
   private auth = inject(AuthService)
@@ -48,6 +38,9 @@ export class WorkspaceComponent {
   protected readonly userStore = inject(UserStore)
   protected readonly boardStore = inject(BoardStore)
   private readonly searchInput = viewChild<ElementRef<HTMLInputElement>>('search')
+  protected readonly filtersOpen = signal(false)
+  protected readonly taskColors = TASK_COLORS
+  protected readonly accountLabel = $localize`:@@account.menu:Аккаунт`
 
   constructor() {
     effect(() => {
@@ -70,7 +63,27 @@ export class WorkspaceComponent {
       const search = this.searchInput()?.nativeElement
       search?.focus()
       search?.select()
+    } else if (event.key === 'Escape') {
+      this.filtersOpen.set(false)
     }
+  }
+
+  @HostListener('document:click')
+  closeFilters() {
+    this.filtersOpen.set(false)
+  }
+
+  toggleFilters(event: Event) {
+    event.stopPropagation()
+    this.filtersOpen.update(open => !open)
+  }
+
+  initials(user: User): string {
+    const letters = [user.firstname, user.lastname]
+      .map(part => part?.trim() ?? '')
+      .filter(part => part.length > 0)
+      .map(part => part[0])
+    return (letters.join('') || user.email.slice(0, 2)).toLocaleUpperCase('ru')
   }
 
   clearSearch(input: HTMLInputElement) {

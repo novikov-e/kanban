@@ -1,129 +1,164 @@
 @let user = userStore.user();
 @let board = boardStore.board();
 <div class="app">
-  <div class="header">
-    <div class="buttons_container ml-5">
-      <button class="text_button" (click)="drawer.toggle()">
-        <mat-icon>menu</mat-icon>
-        <div class="text_in_header_button" i18n="@@workspace.menu">Меню</div>
-      </button>
-    </div>
-
-    <div class="board_title">
-      @if (board) {
-        <input
-          type="text"
-          class="transparent_text_input column-task-title"
-          #boardName
-          [value]="board.name"
-          matInput
-          appSelect
-          aria-label="Название проекта"
-          i18n-aria-label="@@board.name"
-          (change)="renameBoard(board.id, boardName.value)"
-        />
+  <header class="topbar">
+    <div class="spacer"></div>
+    <label class="search">
+      <mat-icon>search</mat-icon>
+      <input
+        #search
+        type="search"
+        [value]="boardStore.searchQuery()"
+        placeholder="Поиск"
+        i18n-placeholder="@@board.search"
+        aria-label="Поиск"
+        i18n-aria-label="@@board.search"
+        (input)="boardStore.setSearch(search.value)"
+        (keydown.escape)="clearSearch(search)"
+      />
+      @if (!boardStore.searchQuery()) {
+        <span class="search-hint" i18n="@@board.searchHint">Ctrl K</span>
       }
-      @if (user) {
-        <button
-          type="button"
-          class="board-switch"
-          [cdkMenuTriggerFor]="boardsMenu"
-          aria-label="Список проектов"
-          i18n-aria-label="@@board.switch"
-        >
-          <mat-icon>expand_more</mat-icon>
-        </button>
-        <ng-template #boardsMenu>
-          <div class="board-menu" cdkMenu>
-            @for (userBoard of user.boards; track userBoard.id) {
-              <a
-                class="board-menu-item"
-                cdkMenuItem
-                [class.current]="userBoard.id === board?.id"
-                [routerLink]="['/boards', userBoard.id]"
-              >
-                {{ userBoard.name }}
-              </a>
+    </label>
+    @if (user) {
+      <button type="button" class="account" [cdkMenuTriggerFor]="accountMenu" [attr.aria-label]="accountLabel">
+        {{ initials(user) }}
+      </button>
+      <ng-template #accountMenu>
+        <div class="popup" cdkMenu>
+          <a class="popup-item" cdkMenuItem routerLink="/profile" i18n="@@account.profile">Профиль</a>
+          <button type="button" class="popup-item" cdkMenuItem (cdkMenuItemTriggered)="userStore.toggleTheme()">
+            @if (user.darkTheme) {
+              <ng-container i18n="@@workspace.lightTheme">Светлая тема</ng-container>
+            } @else {
+              <ng-container i18n="@@workspace.darkTheme">Тёмная тема</ng-container>
             }
+          </button>
+          <button
+            type="button"
+            class="popup-item"
+            cdkMenuItem
+            (cdkMenuItemTriggered)="logout()"
+            i18n="@@workspace.logout"
+          >
+            Выйти
+          </button>
+        </div>
+      </ng-template>
+    }
+  </header>
+
+  <div class="toolbar">
+    @if (board) {
+      <mat-icon class="board-icon">dashboard</mat-icon>
+      <input
+        type="text"
+        class="board-name"
+        #boardName
+        [value]="board.name"
+        appSelect
+        aria-label="Название проекта"
+        i18n-aria-label="@@board.name"
+        (change)="renameBoard(board.id, boardName.value)"
+      />
+    } @else {
+      <span class="projects-label" i18n="@@board.projects">Проекты</span>
+    }
+    @if (user) {
+      <button
+        type="button"
+        class="board-switch"
+        [cdkMenuTriggerFor]="boardsMenu"
+        aria-label="Список проектов"
+        i18n-aria-label="@@board.switch"
+      >
+        <mat-icon>expand_more</mat-icon>
+      </button>
+      <ng-template #boardsMenu>
+        <div class="popup" cdkMenu>
+          @for (userBoard of user.boards; track userBoard.id) {
+            <a
+              class="popup-item"
+              cdkMenuItem
+              [class.current]="userBoard.id === board?.id"
+              [routerLink]="['/boards', userBoard.id]"
+            >
+              {{ userBoard.name }}
+            </a>
+          }
+          <button type="button" class="popup-item popup-create" cdkMenuItem (cdkMenuItemTriggered)="createBoard()">
+            <mat-icon>add</mat-icon>
+            <span i18n="@@workspace.createBoard">Создать проект</span>
+          </button>
+          @if (board) {
             <button
               type="button"
-              class="board-menu-item board-menu-create"
+              class="popup-item"
               cdkMenuItem
-              (cdkMenuItemTriggered)="createBoard()"
+              (cdkMenuItemTriggered)="closeBoard()"
+              i18n="@@board.close"
             >
-              <mat-icon>add</mat-icon>
-              <span i18n="@@workspace.createBoard">Создать проект</span>
+              Выйти из проекта
             </button>
-          </div>
-        </ng-template>
-      }
-    </div>
-
+            <button
+              type="button"
+              class="popup-item danger"
+              cdkMenuItem
+              (cdkMenuItemTriggered)="deleteBoard(board.id)"
+              i18n="@@board.delete"
+            >
+              Удалить проект
+            </button>
+          }
+        </div>
+      </ng-template>
+    }
     @if (board) {
-      <label class="search">
-        <mat-icon>search</mat-icon>
-        <input
-          #search
-          type="search"
-          [value]="boardStore.searchQuery()"
-          placeholder="Поиск"
-          i18n-placeholder="@@board.search"
-          aria-label="Поиск"
-          i18n-aria-label="@@board.search"
-          (input)="boardStore.setSearch(search.value)"
-          (keydown.escape)="clearSearch(search)"
-        />
-        @if (!boardStore.searchQuery()) {
-          <span class="search-hint" i18n="@@board.searchHint">Ctrl K</span>
+      <span class="divider"></span>
+      <div class="spacer"></div>
+      <button type="button" class="primary" (click)="boardStore.addColumn()">
+        <mat-icon>add</mat-icon>
+        <span i18n="@@board.addColumn">Добавить колонку</span>
+      </button>
+      <div class="filter">
+        <button
+          type="button"
+          class="filter-button"
+          [class.active]="boardStore.colors().length > 0"
+          [attr.aria-expanded]="filtersOpen()"
+          (click)="toggleFilters($event)"
+        >
+          <mat-icon>filter_list</mat-icon>
+          <span i18n="@@board.filters">Фильтры</span>
+        </button>
+        @if (filtersOpen()) {
+          <div
+            class="color-filter"
+            role="group"
+            aria-label="Цвет"
+            i18n-aria-label="@@board.filterColor"
+            (click)="$event.stopPropagation()"
+          >
+            @for (color of taskColors; track color.value) {
+              <button
+                type="button"
+                class="color-filter-item"
+                [class.selected]="boardStore.colors().includes(color.value)"
+                [attr.data-color]="color.value"
+                [attr.aria-pressed]="boardStore.colors().includes(color.value)"
+                (click)="boardStore.toggleColor(color.value)"
+              >
+                <span class="swatch"></span>
+                {{ color.name }}
+              </button>
+            }
+          </div>
         }
-      </label>
-
-      <div class="buttons_container mr-5">
-        <button class="text_button" (click)="boardStore.addColumn()">
-          <mat-icon>add_circle_outline</mat-icon>
-          <div class="text_in_header_button" i18n="@@board.addColumn">Добавить колонку</div>
-        </button>
-        <button class="text_button" (click)="closeBoard()">
-          <mat-icon>logout</mat-icon>
-          <div class="text_in_header_button" i18n="@@board.close">Выйти из проекта</div>
-        </button>
-        <button class="text_button danger" (click)="deleteBoard(board.id)">
-          <mat-icon>remove_circle_outline</mat-icon>
-          <div class="text_in_header_button" i18n="@@board.delete">Удалить проект</div>
-        </button>
       </div>
     }
   </div>
 
-  <div class="workspace_container">
-    <mat-drawer-container class="background_transparent" autosize>
-      <mat-drawer class="background_transparent pl-1" #drawer mode="side">
-        @if (user) {
-          <div class="user_details">
-            <button class="text_button m-5">
-              <mat-icon>settings</mat-icon>
-              <div class="text_in_button" i18n="@@workspace.settings">Настройки</div>
-            </button>
-
-            <button class="text_button m-5" (click)="userStore.toggleTheme()">
-              <mat-icon>{{ user.darkTheme ? 'light_mode' : 'dark_mode' }}</mat-icon>
-              <div class="text_in_button">
-                @if (user.darkTheme) {
-                  <ng-container i18n="@@workspace.lightTheme">Светлая тема</ng-container>
-                } @else {
-                  <ng-container i18n="@@workspace.darkTheme">Тёмная тема</ng-container>
-                }
-              </div>
-            </button>
-
-            <button class="text_button m-5" (click)="logout()">
-              <mat-icon>logout</mat-icon>
-              <div class="text_in_button" i18n="@@workspace.logout">Выйти</div>
-            </button>
-          </div>
-        }
-      </mat-drawer>
-      <router-outlet />
-    </mat-drawer-container>
+  <div class="workspace">
+    <router-outlet />
   </div>
 </div>

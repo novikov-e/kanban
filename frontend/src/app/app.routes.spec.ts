@@ -46,7 +46,7 @@ describe('App routes', () => {
 
   const page = (harness: RouterTestingHarness) => harness.fixture.nativeElement as HTMLElement
   const boardTitle = (harness: RouterTestingHarness) =>
-    (page(harness).querySelector('.header input') as HTMLInputElement).value
+    (page(harness).querySelector('.board-name') as HTMLInputElement).value
 
   it('sends a visitor without a session to the login form and remembers the requested page', async () => {
     const created = RouterTestingHarness.create('/boards/board-1')
@@ -68,7 +68,7 @@ describe('App routes', () => {
     harness.detectChanges()
     await settle()
 
-    const menu = document.querySelector('.board-menu')
+    const menu = document.querySelector('.popup')
     expect(menu?.textContent).toContain('Первая доска')
     expect(menu?.textContent).toContain('Вторая доска')
     expect(menu?.textContent).toContain('Создать проект')

@@ -16,6 +16,8 @@
   --theme-danger-hover: #b64e4e;
   --theme-hover: rgba(48, 52, 56, 0.06);
   --theme-search: #f8f9fb;
+  --theme-avatar: #e4ecef;
+  --theme-avatar-text: #54666f;
   --subtask-text: #252a34;
   --checkbox-checked: #4059bb;
   --checkbox-checked-border: #4059bb;
@@ -37,12 +39,6 @@
   --task-header-7: #ecf4fc;
   --task-color-8: #ad85b3;
   --task-header-8: #f4edf9;
-
-  /* Старая шапка читает --accent, пока её не заменит новая */
-  --theme-foreground: var(--theme-text);
-  --theme-foreground-hover: var(--theme-primary);
-  --accent: var(--theme-foreground);
-  --accent-hover: var(--theme-foreground-hover);
 }
 
 :root.theme-dark {
@@ -58,6 +54,8 @@
   --theme-danger-hover: #e6afaf;
   --theme-hover: rgba(255, 255, 255, 0.08);
   --theme-search: #242933;
+  --theme-avatar: #2a3442;
+  --theme-avatar-text: #c5d2df;
   --subtask-text: #e5ebf2;
   --checkbox-checked: #5468b7;
   --checkbox-checked-border: #8080bb;
@@ -79,9 +77,6 @@
   --task-header-7: #363a42;
   --task-color-8: #bda3c1;
   --task-header-8: #373942;
-
-  --theme-foreground: var(--theme-text);
-  --theme-foreground-hover: var(--theme-muted);
 }
 
 [data-color='1'] {
@@ -124,11 +119,6 @@
   --task-header: var(--task-header-8);
 }
 
-.danger {
-  --accent: var(--theme-danger);
-  --accent-hover: var(--theme-danger-hover);
-}
-
 html,
 body {
   height: 100%;
@@ -156,28 +146,4 @@ button {
 
 .cdk-drag-placeholder {
   opacity: 0.4;
-}
-
-/* Поля старой шапки. Новые колонки и списки стилизуют названия сами. */
-
-.transparent_text_input {
-  width: 100%;
-  border: none;
-  outline: none;
-  background-color: transparent;
-  color: var(--accent);
-  overflow: hidden;
-  margin-left: 3px;
-  padding: 3px;
-}
-
-.column-task-title {
-  margin-left: 6px;
-  font-size: 15px;
-  font-weight: bold;
-  padding: 3px;
-}
-
-.buttons_container {
-  display: flex;
 }

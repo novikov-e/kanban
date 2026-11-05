@@ -20,6 +20,13 @@ import {BoardComponent} from '../board/board.component'
       <app-board [board]="board"></app-board>
     }
   `,
+  styles: `
+    :host {
+      display: flex;
+      flex: 1;
+      min-height: 0;
+    }
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [BoardComponent],
 })
