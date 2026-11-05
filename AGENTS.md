@@ -7,16 +7,18 @@
 Весь стек в Docker (из корня): скопировать `.env.example` в `.env` и задать секреты, затем
 `docker compose up -d --build`, приложение — http://localhost:8080. Значений по умолчанию у секретов нет:
 без `POSTGRES_PASSWORD` и `JWT_SECRET` compose и бэкенд не запустятся.
-Сервисы `postgresql`, `migrate`, `backend`, `positions-rebalancer`, `frontend` в общей сети `kanban`.
-Одноразовый `migrate` (`alembic upgrade head`) запускается после готовности БД; `backend` и
-`positions-rebalancer` стартуют только после его успешного завершения. Все три собираются из одного образа
-`kanban-backend`. nginx во фронтенд-контейнере раздаёт сборку Angular и проксирует `/api/` на `backend:8000`.
+Сервисы `postgresql`, `migrate`, `seed`, `backend`, `positions-rebalancer`, `frontend` в общей сети `kanban`.
+Одноразовый `migrate` (`alembic upgrade head`) запускается после готовности БД, затем `seed`
+(`python -m app.demo.seed`) создаёт демо-пользователя `noved256@gmail.com` с паролем `password`
+и доску «Демонстрация». `backend` и `positions-rebalancer` стартуют только после успешного сида.
+Все четыре собираются из одного образа `kanban-backend`. nginx во фронтенд-контейнере раздаёт сборку Angular
+и проксирует `/api/` на `backend:8000`.
 Healthcheck бэкенда — `GET /health` (200, если доступна БД, иначе 503); наружу он не проксируется,
 `frontend` ждёт здорового `backend`.
 
-Демо-данные не входят в миграции. Создать демо-пользователя с демо-доской:
-`docker compose exec -e DEMO_PASSWORD=<пароль> backend python -m app.demo.seed`
-(email — `DEMO_EMAIL`, по умолчанию `demo@example.com`; повторный запуск ничего не дублирует).
+Демо-данные не входят в миграции: их создаёт сервис `seed` при `docker compose up`.
+Повторный запуск ничего не дублирует. Другого пользователя можно создать той же командой:
+`docker compose exec -e DEMO_EMAIL=<email> -e DEMO_PASSWORD=<пароль> backend python -m app.demo.seed`.
 
 Локальная разработка:
 

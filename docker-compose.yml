@@ -32,6 +32,10 @@ x-after-migrations: &after-migrations
   migrate:
     condition: service_completed_successfully
 
+x-after-seed: &after-seed
+  seed:
+    condition: service_completed_successfully
+
 services:
   postgresql:
     image: postgres:18.3
@@ -71,10 +75,16 @@ services:
       postgresql:
         condition: service_healthy
 
+  seed:
+    <<: *backend-service
+    command: ["python", "-m", "app.demo.seed"]
+    restart: "no"
+    depends_on: *after-migrations
+
   backend:
     <<: *backend-service
     restart: unless-stopped
-    depends_on: *after-migrations
+    depends_on: *after-seed
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=3)"]
       interval: 10s
@@ -89,7 +99,7 @@ services:
     environment:
       <<: *backend-env
       POSITIONS_REBALANCE_AT: ${POSITIONS_REBALANCE_AT:-03:00}
-    depends_on: *after-migrations
+    depends_on: *after-seed
 
   frontend:
     build: ./frontend
