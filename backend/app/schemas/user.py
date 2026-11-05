@@ -1,4 +1,5 @@
 from datetime import date
+from typing import Literal
 from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, EmailStr, Field
@@ -9,12 +10,20 @@ from app.schemas.common import ApiRequest
 
 
 class UserUpdateRequest(ApiRequest):
-    """Частичное изменение настроек: переданные поля меняются, остальные остаются как есть."""
+    """Частичное изменение: переданные поля меняются, остальные остаются как есть."""
 
     dark_theme: bool | None = Field(default=None, description="Включить тёмную тему")
     last_board_id: UUID | None = Field(
         default=None, description="Доска, открываемая при следующем входе; null — доска закрыта"
     )
+    firstname: str | None = Field(default=None, max_length=50, description="Имя")
+    lastname: str | None = Field(default=None, max_length=50, description="Фамилия")
+    date_of_birth: date | None = Field(default=None, description="Дата рождения")
+    sex: Literal["M", "F"] | None = Field(default=None, description="Пол: M или F")
+    image: str | None = Field(default=None, max_length=150, description="Ссылка на аватар")
+    email: EmailStr | None = Field(default=None, description="Email")
+    current_password: str | None = Field(default=None, description="Текущий пароль, обязателен при смене пароля")
+    new_password: str | None = Field(default=None, min_length=8, max_length=128, description="Новый пароль")
 
 
 class UserResponse(BaseModel):

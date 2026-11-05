@@ -2,7 +2,7 @@ import {inject, Injectable, signal} from '@angular/core'
 import {Observable, tap} from 'rxjs'
 import {errorAlreadyReported} from '../interceptors/http-error.interceptor'
 import {Board} from '../models/board'
-import {User} from '../models/user'
+import {ProfileUpdate, User} from '../models/user'
 import {BoardService} from '../services/board.service'
 import {UserService} from '../services/user.service'
 import {moveItem} from '../utils/board-tree'
@@ -54,6 +54,14 @@ export class UserStore {
       boards: user.boards.filter(board => board.id !== boardId),
     }))
     this.send(this.boardService.delete(boardId))
+  }
+
+  saveProfile(profile: ProfileUpdate): Observable<void> {
+    return this.userService.updateProfile(profile).pipe(tap(() => this.update(user => ({...user, ...profile}))))
+  }
+
+  changePassword(currentPassword: string, newPassword: string): Observable<void> {
+    return this.userService.changePassword(currentPassword, newPassword)
   }
 
   toggleTheme(): void {

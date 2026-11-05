@@ -5,7 +5,7 @@ from fastapi.responses import JSONResponse
 from app.api.health import router as health_router
 from app.api.v1.router import api_router
 from app.core.config import settings
-from app.core.errors import AuthError, ConflictError, NotFoundError
+from app.core.errors import AuthError, BadRequestError, ConflictError, NotFoundError
 
 DESCRIPTION = """
 API канбан-доски. Иерархия: **Board → Column → Task → Subtask**.
@@ -58,3 +58,8 @@ async def handle_auth_error(_: Request, error: AuthError) -> JSONResponse:
 @app.exception_handler(ConflictError)
 async def handle_conflict(_: Request, error: ConflictError) -> JSONResponse:
     return JSONResponse(status_code=status.HTTP_409_CONFLICT, content={"detail": str(error)})
+
+
+@app.exception_handler(BadRequestError)
+async def handle_bad_request(_: Request, error: BadRequestError) -> JSONResponse:
+    return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content={"detail": str(error)})

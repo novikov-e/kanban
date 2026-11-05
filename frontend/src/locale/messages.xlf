@@ -121,6 +121,146 @@
           <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="profile.title" datatype="html">
+        <source>Профиль</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/profile/profile.component.html</context>
+          <context context-type="linenumber">2,3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="profile.firstname" datatype="html">
+        <source>Имя</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/profile/profile.component.html</context>
+          <context context-type="linenumber">4,5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="profile.lastname" datatype="html">
+        <source>Фамилия</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/profile/profile.component.html</context>
+          <context context-type="linenumber">8,9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="profile.birthdate" datatype="html">
+        <source>Дата рождения</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/profile/profile.component.html</context>
+          <context context-type="linenumber">12,13</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="profile.sex" datatype="html">
+        <source>Пол</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/profile/profile.component.html</context>
+          <context context-type="linenumber">16,17</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="profile.sexUnset" datatype="html">
+        <source>Не указан</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/profile/profile.component.html</context>
+          <context context-type="linenumber">18,19</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="profile.sexMale" datatype="html">
+        <source>Мужской</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/profile/profile.component.html</context>
+          <context context-type="linenumber">19,20</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="profile.sexFemale" datatype="html">
+        <source>Женский</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/profile/profile.component.html</context>
+          <context context-type="linenumber">20,22</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="profile.image" datatype="html">
+        <source>Ссылка на аватар</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/profile/profile.component.html</context>
+          <context context-type="linenumber">24,25</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="profile.email" datatype="html">
+        <source>Email</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/profile/profile.component.html</context>
+          <context context-type="linenumber">28,29</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="profile.save" datatype="html">
+        <source> Сохранить </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/profile/profile.component.html</context>
+          <context context-type="linenumber">35,39</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="profile.password" datatype="html">
+        <source>Пароль</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/profile/profile.component.html</context>
+          <context context-type="linenumber">40,42</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="profile.currentPassword" datatype="html">
+        <source>Текущий пароль</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/profile/profile.component.html</context>
+          <context context-type="linenumber">42,43</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="profile.newPassword" datatype="html">
+        <source>Новый пароль</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/profile/profile.component.html</context>
+          <context context-type="linenumber">46,47</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="profile.confirmPassword" datatype="html">
+        <source>Повторите пароль</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/profile/profile.component.html</context>
+          <context context-type="linenumber">50,51</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="profile.passwordMismatch" datatype="html">
+        <source>Пароли не совпадают</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/profile/profile.component.html</context>
+          <context context-type="linenumber">54,57</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="profile.savePassword" datatype="html">
+        <source> Сменить пароль </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/profile/profile.component.html</context>
+          <context context-type="linenumber">65,68</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="profile.emailTaken" datatype="html">
+        <source>Этот email уже зарегистрирован</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/profile/profile.component.ts</context>
+          <context context-type="linenumber">9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="profile.wrongPassword" datatype="html">
+        <source>Неверный текущий пароль</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/profile/profile.component.ts</context>
+          <context context-type="linenumber">12</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="profile.failed" datatype="html">
+        <source>Не удалось сохранить</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/profile/profile.component.ts</context>
+          <context context-type="linenumber">14</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="subtask.done" datatype="html">
         <source>Выполнена</source>
         <context-group purpose="location">

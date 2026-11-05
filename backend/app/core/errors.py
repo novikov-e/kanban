@@ -10,3 +10,7 @@ class AuthError(Exception):
 
 class ConflictError(Exception):
     pass
+
+
+class BadRequestError(Exception):
+    pass

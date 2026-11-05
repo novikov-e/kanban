@@ -2,7 +2,7 @@ import {HttpClient} from '@angular/common/http'
 import {inject, Injectable} from '@angular/core'
 import {Observable} from 'rxjs'
 import {API_URL} from '../data/url'
-import {User} from '../models/user'
+import {ProfileUpdate, User} from '../models/user'
 
 @Injectable({providedIn: 'root'})
 export class UserService {
@@ -18,5 +18,13 @@ export class UserService {
 
   setLastBoard(lastBoardId: string | null): Observable<void> {
     return this.http.patch<void>(`${API_URL}/users/me`, {lastBoardId})
+  }
+
+  updateProfile(profile: ProfileUpdate): Observable<void> {
+    return this.http.patch<void>(`${API_URL}/users/me`, profile)
+  }
+
+  changePassword(currentPassword: string, newPassword: string): Observable<void> {
+    return this.http.patch<void>(`${API_URL}/users/me`, {currentPassword, newPassword})
   }
 }

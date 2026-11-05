@@ -1,0 +1,67 @@
+<form class="card" [formGroup]="profileForm" (ngSubmit)="saveProfile()">
+  <h1 i18n="@@profile.title">Профиль</h1>
+  <label class="field">
+    <span i18n="@@profile.firstname">Имя</span>
+    <input type="text" formControlName="firstname" maxlength="50" autocomplete="given-name" />
+  </label>
+  <label class="field">
+    <span i18n="@@profile.lastname">Фамилия</span>
+    <input type="text" formControlName="lastname" maxlength="50" autocomplete="family-name" />
+  </label>
+  <label class="field">
+    <span i18n="@@profile.birthdate">Дата рождения</span>
+    <input type="date" formControlName="dateOfBirth" autocomplete="bday" />
+  </label>
+  <label class="field">
+    <span i18n="@@profile.sex">Пол</span>
+    <select formControlName="sex">
+      <option value="" i18n="@@profile.sexUnset">Не указан</option>
+      <option value="M" i18n="@@profile.sexMale">Мужской</option>
+      <option value="F" i18n="@@profile.sexFemale">Женский</option>
+    </select>
+  </label>
+  <label class="field">
+    <span i18n="@@profile.image">Ссылка на аватар</span>
+    <input type="url" formControlName="image" maxlength="150" autocomplete="off" />
+  </label>
+  <label class="field">
+    <span i18n="@@profile.email">Email</span>
+    <input type="email" formControlName="email" autocomplete="email" required />
+  </label>
+  @if (profileError()) {
+    <p class="error">{{ profileError() }}</p>
+  }
+  <button type="submit" class="primary" [disabled]="profileForm.invalid || profileSaving()" i18n="@@profile.save">
+    Сохранить
+  </button>
+</form>
+
+<form class="card" [formGroup]="passwordForm" (ngSubmit)="savePassword()">
+  <h2 i18n="@@profile.password">Пароль</h2>
+  <label class="field">
+    <span i18n="@@profile.currentPassword">Текущий пароль</span>
+    <input type="password" formControlName="current" autocomplete="current-password" />
+  </label>
+  <label class="field">
+    <span i18n="@@profile.newPassword">Новый пароль</span>
+    <input type="password" formControlName="next" [attr.minlength]="minPasswordLength" autocomplete="new-password" />
+  </label>
+  <label class="field">
+    <span i18n="@@profile.confirmPassword">Повторите пароль</span>
+    <input type="password" formControlName="confirm" autocomplete="new-password" />
+  </label>
+  @if (passwordMismatch()) {
+    <p class="error" i18n="@@profile.passwordMismatch">Пароли не совпадают</p>
+  }
+  @if (passwordError()) {
+    <p class="error">{{ passwordError() }}</p>
+  }
+  <button
+    type="submit"
+    class="primary"
+    [disabled]="passwordForm.invalid || passwordMismatch() || passwordSaving()"
+    i18n="@@profile.savePassword"
+  >
+    Сменить пароль
+  </button>
+</form>
