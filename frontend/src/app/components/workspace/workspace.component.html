@@ -9,8 +9,8 @@
       </button>
     </div>
 
-    @if (board) {
-      <div class="board_title">
+    <div class="board_title">
+      @if (board) {
         <input
           type="text"
           class="transparent_text_input column-task-title"
@@ -22,8 +22,44 @@
           i18n-aria-label="@@board.name"
           (change)="renameBoard(board.id, boardName.value)"
         />
-      </div>
+      }
+      @if (user) {
+        <button
+          type="button"
+          class="board-switch"
+          [cdkMenuTriggerFor]="boardsMenu"
+          aria-label="Список проектов"
+          i18n-aria-label="@@board.switch"
+        >
+          <mat-icon>expand_more</mat-icon>
+        </button>
+        <ng-template #boardsMenu>
+          <div class="board-menu" cdkMenu>
+            @for (userBoard of user.boards; track userBoard.id) {
+              <a
+                class="board-menu-item"
+                cdkMenuItem
+                [class.current]="userBoard.id === board?.id"
+                [routerLink]="['/boards', userBoard.id]"
+              >
+                {{ userBoard.name }}
+              </a>
+            }
+            <button
+              type="button"
+              class="board-menu-item board-menu-create"
+              cdkMenuItem
+              (cdkMenuItemTriggered)="createBoard()"
+            >
+              <mat-icon>add</mat-icon>
+              <span i18n="@@workspace.createBoard">Создать проект</span>
+            </button>
+          </div>
+        </ng-template>
+      }
+    </div>
 
+    @if (board) {
       <label class="search">
         <mat-icon>search</mat-icon>
         <input
@@ -64,27 +100,6 @@
       <mat-drawer class="background_transparent pl-1" #drawer mode="side">
         @if (user) {
           <div class="user_details">
-            <button class="text_button m-5" (click)="createBoard()">
-              <mat-icon>add_circle_outline</mat-icon>
-              <div class="text_in_button" i18n="@@workspace.createBoard">Создать проект</div>
-            </button>
-
-            <div
-              class="list_boards"
-              cdkDropList
-              (cdkDropListDropped)="onBoardDrop($event)"
-              cdkDropListOrientation="vertical"
-            >
-              @for (userBoard of user.boards; track userBoard.id) {
-                <div class="board_item" cdkDrag [cdkDragData]="userBoard">
-                  <button class="text_button m-5" [routerLink]="['/boards', userBoard.id]">
-                    <mat-icon>dashboard</mat-icon>
-                    <div class="text_in_button">{{ userBoard.name }}</div>
-                  </button>
-                </div>
-              }
-            </div>
-
             <button class="text_button m-5">
               <mat-icon>settings</mat-icon>
               <div class="text_in_button" i18n="@@workspace.settings">Настройки</div>

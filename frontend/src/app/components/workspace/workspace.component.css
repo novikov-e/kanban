@@ -48,36 +48,86 @@
   align-items: flex-start;
 }
 
-.list_boards {
+.board_title {
+  display: flex;
   flex: 1;
-  width: 100%;
-  border-bottom: 1px solid silver;
-  border-top: 1px solid silver;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  gap: 2px;
+}
+
+.board-switch {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--theme-text);
+  cursor: pointer;
+}
+
+.board-switch:hover,
+.board-switch[aria-expanded='true'] {
+  background-color: var(--theme-hover);
+}
+
+.board-switch .mat-icon {
+  width: 22px;
+  height: 22px;
+  font-size: 22px;
+}
+
+.board-menu {
+  display: flex;
+  flex-direction: column;
+  min-width: 220px;
+  max-width: 320px;
+  max-height: 360px;
+  padding: 6px;
   overflow-y: auto;
+  border: 1px solid var(--theme-border);
+  border-radius: 8px;
+  background-color: var(--theme-surface);
+  box-shadow: 0 8px 24px rgba(16, 24, 40, 0.12);
 }
 
-.list_boards::-webkit-scrollbar {
-  width: 10px;
-  background-color: transparent;
-}
-
-.list_boards::-webkit-scrollbar-thumb {
-  border: 2px solid #bcbcbc;
-  border-radius: 10px;
-  background-color: transparent;
-}
-
-.list_boards::-webkit-scrollbar-track {
-  border-radius: 10px;
-  background-color: transparent;
-}
-
-.board_item {
+.board-menu-item {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  padding-right: 8px;
+  gap: 8px;
+  padding: 8px 10px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--theme-text);
+  font-size: 14px;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.board-menu-item:hover,
+.board-menu-item.current {
+  background-color: var(--theme-hover);
+}
+
+.board-menu-create {
+  margin-top: 4px;
+  border-top: 1px solid var(--theme-border);
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+.board-menu-create .mat-icon {
+  width: 18px;
+  height: 18px;
+  font-size: 18px;
 }
 
 .text_button {
@@ -106,11 +156,9 @@
   font-weight: bold;
 }
 
-.board_title {
-  flex-grow: 1;
-}
-
 .board_title input {
+  flex: 0 1 420px;
+  width: auto;
   text-align: center;
   font-size: 17px;
 }

@@ -1,4 +1,4 @@
-import {CdkDrag, CdkDragDrop, CdkDropList} from '@angular/cdk/drag-drop'
+import {CdkMenu, CdkMenuItem, CdkMenuTrigger} from '@angular/cdk/menu'
 import {DOCUMENT} from '@angular/common'
 import {
   ChangeDetectionStrategy,
@@ -17,11 +17,9 @@ import {Router, RouterLink, RouterOutlet} from '@angular/router'
 import {SelectDirective} from '../../directives/select.directive'
 import {LOGIN_PATH} from '../../guards/session.guards'
 import {errorAlreadyReported} from '../../interceptors/http-error.interceptor'
-import {BoardSummary} from '../../models/board'
 import {AuthService} from '../../services/auth.service'
 import {BoardStore} from '../../state/board.store'
 import {UserStore} from '../../state/user.store'
-import {isNoopDrop} from '../../utils/drag-drop'
 
 /** Класс на <html>, переключающий палитру в styles.css. */
 const DARK_THEME_CLASS = 'theme-dark'
@@ -37,8 +35,9 @@ const DARK_THEME_CLASS = 'theme-dark'
     SelectDirective,
     MatDrawerContainer,
     MatDrawer,
-    CdkDropList,
-    CdkDrag,
+    CdkMenuTrigger,
+    CdkMenu,
+    CdkMenuItem,
     RouterLink,
     RouterOutlet,
   ],
@@ -102,12 +101,6 @@ export class WorkspaceComponent {
   renameBoard(boardId: string, name: string) {
     this.userStore.renameBoard(boardId, name)
     this.boardStore.setName(name)
-  }
-
-  onBoardDrop(event: CdkDragDrop<readonly BoardSummary[]>) {
-    if (!isNoopDrop(event)) {
-      this.userStore.moveBoard(event.previousIndex, event.currentIndex)
-    }
   }
 
   deleteBoard(boardId: string) {

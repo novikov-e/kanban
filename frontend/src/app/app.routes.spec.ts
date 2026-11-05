@@ -61,12 +61,17 @@ describe('App routes', () => {
     expect(page(harness).querySelector('app-login form')).not.toBeNull()
   })
 
-  it('restores the session and lists the boards in the menu', async () => {
+  it('restores the session and lists the boards in the project menu', async () => {
     const harness = await startWithSession('/', user)
 
-    const menu = page(harness).querySelector('.list_boards') as HTMLElement
-    expect(menu.textContent).toContain('Первая доска')
-    expect(menu.textContent).toContain('Вторая доска')
+    ;(page(harness).querySelector('.board-switch') as HTMLButtonElement).click()
+    harness.detectChanges()
+    await settle()
+
+    const menu = document.querySelector('.board-menu')
+    expect(menu?.textContent).toContain('Первая доска')
+    expect(menu?.textContent).toContain('Вторая доска')
+    expect(menu?.textContent).toContain('Создать проект')
   })
 
   it('opens the last board of the user', async () => {
