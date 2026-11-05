@@ -19,26 +19,24 @@
   --theme-avatar: #e4ecef;
   --theme-avatar-text: #54666f;
   --subtask-text: #252a34;
-  --checkbox-checked: #4059bb;
-  --checkbox-checked-border: #4059bb;
   --checkbox-border: #939ba7;
 
   --task-color-1: #424242;
-  --task-header-1: transparent;
+  --task-header-1: #e6e9ee;
   --task-color-2: #d76363;
-  --task-header-2: #fcedee;
+  --task-header-2: #f8e4e6;
   --task-color-3: #de6696;
-  --task-header-3: #fcedf4;
+  --task-header-3: #f8e4ee;
   --task-color-4: #ec9868;
-  --task-header-4: #fcedee;
+  --task-header-4: #f8eadf;
   --task-color-5: #87ab66;
-  --task-header-5: #eff6e9;
+  --task-header-5: #e7f0e2;
   --task-color-6: #69a6ac;
-  --task-header-6: #ecf4fc;
+  --task-header-6: #e3f1f2;
   --task-color-7: #579ac7;
-  --task-header-7: #ecf4fc;
+  --task-header-7: #e4eef8;
   --task-color-8: #ad85b3;
-  --task-header-8: #f4edf9;
+  --task-header-8: #f0e7f6;
 }
 
 :root.theme-dark {
@@ -57,26 +55,24 @@
   --theme-avatar: #2a3442;
   --theme-avatar-text: #c5d2df;
   --subtask-text: #e5ebf2;
-  --checkbox-checked: #5468b7;
-  --checkbox-checked-border: #8080bb;
   --checkbox-border: #8d98ab;
 
   --task-color-1: #e5ebf2;
-  --task-header-1: transparent;
+  --task-header-1: #323846;
   --task-color-2: #d88d8d;
-  --task-header-2: #383941;
+  --task-header-2: #4a3036;
   --task-color-3: #dd8fae;
-  --task-header-3: #383941;
+  --task-header-3: #4a3040;
   --task-color-4: #e6af90;
-  --task-header-4: #383941;
+  --task-header-4: #4a3a30;
   --task-color-5: #a4bc8f;
-  --task-header-5: #373a40;
+  --task-header-5: #354236;
   --task-color-6: #91b8bc;
-  --task-header-6: #363a42;
+  --task-header-6: #2e4244;
   --task-color-7: #85b1ce;
-  --task-header-7: #363a42;
+  --task-header-7: #2e3c4c;
   --task-color-8: #bda3c1;
-  --task-header-8: #373942;
+  --task-header-8: #40344a;
 }
 
 [data-color='1'] {

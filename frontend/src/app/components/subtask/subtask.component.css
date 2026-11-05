@@ -22,13 +22,13 @@
   padding: 0;
   border: 1.5px solid var(--checkbox-border);
   border-radius: 3px;
-  background-color: var(--theme-surface);
+  background-color: var(--task-header);
   cursor: pointer;
 }
 
 .checkbox.checked {
-  border-color: var(--checkbox-checked-border);
-  background-color: var(--checkbox-checked);
+  border-color: var(--task-title);
+  background-color: var(--task-header);
 }
 
 .checkbox.checked::after {
@@ -37,8 +37,8 @@
   width: 4px;
   height: 8px;
   margin-top: -2px;
-  border-right: 1.5px solid #fff;
-  border-bottom: 1.5px solid #fff;
+  border-right: 1.5px solid var(--task-title);
+  border-bottom: 1.5px solid var(--task-title);
   transform: rotate(45deg);
 }
 
