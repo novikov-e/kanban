@@ -6,7 +6,12 @@ import {filterBoard} from './board-filter'
 import {dropIndex} from './drag-drop'
 
 const subtask = (id: string, name: string): Subtask => ({id, name, state: false})
-const task = (id: string, name: string, subtasks: Subtask[] = []): Task => ({id, name, color: 1, subtasks})
+const task = (id: string, name: string, subtasks: Subtask[] = [], color = 1): Task => ({
+  id,
+  name,
+  color,
+  subtasks,
+})
 const column = (id: string, name: string, tasks: Task[]): Column => ({id, name, tasks})
 
 describe('filterBoard', () => {
@@ -14,7 +19,10 @@ describe('filterBoard', () => {
     column('ideas', 'Идеи', [
       task('list', 'Простой список', [subtask('one', 'Первая задача'), subtask('two', 'Вторая')]),
     ]),
-    column('colors', 'Цвета', [task('red', 'Красный список', [subtask('hot', 'Срочная')]), task('green', 'Зелёный')]),
+    column('colors', 'Цвета', [
+      task('red', 'Красный список', [subtask('hot', 'Срочная')], 2),
+      task('green', 'Зелёный', [], 5),
+    ]),
     column('empty', 'Пустая', []),
   ])
 
@@ -36,6 +44,15 @@ describe('filterBoard', () => {
 
     expect(names(found.columns)).toEqual([['Идеи', ['Простой список']]])
     expect(found.columns[0].tasks[0].subtasks).toHaveLength(2)
+  })
+
+  it('keeps only lists of the selected colors', () => {
+    expect(names(filterBoard(board, '', [2]).columns)).toEqual([['Цвета', ['Красный список']]])
+  })
+
+  it('combines the text query with the color', () => {
+    expect(names(filterBoard(board, 'зел', [5]).columns)).toEqual([['Цвета', ['Зелёный']]])
+    expect(names(filterBoard(board, 'зелёный', [2]).columns)).toEqual([])
   })
 
   it('keeps a column or list that is still being named', () => {

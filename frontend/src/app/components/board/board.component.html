@@ -1,4 +1,4 @@
-@if (board().columns.length === 0 && store.hasSearch()) {
+@if (board().columns.length === 0 && store.filtering()) {
   <p class="search-empty" i18n="@@board.searchEmpty">Ничего не найдено</p>
 } @else {
   <div

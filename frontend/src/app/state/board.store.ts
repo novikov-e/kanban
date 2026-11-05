@@ -33,6 +33,7 @@ export class BoardStore {
 
   private readonly state = signal<Board | null>(null)
   private readonly searchState = signal('')
+  private readonly colorState = signal<readonly number[]>([])
   private openBoardId: string | null = null
   private etag: string | null = null
   private readonly creating = new Set<string>()
@@ -41,12 +42,13 @@ export class BoardStore {
 
   readonly board = this.state.asReadonly()
   readonly searchQuery = this.searchState.asReadonly()
-  readonly hasSearch = computed(() => this.searchState().trim() !== '')
+  readonly colors = this.colorState.asReadonly()
+  readonly filtering = computed(() => this.searchState().trim() !== '' || this.colorState().length > 0)
 
-  /** Доска, которую видит пользователь: при поиске в ней только совпавшие колонки и списки. */
+  /** Доска, которую видит пользователь: поиск и фильтр цвета оставляют только совпавшие колонки и списки. */
   readonly visibleBoard = computed(() => {
     const board = this.state()
-    return board ? filterBoard(board, this.searchState()) : null
+    return board ? filterBoard(board, this.searchState(), this.colorState()) : null
   })
 
   /**
@@ -64,6 +66,12 @@ export class BoardStore {
 
   setSearch(query: string): void {
     this.searchState.set(query)
+  }
+
+  toggleColor(color: number): void {
+    this.colorState.update(colors =>
+      colors.includes(color) ? colors.filter(current => current !== color) : [...colors, color],
+    )
   }
 
   open(boardId: string): void {
@@ -87,6 +95,7 @@ export class BoardStore {
     this.state.set(null)
     this.etag = null
     this.searchState.set('')
+    this.colorState.set([])
   }
 
   /** Подтягивает изменения из других вкладок; доску с несохранёнными элементами не трогает. */
