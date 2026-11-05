@@ -18,7 +18,7 @@ x-logging: &logging
     max-size: "20m"
     max-file: "3"
 
-# Сервисы из образа бэкенда: API, миграции и ежедневная перенумерация позиций
+# Сервисы из образа бэкенда: API и миграции
 x-backend-service: &backend-service
   build: ./backend
   image: kanban-backend
@@ -31,10 +31,6 @@ x-backend-service: &backend-service
 
 x-after-migrations: &after-migrations
   migrate:
-    condition: service_completed_successfully
-
-x-after-seed: &after-seed
-  seed:
     condition: service_completed_successfully
 
 services:
@@ -74,31 +70,16 @@ services:
       postgresql:
         condition: service_healthy
 
-  seed:
-    <<: *backend-service
-    command: ["python", "-m", "app.demo.seed"]
-    restart: "no"
-    depends_on: *after-migrations
-
   backend:
     <<: *backend-service
     restart: unless-stopped
-    depends_on: *after-seed
+    depends_on: *after-migrations
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=3)"]
       interval: 10s
       timeout: 5s
       retries: 5
       start_period: 10s
-
-  positions-rebalancer:
-    <<: *backend-service
-    command: ["python", "-m", "app.jobs.rebalance_positions"]
-    restart: unless-stopped
-    environment:
-      <<: *backend-env
-      POSITIONS_REBALANCE_AT: ${POSITIONS_REBALANCE_AT:-03:00}
-    depends_on: *after-seed
 
   frontend:
     build: ./frontend

@@ -1,5 +1,3 @@
-from datetime import time
-
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -22,8 +20,6 @@ class Settings(BaseSettings):
     REFRESH_TOKEN_TTL_DAYS: int = 30
     REFRESH_REUSE_INTERVAL_SECONDS: int = 10
     REFRESH_COOKIE_SECURE: bool = True
-
-    POSITIONS_REBALANCE_AT: time = time(3, 0)
 
     @property
     def database_url(self) -> str:

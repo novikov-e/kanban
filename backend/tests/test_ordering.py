@@ -1,7 +1,18 @@
 import asyncio
 
-from app.jobs.rebalance_positions import rebalance_all
+from app.db.database import SessionFactory
+from app.services import ordering
+from app.services.board_service import BOARD_ORDER
+from app.services.column_service import COLUMN_ORDER
+from app.services.subtask_service import SUBTASK_ORDER
+from app.services.task_service import TASK_ORDER
 from tests.api import Api, names
+
+
+async def rebalance_all() -> None:
+    for spec in (BOARD_ORDER, COLUMN_ORDER, TASK_ORDER, SUBTASK_ORDER):
+        async with SessionFactory() as session, session.begin():
+            await ordering.rebalance(session, spec)
 
 
 async def board_with_columns(api: Api, *column_names: str) -> tuple[str, dict[str, str]]:
@@ -85,7 +96,7 @@ async def test_concurrent_moves_get_distinct_positions(api: Api) -> None:
     assert len(set(positions)) == 12
 
 
-async def test_daily_rebalance_renumbers_without_changing_the_order(api: Api) -> None:
+async def test_rebalance_renumbers_without_changing_the_order(api: Api) -> None:
     board_id, ids = await board_with_columns(api, "A", "B", "C")
     await api.patch(f"/columns/{ids['C']}", index=1)
     await api.patch(f"/columns/{ids['B']}", index=1)

@@ -9,11 +9,11 @@
 
 Production (`docker-compose.yml`): `docker compose -f docker-compose.yml up -d --build`, приложение —
 http://localhost:8080. В `.env` рядом с compose обязательны `POSTGRES_PASSWORD` и `JWT_SECRET`.
-Сервисы `postgresql`, `migrate`, `seed`, `backend`, `positions-rebalancer`, `frontend` в сети `kanban`.
-Порт базы наружу не публикуется. `migrate` (`alembic upgrade head`) запускается после готовности БД, затем
-`seed` (`python -m app.demo.seed`) создаёт демо-пользователя `noved256@gmail.com` с паролем `password`
-и доску «Демонстрация». `backend` и `positions-rebalancer` стартуют только после успешного сида.
-Все четыре собираются из одного образа `kanban-backend`. nginx во фронтенд-контейнере раздаёт сборку Angular
+Сервисы `postgresql`, `migrate`, `backend`, `frontend` в сети `kanban`.
+Порт базы наружу не публикуется. `migrate` (`alembic upgrade head`) запускается после готовности БД
+и создаёт таблицы, демо-пользователя `test@app.ru` с паролем `password` и доску «Демонстрация».
+`backend` стартует только после успешной миграции.
+`migrate` и `backend` собираются из образа `kanban-backend`. nginx во фронтенд-контейнере раздаёт сборку Angular
 и проксирует `/api/` на `backend:8000`.
 Healthcheck бэкенда — `GET /health` (200, если доступна БД, иначе 503); наружу он не проксируется,
 `frontend` ждёт здорового `backend`.
@@ -22,13 +22,13 @@ Development (`docker-compose.dev.yml`): в Docker только Postgres на `12
 Бэкенд и фронтенд — на хосте. В `backend/.env` хост базы — `127.0.0.1` (шаблон: `backend/.env.example`).
 
 - БД: `docker compose -f docker-compose.dev.yml up -d`.
-- Бэкенд (из `backend/`): `uv sync`, `uv run alembic upgrade head`, `uv run python -m app.demo.seed`,
+- Бэкенд (из `backend/`): `uv sync`, `uv run alembic upgrade head`,
   `uv run uvicorn app.main:app --reload --port 8000`.
   Зависимости — в `pyproject.toml`, точные версии — в `uv.lock` (`uv add` / `uv lock --upgrade`, lock коммитится).
 - Фронтенд (из `frontend/`): `npm ci`, `npm start` — `ng serve` с `proxy.conf.json`, который проксирует `/api` на `localhost:8000`.
 
-Демо-данные не входят в миграции. Повторный сид ничего не дублирует. Другого пользователя в production:
-`docker compose -f docker-compose.yml exec -e DEMO_EMAIL=<email> -e DEMO_PASSWORD=<пароль> backend python -m app.demo.seed`.
+Демо-пользователь `test@app.ru` с паролем `password` и доска «Демонстрация» создаются начальной миграцией.
+История миграций — один файл: базу от прежних ревизий нужно создать заново.
 
 ## Проверки перед завершением задачи
 
@@ -101,9 +101,7 @@ Development (`docker-compose.dev.yml`): в Docker только Postgres на `12
 - Порядок элементов хранится в полях `*_position` типа double. Создание, перемещение и удаление — через
   `services/ordering.py`: клиент передаёт только индекс места, сервер ставит элемент в середину между соседями
   одним UPDATE под блокировкой строки родителя (`SELECT … FOR UPDATE`). Если точности double не хватает,
-  список родителя перенумеровывается сразу. Раз в сутки сервис `positions-rebalancer`
-  (`python -m app.jobs.rebalance_positions`, время — `POSITIONS_REBALANCE_AT`, UTC) выравнивает все позиции в 1, 2, 3…;
-  `--once` — разовый запуск.
+  список родителя сразу перенумеровывается в 1, 2, 3….
 - Обновления и вставки — через `services/crud.py`. Отсутствующий объект — `NotFoundError`,
   обработчик в `main.py` превращает её в 404; роутеры ошибки не проверяют.
 - Удаление мягкое (`deleted_at`). Каскад на дочерние сущности делают триггеры БД, поэтому все выборки

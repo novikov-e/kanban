@@ -14,26 +14,19 @@ docker compose -f docker-compose.yml down
 
 Скопируйте `.env.example` в `.env` в корне и задайте `POSTGRES_PASSWORD`. Для production там же нужен `JWT_SECRET` не короче 32 символов.
 
-Демо-пользователь не создаётся миграцией.
+Демо-пользователь и доска «Демонстрация» создаются начальной миграцией.
 
-- email: `noved256@gmail.com`
+- email: `test@app.ru`
 - пароль: `password`
-- доска: «Демонстрация»
 
-Повторный запуск сида ничего не дублирует.
+Миграция одна. Базу, которую собрали прежние миграции, нужно создать заново: иначе `alembic upgrade head` не найдёт старую ревизию. Для этого остановите стек с `-v` (том с данными удалится) и поднимите его снова.
 
 ## Production
 
-Весь стек в Docker: база, миграции, сид, API, ежедневное выравнивание позиций и nginx с собранным фронтендом. Сервисы в сети `kanban`. Порт базы наружу не публикуется, бэкенд доступен только из этой сети. nginx слушает http://localhost:8080 и проксирует `/api/` на бэкенд.
+Весь стек в Docker: база, миграции, API и nginx с собранным фронтендом. Сервисы в сети `kanban`. Порт базы наружу не публикуется, бэкенд доступен только из этой сети. nginx слушает http://localhost:8080 и проксирует `/api/` на бэкенд.
 
 ```bash
 docker compose -f docker-compose.yml up -d --build
-```
-
-Сид создаёт демо-пользователя после миграций. Другого пользователя можно добавить так:
-
-```bash
-docker compose -f docker-compose.yml exec -e DEMO_EMAIL=<email> -e DEMO_PASSWORD=<пароль> backend python -m app.demo.seed
 ```
 
 Остановка:
@@ -61,7 +54,6 @@ docker compose -f docker-compose.dev.yml up -d
 ```bash
 uv sync
 uv run alembic upgrade head
-uv run python -m app.demo.seed
 uv run uvicorn app.main:app --reload --port 8000
 ```
 
