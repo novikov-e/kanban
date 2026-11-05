@@ -7,10 +7,13 @@
   align-items: flex-start;
   gap: 9px;
   min-height: 24px;
-  padding: 3px 6px 3px 10px;
+  padding: 0 6px 0 10px;
 }
 
 .checkbox {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   box-sizing: border-box;
   flex: none;
   width: 16px;
@@ -30,13 +33,13 @@
 
 .checkbox.checked::after {
   content: '';
-  display: block;
-  width: 7px;
-  height: 4px;
-  margin: 2px auto 0;
+  box-sizing: border-box;
+  width: 4px;
+  height: 8px;
+  margin-top: -2px;
+  border-right: 1.5px solid #fff;
   border-bottom: 1.5px solid #fff;
-  border-left: 1.5px solid #fff;
-  transform: rotate(-45deg);
+  transform: rotate(45deg);
 }
 
 .name-field {

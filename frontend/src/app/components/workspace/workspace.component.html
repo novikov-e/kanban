@@ -39,22 +39,21 @@
       </button>
       <ng-template #accountMenu>
         <div class="popup" cdkMenu>
-          <a class="popup-item" cdkMenuItem routerLink="/profile" i18n="@@account.profile">Профиль</a>
+          <a class="popup-item" cdkMenuItem routerLink="/profile">
+            <mat-icon aria-hidden="true">person</mat-icon>
+            <span i18n="@@account.profile">Профиль</span>
+          </a>
           <button type="button" class="popup-item" cdkMenuItem (cdkMenuItemTriggered)="theme.toggle()">
+            <mat-icon aria-hidden="true">{{ theme.isDark() ? 'light_mode' : 'dark_mode' }}</mat-icon>
             @if (theme.isDark()) {
-              <ng-container i18n="@@workspace.lightTheme">Светлая тема</ng-container>
+              <span i18n="@@workspace.lightTheme">Светлая тема</span>
             } @else {
-              <ng-container i18n="@@workspace.darkTheme">Тёмная тема</ng-container>
+              <span i18n="@@workspace.darkTheme">Тёмная тема</span>
             }
           </button>
-          <button
-            type="button"
-            class="popup-item"
-            cdkMenuItem
-            (cdkMenuItemTriggered)="logout()"
-            i18n="@@workspace.logout"
-          >
-            Выйти
+          <button type="button" class="popup-item" cdkMenuItem (cdkMenuItemTriggered)="logout()">
+            <mat-icon aria-hidden="true">logout</mat-icon>
+            <span i18n="@@workspace.logout">Выйти</span>
           </button>
         </div>
       </ng-template>

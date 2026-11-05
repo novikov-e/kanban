@@ -25,6 +25,8 @@ export class LoginComponent {
   private auth = inject(AuthService)
   private router = inject(Router)
   protected readonly theme = inject(ThemeStore)
+  protected readonly lightThemeLabel = $localize`:@@workspace.lightTheme:Светлая тема`
+  protected readonly darkThemeLabel = $localize`:@@workspace.darkTheme:Тёмная тема`
 
   /** Куда вернуться после входа: страница, с которой guard перенаправил на вход. */
   readonly returnUrl = input<string>('/')

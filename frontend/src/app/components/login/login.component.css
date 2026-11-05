@@ -17,15 +17,23 @@
   position: absolute;
   top: 16px;
   right: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
   height: 36px;
-  padding: 0 12px;
+  padding: 0;
   border: 1px solid var(--theme-border);
   border-radius: 6px;
   background-color: var(--theme-surface);
   color: var(--theme-text);
-  font-size: 14px;
-  font-weight: 500;
   cursor: pointer;
+}
+
+.theme .mat-icon {
+  width: 20px;
+  height: 20px;
+  font-size: 20px;
 }
 
 .theme:hover {
@@ -43,16 +51,16 @@
 .brand {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 12px;
   color: var(--theme-text);
-  font-size: 18px;
+  font-size: 40px;
   font-weight: 600;
 }
 
 .brand .mat-icon {
-  width: 24px;
-  height: 24px;
-  font-size: 24px;
+  width: 48px;
+  height: 48px;
+  font-size: 48px;
 }
 
 .card {

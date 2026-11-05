@@ -1,10 +1,11 @@
 <div class="login-page">
-  <button type="button" class="theme" (click)="theme.toggle()">
-    @if (theme.isDark()) {
-      <ng-container i18n="@@workspace.lightTheme">Светлая тема</ng-container>
-    } @else {
-      <ng-container i18n="@@workspace.darkTheme">Тёмная тема</ng-container>
-    }
+  <button
+    type="button"
+    class="theme"
+    (click)="theme.toggle()"
+    [attr.aria-label]="theme.isDark() ? lightThemeLabel : darkThemeLabel"
+  >
+    <mat-icon aria-hidden="true">{{ theme.isDark() ? 'light_mode' : 'dark_mode' }}</mat-icon>
   </button>
 
   <div class="panel">

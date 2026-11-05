@@ -7,7 +7,6 @@
   border: 1px solid var(--theme-card-border);
   border-radius: 8px;
   background-color: var(--theme-surface);
-  padding-bottom: 6px;
 }
 
 .task-header {
@@ -112,10 +111,11 @@
   box-shadow: 0 8px 24px rgba(16, 24, 40, 0.12);
 }
 
-.subtasks {
+.subtasks:not(:empty) {
   display: flex;
   flex-direction: column;
-  min-height: 4px;
+  gap: 6px;
+  padding: 6px 0;
 }
 
 .subtask-item {
