@@ -1,47 +1,59 @@
 <div class="column">
-  <div class="border_container column_header">
-    <div class="title-and-buttons">
-      <div class="text_grow">
-        <textarea
-          class="transparent_text_input column-task-title"
-          #columnName
-          [value]="column().name"
-          matInput
-          cdkTextareaAutosize
-          #autosize="cdkTextareaAutosize"
-          appFocus
-          cdkAutosizeMinRows="1"
-          aria-label="Название колонки"
-          i18n-aria-label="@@column.name"
-          (change)="rename(columnName.value)"
-          (keydown)="onKeydown(columnName, $event)"
-        >
-        </textarea>
-      </div>
-
-      <div class="buttons_container">
-        <button
-          class="custom_icon_button"
-          aria-label="Добавить список"
-          i18n-aria-label="@@column.addTask"
-          (click)="addTask()"
-        >
-          <mat-icon>assignment_add</mat-icon>
-        </button>
-
-        <button
-          class="custom_icon_button"
-          aria-label="Удалить колонку"
-          i18n-aria-label="@@column.delete"
-          (click)="delete()"
-        >
-          <mat-icon>remove_circle_outline</mat-icon>
-        </button>
-      </div>
+  <header class="column-header">
+    <div class="name-field">
+      <textarea
+        class="name"
+        #columnName
+        [value]="column().name"
+        matInput
+        cdkTextareaAutosize
+        #autosize="cdkTextareaAutosize"
+        appFocus
+        cdkAutosizeMinRows="1"
+        aria-label="Название колонки"
+        i18n-aria-label="@@column.name"
+        (change)="rename(columnName.value)"
+        (keydown)="onKeydown(columnName, $event)"
+      ></textarea>
     </div>
-  </div>
+
+    <span class="count">{{ column().tasks.length }}</span>
+
+    <div class="actions">
+      <button
+        type="button"
+        class="icon-button"
+        aria-label="Добавить список"
+        i18n-aria-label="@@column.addTask"
+        (click)="addTask()"
+      >
+        <mat-icon>add</mat-icon>
+      </button>
+
+      <button
+        type="button"
+        class="icon-button drag-handle"
+        cdkDragHandle
+        aria-label="Переместить колонку"
+        i18n-aria-label="@@column.move"
+      >
+        <mat-icon>more_horiz</mat-icon>
+      </button>
+
+      <button
+        type="button"
+        class="icon-button danger"
+        aria-label="Удалить колонку"
+        i18n-aria-label="@@column.delete"
+        (click)="delete()"
+      >
+        <mat-icon>delete_outline</mat-icon>
+      </button>
+    </div>
+  </header>
+
   <div
-    class="column-drop-list"
+    class="task-list"
     cdkDropList
     [id]="taskListId(column().id)"
     [cdkDropListData]="column().tasks"
@@ -49,7 +61,7 @@
     (cdkDropListDropped)="onTaskDrop($event)"
   >
     @for (task of column().tasks; track task.id) {
-      <div cdkDrag [cdkDragData]="task">
+      <div class="task-item" cdkDrag [cdkDragData]="task">
         <app-task [task]="task"></app-task>
       </div>
     }

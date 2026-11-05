@@ -1,4 +1,4 @@
-import {CdkDrag, CdkDragDrop, CdkDropList} from '@angular/cdk/drag-drop'
+import {CdkDrag, CdkDragDrop, CdkDragHandle, CdkDropList} from '@angular/cdk/drag-drop'
 import {CdkMenu, CdkMenuItem, CdkMenuTrigger} from '@angular/cdk/menu'
 import {CdkTextareaAutosize} from '@angular/cdk/text-field'
 import {ChangeDetectionStrategy, Component, inject, input} from '@angular/core'
@@ -27,6 +27,7 @@ import {SubtaskComponent} from '../subtask/subtask.component'
     CdkMenuItem,
     CdkDropList,
     CdkDrag,
+    CdkDragHandle,
     SubtaskComponent,
   ],
 })

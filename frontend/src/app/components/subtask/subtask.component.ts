@@ -1,3 +1,4 @@
+import {CdkDragHandle} from '@angular/cdk/drag-drop'
 import {CdkTextareaAutosize} from '@angular/cdk/text-field'
 import {ChangeDetectionStrategy, Component, inject, input} from '@angular/core'
 import {MatIcon} from '@angular/material/icon'
@@ -11,7 +12,7 @@ import {BoardStore} from '../../state/board.store'
   templateUrl: './subtask.component.html',
   styleUrl: './subtask.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [MatIcon, MatInput, CdkTextareaAutosize, FocusDirective],
+  imports: [MatIcon, MatInput, CdkTextareaAutosize, FocusDirective, CdkDragHandle],
 })
 export class SubtaskComponent {
   private store = inject(BoardStore)

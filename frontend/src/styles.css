@@ -1,82 +1,130 @@
 /*
- * Палитра темы. Номер --task-color-N совпадает с полем color задачи (1–8): 1 — основной цвет текста,
- * 2 — красный, он же цвет опасных действий. Тёмная тема — класс theme-dark на <html>, чтобы палитру видели
- * и оверлеи, и превью перетаскивания, которые CDK вставляет в body.
+ * Палитра по макету доски. Номер --task-color-N совпадает с полем color задачи (1–8).
+ * Тёмная тема — класс theme-dark на <html>, чтобы палитру видели оверлеи и превью перетаскивания,
+ * которые CDK вставляет в body.
  */
 :root {
-  --theme-background: #fafafa;
-  --task-color-1: #3c3c3c;
-  --task-color-1-hover: #838383;
-  --task-color-2: #db4c4c;
-  --task-color-2-hover: #993535;
-  --task-color-3: #eb3472;
-  --task-color-3-hover: #a4244f;
-  --task-color-4: #fd7336;
-  --task-color-4-hover: #b15025;
-  --task-color-5: #4b8333;
-  --task-color-5-hover: #345b23;
-  --task-color-6: #2a9095;
-  --task-color-6-hover: #1d6468;
-  --task-color-7: #2478b7;
-  --task-color-7-hover: #195480;
-  --task-color-8: #a969a0;
-  --task-color-8-hover: #764970;
+  --theme-background: #f7f8fa;
+  --theme-column: #f0f2f5;
+  --theme-surface: #ffffff;
+  --theme-border: #dfe3e8;
+  --theme-card-border: #e0e4ea;
+  --theme-text: #303438;
+  --theme-muted: #747b83;
+  --theme-primary: #54666f;
+  --theme-danger: #d76363;
+  --theme-danger-hover: #b64e4e;
+  --theme-hover: rgba(48, 52, 56, 0.06);
+  --subtask-text: #252a34;
+  --checkbox-checked: #4059bb;
+  --checkbox-checked-border: #4059bb;
+  --checkbox-border: #939ba7;
 
-  --theme-foreground: var(--task-color-1);
-  --theme-foreground-hover: var(--task-color-1-hover);
-  --theme-danger: var(--task-color-2);
-  --theme-danger-hover: var(--task-color-2-hover);
+  --task-color-1: #424242;
+  --task-header-1: transparent;
+  --task-color-2: #d76363;
+  --task-header-2: #fcedee;
+  --task-color-3: #de6696;
+  --task-header-3: #fcedf4;
+  --task-color-4: #ec9868;
+  --task-header-4: #fcedee;
+  --task-color-5: #87ab66;
+  --task-header-5: #eff6e9;
+  --task-color-6: #69a6ac;
+  --task-header-6: #ecf4fc;
+  --task-color-7: #579ac7;
+  --task-header-7: #ecf4fc;
+  --task-color-8: #ad85b3;
+  --task-header-8: #f4edf9;
 
-  /* Цвет текущего элемента: задача переопределяет его через data-color, подзадачи наследуют */
+  /* Старая шапка читает --accent, пока её не заменит новая */
+  --theme-foreground: var(--theme-text);
+  --theme-foreground-hover: var(--theme-primary);
   --accent: var(--theme-foreground);
   --accent-hover: var(--theme-foreground-hover);
 }
 
 :root.theme-dark {
-  --theme-background: #303030;
-  --task-color-1: #bebebe;
-  --task-color-1-hover: #838383;
+  --theme-background: #171b24;
+  --theme-column: #1e2430;
+  --theme-surface: #242933;
+  --theme-border: #404a59;
+  --theme-card-border: #404a59;
+  --theme-text: #e5ebf2;
+  --theme-muted: #a3b0c4;
+  --theme-primary: #8ea0b5;
+  --theme-danger: #d88d8d;
+  --theme-danger-hover: #e6afaf;
+  --theme-hover: rgba(255, 255, 255, 0.08);
+  --subtask-text: #e5ebf2;
+  --checkbox-checked: #5468b7;
+  --checkbox-checked-border: #8080bb;
+  --checkbox-border: #8d98ab;
+
+  --task-color-1: #e5ebf2;
+  --task-header-1: transparent;
+  --task-color-2: #d88d8d;
+  --task-header-2: #383941;
+  --task-color-3: #dd8fae;
+  --task-header-3: #383941;
+  --task-color-4: #e6af90;
+  --task-header-4: #383941;
+  --task-color-5: #a4bc8f;
+  --task-header-5: #373a40;
+  --task-color-6: #91b8bc;
+  --task-header-6: #363a42;
+  --task-color-7: #85b1ce;
+  --task-header-7: #363a42;
+  --task-color-8: #bda3c1;
+  --task-header-8: #373942;
+
+  --theme-foreground: var(--theme-text);
+  --theme-foreground-hover: var(--theme-muted);
 }
 
 [data-color='1'] {
-  --accent: var(--task-color-1);
-  --accent-hover: var(--task-color-1-hover);
+  --task-title: var(--task-color-1);
+  --task-header: var(--task-header-1);
 }
 
-[data-color='2'],
-.danger {
-  --accent: var(--task-color-2);
-  --accent-hover: var(--task-color-2-hover);
+[data-color='2'] {
+  --task-title: var(--task-color-2);
+  --task-header: var(--task-header-2);
 }
 
 [data-color='3'] {
-  --accent: var(--task-color-3);
-  --accent-hover: var(--task-color-3-hover);
+  --task-title: var(--task-color-3);
+  --task-header: var(--task-header-3);
 }
 
 [data-color='4'] {
-  --accent: var(--task-color-4);
-  --accent-hover: var(--task-color-4-hover);
+  --task-title: var(--task-color-4);
+  --task-header: var(--task-header-4);
 }
 
 [data-color='5'] {
-  --accent: var(--task-color-5);
-  --accent-hover: var(--task-color-5-hover);
+  --task-title: var(--task-color-5);
+  --task-header: var(--task-header-5);
 }
 
 [data-color='6'] {
-  --accent: var(--task-color-6);
-  --accent-hover: var(--task-color-6-hover);
+  --task-title: var(--task-color-6);
+  --task-header: var(--task-header-6);
 }
 
 [data-color='7'] {
-  --accent: var(--task-color-7);
-  --accent-hover: var(--task-color-7-hover);
+  --task-title: var(--task-color-7);
+  --task-header: var(--task-header-7);
 }
 
 [data-color='8'] {
-  --accent: var(--task-color-8);
-  --accent-hover: var(--task-color-8-hover);
+  --task-title: var(--task-color-8);
+  --task-header: var(--task-header-8);
+}
+
+.danger {
+  --accent: var(--theme-danger);
+  --accent-hover: var(--theme-danger-hover);
 }
 
 html,
@@ -87,6 +135,8 @@ body {
 body {
   margin: 0;
   font-family: Roboto, 'Helvetica Neue', sans-serif;
+  color: var(--theme-text);
+  background-color: var(--theme-background);
 }
 
 input,
@@ -96,36 +146,17 @@ button {
   font-size: inherit;
 }
 
-/* Превью перетаскивания CDK вставляет в body, вне рабочей области */
 .cdk-drag-preview {
-  font-family: sans-serif;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
   font-size: 15px;
+  box-shadow: 0 8px 24px rgba(16, 24, 40, 0.16);
 }
 
-/* Общие элементы колонок, задач и подзадач */
-
-.border_container {
-  box-sizing: border-box;
-  border: solid 2px var(--accent);
-  border-radius: 18px;
-  margin: 0 1px 2px 1px;
-  padding: 5px;
-  user-select: none;
+.cdk-drag-placeholder {
+  opacity: 0.4;
 }
 
-.title-and-buttons {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  align-items: start;
-  box-sizing: border-box;
-}
-
-.text_grow {
-  display: flex;
-  height: 100%;
-  flex-grow: 1;
-}
+/* Поля старой шапки. Новые колонки и списки стилизуют названия сами. */
 
 .transparent_text_input {
   width: 100%;
@@ -147,18 +178,4 @@ button {
 
 .buttons_container {
   display: flex;
-}
-
-.custom_icon_button {
-  width: 24px;
-  height: 24px;
-  border: none;
-  background-color: transparent;
-  color: var(--accent);
-  position: relative;
-  padding: 0;
-}
-
-.custom_icon_button:hover {
-  color: var(--accent-hover);
 }

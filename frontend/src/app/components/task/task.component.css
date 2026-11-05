@@ -1,10 +1,123 @@
-.colors-menu {
-  display: flex;
-  background-color: var(--theme-background);
-  border-radius: 16px;
-  border: solid 2px var(--theme-foreground);
+:host {
+  display: block;
 }
 
-.subtask_drag_list {
-  min-height: 1px;
+.task {
+  overflow: hidden;
+  border: 1px solid var(--theme-card-border);
+  border-radius: 8px;
+  background-color: var(--theme-surface);
+  padding-bottom: 6px;
+}
+
+.task-header {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 32px;
+  padding: 4px 6px 4px 10px;
+  background-color: var(--task-header);
+}
+
+.name-field {
+  flex: 1;
+  min-width: 0;
+}
+
+.name {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: none;
+  outline: none;
+  resize: none;
+  overflow: hidden;
+  background: transparent;
+  color: var(--task-title);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 18px;
+}
+
+.count {
+  flex: none;
+  color: var(--theme-muted);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.actions {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 2px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.task-header:hover .actions,
+.task-header:focus-within .actions {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--theme-muted);
+  cursor: pointer;
+}
+
+.icon-button .mat-icon {
+  width: 18px;
+  height: 18px;
+  font-size: 18px;
+}
+
+.icon-button:hover {
+  background-color: var(--theme-hover);
+  color: var(--theme-text);
+}
+
+.icon-button.danger:hover {
+  color: var(--theme-danger);
+}
+
+.color-trigger,
+.color-option,
+.color-option:hover {
+  color: var(--task-title);
+}
+
+.drag-handle {
+  cursor: grab;
+}
+
+.colors-menu {
+  display: flex;
+  gap: 2px;
+  padding: 6px;
+  border: 1px solid var(--theme-border);
+  border-radius: 8px;
+  background-color: var(--theme-surface);
+  box-shadow: 0 8px 24px rgba(16, 24, 40, 0.12);
+}
+
+.subtasks {
+  display: flex;
+  flex-direction: column;
+  min-height: 4px;
+}
+
+.subtask-item {
+  display: block;
 }

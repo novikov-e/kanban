@@ -6,21 +6,28 @@
         <source>Название колонки</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/components/column/column.component.html</context>
-          <context context-type="linenumber">14,15</context>
+          <context context-type="linenumber">13,14</context>
         </context-group>
       </trans-unit>
       <trans-unit id="column.addTask" datatype="html">
         <source>Добавить список</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/components/column/column.component.html</context>
-          <context context-type="linenumber">25,26</context>
+          <context context-type="linenumber">26,27</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="column.move" datatype="html">
+        <source>Переместить колонку</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/column/column.component.html</context>
+          <context context-type="linenumber">37,38</context>
         </context-group>
       </trans-unit>
       <trans-unit id="column.delete" datatype="html">
         <source>Удалить колонку</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/components/column/column.component.html</context>
-          <context context-type="linenumber">34,35</context>
+          <context context-type="linenumber">46,47</context>
         </context-group>
       </trans-unit>
       <trans-unit id="login.registerTitle" datatype="html">
@@ -118,14 +125,21 @@
         <source>Название задачи</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/components/subtask/subtask.component.html</context>
-          <context context-type="linenumber">31,32</context>
+          <context context-type="linenumber">23,24</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="subtask.move" datatype="html">
+        <source>Переместить задачу</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/subtask/subtask.component.html</context>
+          <context context-type="linenumber">35,36</context>
         </context-group>
       </trans-unit>
       <trans-unit id="subtask.delete" datatype="html">
         <source>Удалить задачу</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/components/subtask/subtask.component.html</context>
-          <context context-type="linenumber">42,43</context>
+          <context context-type="linenumber">44,45</context>
         </context-group>
       </trans-unit>
       <trans-unit id="task.name" datatype="html">
@@ -139,21 +153,28 @@
         <source>Добавить задачу</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/components/task/task.component.html</context>
-          <context context-type="linenumber">24,25</context>
+          <context context-type="linenumber">26,27</context>
         </context-group>
       </trans-unit>
       <trans-unit id="task.color" datatype="html">
         <source>Цвет списка</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/components/task/task.component.html</context>
-          <context context-type="linenumber">34,35</context>
+          <context context-type="linenumber">37,38</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="task.move" datatype="html">
+        <source>Переместить список</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/task/task.component.html</context>
+          <context context-type="linenumber">64,65</context>
         </context-group>
       </trans-unit>
       <trans-unit id="task.delete" datatype="html">
         <source>Удалить список</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/components/task/task.component.html</context>
-          <context context-type="linenumber">56</context>
+          <context context-type="linenumber">73,74</context>
         </context-group>
       </trans-unit>
       <trans-unit id="workspace.menu" datatype="html">

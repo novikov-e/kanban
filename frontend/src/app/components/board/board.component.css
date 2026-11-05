@@ -1,25 +1,17 @@
 .columns {
-  height: 100%;
   display: flex;
+  gap: 3px;
+  height: 100%;
+  box-sizing: border-box;
+  padding: 0 3px 20px;
   overflow-x: auto;
-}
-
-.columns::-webkit-scrollbar {
-  width: 10px;
-  background-color: transparent;
-}
-
-.columns::-webkit-scrollbar-thumb {
-  border: 2px solid #bcbcbc;
-  border-radius: 10px;
-  background-color: transparent;
-}
-
-.columns::-webkit-scrollbar-track {
-  border-radius: 10px;
-  background-color: transparent;
+  scrollbar-width: thin;
+  scrollbar-color: var(--theme-border) transparent;
 }
 
 .column_item {
+  display: flex;
+  flex: 1 0 280px;
+  min-width: 280px;
   height: 100%;
 }

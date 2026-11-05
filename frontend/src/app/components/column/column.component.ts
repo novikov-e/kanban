@@ -1,4 +1,4 @@
-import {CdkDrag, CdkDragDrop, CdkDropList} from '@angular/cdk/drag-drop'
+import {CdkDrag, CdkDragDrop, CdkDragHandle, CdkDropList} from '@angular/cdk/drag-drop'
 import {CdkTextareaAutosize} from '@angular/cdk/text-field'
 import {ChangeDetectionStrategy, Component, inject, input} from '@angular/core'
 import {MatIcon} from '@angular/material/icon'
@@ -15,7 +15,7 @@ import {TaskComponent} from '../task/task.component'
   templateUrl: './column.component.html',
   styleUrl: './column.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [MatInput, CdkTextareaAutosize, FocusDirective, MatIcon, CdkDropList, CdkDrag, TaskComponent],
+  imports: [MatInput, CdkTextareaAutosize, FocusDirective, MatIcon, CdkDropList, CdkDrag, CdkDragHandle, TaskComponent],
 })
 export class ColumnComponent {
   protected readonly store = inject(BoardStore)
