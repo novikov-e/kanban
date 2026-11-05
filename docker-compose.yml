@@ -1,4 +1,5 @@
-# Значения можно переопределить в файле .env рядом с docker-compose.yml
+# Production: весь стек. База доступна только в сети kanban, наружу открыт фронтенд на 127.0.0.1:8080.
+# Локальная разработка — docker-compose.dev.yml. Значения можно переопределить в .env рядом с этим файлом.
 x-db-env: &db-env
   POSTGRES_USER: ${POSTGRES_USER:-kanban_user}
   POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Задайте POSTGRES_PASSWORD в .env рядом с docker-compose.yml}
@@ -41,8 +42,6 @@ services:
     image: postgres:18.3
     container_name: postgresql
     restart: unless-stopped
-    ports:
-      - "127.0.0.1:5432:5432"
     environment:
       <<: *db-env
       PGDATA: /var/lib/postgresql/data/pgdata

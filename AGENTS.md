@@ -4,29 +4,31 @@
 
 ## Запуск
 
-Весь стек в Docker (из корня): скопировать `.env.example` в `.env` и задать секреты, затем
-`docker compose up -d --build`, приложение — http://localhost:8080. Значений по умолчанию у секретов нет:
-без `POSTGRES_PASSWORD` и `JWT_SECRET` compose и бэкенд не запустятся.
-Сервисы `postgresql`, `migrate`, `seed`, `backend`, `positions-rebalancer`, `frontend` в общей сети `kanban`.
-Одноразовый `migrate` (`alembic upgrade head`) запускается после готовности БД, затем `seed`
-(`python -m app.demo.seed`) создаёт демо-пользователя `noved256@gmail.com` с паролем `password`
+Два режима, подробности — в `README.md`. Файлы compose не смешивать: у обоих контейнер `postgresql`
+и один том. Перед сменой режима остановить текущий стек без `-v`.
+
+Production (`docker-compose.yml`): `docker compose -f docker-compose.yml up -d --build`, приложение —
+http://localhost:8080. В `.env` рядом с compose обязательны `POSTGRES_PASSWORD` и `JWT_SECRET`.
+Сервисы `postgresql`, `migrate`, `seed`, `backend`, `positions-rebalancer`, `frontend` в сети `kanban`.
+Порт базы наружу не публикуется. `migrate` (`alembic upgrade head`) запускается после готовности БД, затем
+`seed` (`python -m app.demo.seed`) создаёт демо-пользователя `noved256@gmail.com` с паролем `password`
 и доску «Демонстрация». `backend` и `positions-rebalancer` стартуют только после успешного сида.
 Все четыре собираются из одного образа `kanban-backend`. nginx во фронтенд-контейнере раздаёт сборку Angular
 и проксирует `/api/` на `backend:8000`.
 Healthcheck бэкенда — `GET /health` (200, если доступна БД, иначе 503); наружу он не проксируется,
 `frontend` ждёт здорового `backend`.
 
-Демо-данные не входят в миграции: их создаёт сервис `seed` при `docker compose up`.
-Повторный запуск ничего не дублирует. Другого пользователя можно создать той же командой:
-`docker compose exec -e DEMO_EMAIL=<email> -e DEMO_PASSWORD=<пароль> backend python -m app.demo.seed`.
+Development (`docker-compose.dev.yml`): в Docker только Postgres на `127.0.0.1:5432`.
+Бэкенд и фронтенд — на хосте. В `backend/.env` хост базы — `127.0.0.1` (шаблон: `backend/.env.example`).
 
-Локальная разработка:
-
-- БД: `docker compose up -d postgresql`.
-- Бэкенд (из `backend/`): `uv sync`, `uv run alembic upgrade head`, `uv run uvicorn app.main:app --reload --port 8000`.
+- БД: `docker compose -f docker-compose.dev.yml up -d`.
+- Бэкенд (из `backend/`): `uv sync`, `uv run alembic upgrade head`, `uv run python -m app.demo.seed`,
+  `uv run uvicorn app.main:app --reload --port 8000`.
   Зависимости — в `pyproject.toml`, точные версии — в `uv.lock` (`uv add` / `uv lock --upgrade`, lock коммитится).
-  Настройки подключения — в `backend/.env` (шаблон: `backend/.env.example`).
 - Фронтенд (из `frontend/`): `npm ci`, `npm start` — `ng serve` с `proxy.conf.json`, который проксирует `/api` на `localhost:8000`.
+
+Демо-данные не входят в миграции. Повторный сид ничего не дублирует. Другого пользователя в production:
+`docker compose -f docker-compose.yml exec -e DEMO_EMAIL=<email> -e DEMO_PASSWORD=<пароль> backend python -m app.demo.seed`.
 
 ## Проверки перед завершением задачи
 

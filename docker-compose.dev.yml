@@ -1,0 +1,31 @@
+# Только PostgreSQL для локальной разработки. Бэкенд и фронтенд запускаются на хосте
+# и подключаются к 127.0.0.1:5432. Том тот же, что у production-стека.
+# Не запускать одновременно с `docker compose -f docker-compose.yml up`: имя контейнера одно.
+
+services:
+  postgresql:
+    image: postgres:18.3
+    container_name: postgresql
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:5432:5432"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-kanban_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Задайте POSTGRES_PASSWORD в .env рядом с docker-compose.yml}
+      POSTGRES_DB: ${POSTGRES_DB:-kanban_db}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - postgresql:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20m"
+        max-file: "3"
+
+volumes:
+  postgresql:
