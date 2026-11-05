@@ -1,46 +1,63 @@
-<form class="login" [formGroup]="form" (ngSubmit)="submit()">
-  <h1 class="login-title">
-    @if (registering()) {
-      <ng-container i18n="@@login.registerTitle">Регистрация</ng-container>
+<div class="login-page">
+  <button type="button" class="theme" (click)="theme.toggle()">
+    @if (theme.isDark()) {
+      <ng-container i18n="@@workspace.lightTheme">Светлая тема</ng-container>
     } @else {
-      <ng-container i18n="@@login.loginTitle">Вход</ng-container>
-    }
-  </h1>
-
-  <label class="login-field">
-    <ng-container i18n="@@login.email">Email</ng-container>
-    <input type="email" formControlName="email" autocomplete="email" required />
-  </label>
-
-  <label class="login-field">
-    <ng-container i18n="@@login.password">Пароль</ng-container>
-    <input
-      type="password"
-      formControlName="password"
-      [attr.autocomplete]="registering() ? 'new-password' : 'current-password'"
-      required
-    />
-    @if (registering()) {
-      <span class="login-hint" i18n="@@login.passwordHint">Не короче {{ minPasswordLength }} символов</span>
-    }
-  </label>
-
-  @if (error(); as message) {
-    <p class="login-error" role="alert">{{ message }}</p>
-  }
-
-  <button type="submit" class="login-submit" [disabled]="form.invalid">
-    @if (registering()) {
-      <ng-container i18n="@@login.register">Зарегистрироваться</ng-container>
-    } @else {
-      <ng-container i18n="@@login.submit">Войти</ng-container>
+      <ng-container i18n="@@workspace.darkTheme">Тёмная тема</ng-container>
     }
   </button>
-  <button type="button" class="login-switch" (click)="toggleMode()">
-    @if (registering()) {
-      <ng-container i18n="@@login.haveAccount">У меня уже есть аккаунт</ng-container>
-    } @else {
-      <ng-container i18n="@@login.createAccount">Создать аккаунт</ng-container>
-    }
-  </button>
-</form>
+
+  <div class="panel">
+    <div class="brand">
+      <mat-icon aria-hidden="true">view_kanban</mat-icon>
+      <span i18n="@@app.name">Канбан</span>
+    </div>
+
+    <form class="card" [formGroup]="form" (ngSubmit)="submit()">
+      <h1>
+        @if (registering()) {
+          <ng-container i18n="@@login.registerTitle">Регистрация</ng-container>
+        } @else {
+          <ng-container i18n="@@login.loginTitle">Вход</ng-container>
+        }
+      </h1>
+
+      <label class="field">
+        <ng-container i18n="@@login.email">Email</ng-container>
+        <input type="email" formControlName="email" autocomplete="email" required />
+      </label>
+
+      <label class="field">
+        <ng-container i18n="@@login.password">Пароль</ng-container>
+        <input
+          type="password"
+          formControlName="password"
+          [attr.autocomplete]="registering() ? 'new-password' : 'current-password'"
+          required
+        />
+        @if (registering()) {
+          <span class="hint" i18n="@@login.passwordHint">Не короче {{ minPasswordLength }} символов</span>
+        }
+      </label>
+
+      @if (error(); as message) {
+        <p class="error" role="alert">{{ message }}</p>
+      }
+
+      <button type="submit" class="primary" [disabled]="form.invalid">
+        @if (registering()) {
+          <ng-container i18n="@@login.register">Зарегистрироваться</ng-container>
+        } @else {
+          <ng-container i18n="@@login.submit">Войти</ng-container>
+        }
+      </button>
+      <button type="button" class="switch" (click)="toggleMode()">
+        @if (registering()) {
+          <ng-container i18n="@@login.haveAccount">У меня уже есть аккаунт</ng-container>
+        } @else {
+          <ng-container i18n="@@login.createAccount">Создать аккаунт</ng-container>
+        }
+      </button>
+    </form>
+  </div>
+</div>

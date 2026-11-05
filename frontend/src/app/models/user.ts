@@ -8,7 +8,6 @@ export interface User {
   readonly sex: string | null
   readonly image: string | null
   readonly email: string
-  readonly darkTheme: boolean
   readonly lastBoard: string | null
   readonly boards: readonly BoardSummary[]
 }

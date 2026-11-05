@@ -1,5 +1,6 @@
-import {ChangeDetectionStrategy, Component} from '@angular/core'
+import {ChangeDetectionStrategy, Component, inject} from '@angular/core'
 import {RouterOutlet} from '@angular/router'
+import {ThemeStore} from './state/theme.store'
 
 @Component({
   selector: 'app-root',
@@ -8,4 +9,8 @@ import {RouterOutlet} from '@angular/router'
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [RouterOutlet],
 })
-export class AppComponent {}
+export class AppComponent {
+  constructor() {
+    inject(ThemeStore)
+  }
+}

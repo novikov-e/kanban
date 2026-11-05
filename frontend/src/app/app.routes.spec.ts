@@ -14,7 +14,6 @@ const user: User = {
   sex: 'M',
   image: '',
   email: 'user@example.com',
-  darkTheme: false,
   lastBoard: null,
   boards: [makeBoard('board-1', 'Первая доска'), makeBoard('board-2', 'Вторая доска')],
 }

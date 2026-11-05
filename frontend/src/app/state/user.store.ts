@@ -64,12 +64,6 @@ export class UserStore {
     return this.userService.changePassword(currentPassword, newPassword)
   }
 
-  toggleTheme(): void {
-    const darkTheme = !this.state()?.darkTheme
-    this.update(user => ({...user, darkTheme}))
-    this.send(this.userService.setDarkTheme(darkTheme))
-  }
-
   rememberLastBoard(boardId: string | null): void {
     if (!this.state() || this.state()?.lastBoard === boardId) {
       return

@@ -1,5 +1,4 @@
 import {CdkMenu, CdkMenuItem, CdkMenuTrigger} from '@angular/cdk/menu'
-import {DOCUMENT} from '@angular/common'
 import {
   ChangeDetectionStrategy,
   Component,
@@ -18,11 +17,9 @@ import {LOGIN_PATH} from '../../guards/session.guards'
 import {TASK_COLORS} from '../../models/task'
 import {User} from '../../models/user'
 import {AuthService} from '../../services/auth.service'
+import {ThemeStore} from '../../state/theme.store'
 import {BoardStore} from '../../state/board.store'
 import {UserStore} from '../../state/user.store'
-
-/** Класс на <html>, переключающий палитру в styles.css. */
-const DARK_THEME_CLASS = 'theme-dark'
 
 @Component({
   selector: 'app-workspace',
@@ -36,6 +33,7 @@ export class WorkspaceComponent {
   private router = inject(Router)
   protected readonly userStore = inject(UserStore)
   protected readonly boardStore = inject(BoardStore)
+  protected readonly theme = inject(ThemeStore)
   private readonly searchInput = viewChild<ElementRef<HTMLInputElement>>('search')
   protected readonly filtersOpen = signal(false)
   protected readonly taskColors = TASK_COLORS
@@ -47,12 +45,7 @@ export class WorkspaceComponent {
         void this.router.navigate([LOGIN_PATH])
       }
     })
-    const root = inject(DOCUMENT).documentElement
-    effect(() => root.classList.toggle(DARK_THEME_CLASS, this.userStore.user()?.darkTheme === true))
-    inject(DestroyRef).onDestroy(() => {
-      root.classList.remove(DARK_THEME_CLASS)
-      this.userStore.clear()
-    })
+    inject(DestroyRef).onDestroy(() => this.userStore.clear())
   }
 
   @HostListener('document:keydown', ['$event'])

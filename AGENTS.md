@@ -81,7 +81,9 @@ Development (`docker-compose.dev.yml`): в Docker только Postgres на `12
 - Списки перетаскивания вложены друг в друга, поэтому `cdkDropListGroup` не работает: списки одного уровня
   связываются через `cdkDropListConnectedTo` с id из `BoardStore.taskListIds` / `subtaskListIds`.
 - Цвета — CSS-переменные палитры в `styles.css` (`--theme-*`, `--task-color-N`); тёмная тема — класс
-  `theme-dark` на `<html>`. Задача задаёт свой цвет атрибутом `data-color`, вложенные элементы берут его
+  `theme-dark` на `<html>`. Пока пользователь не выбрал тему, берётся тема системы; выбор хранится
+  в `localStorage` (`kanban-theme`) и дальше используется на всех страницах, включая вход.
+  Задача задаёт свой цвет атрибутом `data-color`, вложенные элементы берут его
   из `--accent` / `--accent-hover`. Инлайн-цвета и директивы, меняющие стили через DOM, не используются:
   наведение — `:hover` в CSS.
 - Сервисы в `services/` только отправляют HTTP-запросы и возвращают `Observable`; подписываются сторы.

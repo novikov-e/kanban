@@ -9,6 +9,14 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" />
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <script>
+      /* До запуска приложения: без сохранённого выбора тема берётся из системы. */
+      ;(function () {
+        var saved = localStorage.getItem('kanban-theme')
+        var dark = saved === 'dark' || (saved !== 'light' && window.matchMedia('(prefers-color-scheme: dark)').matches)
+        if (dark) document.documentElement.classList.add('theme-dark')
+      })()
+    </script>
   </head>
   <body class="mat-typography">
     <app-root></app-root>

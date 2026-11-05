@@ -40,8 +40,8 @@
       <ng-template #accountMenu>
         <div class="popup" cdkMenu>
           <a class="popup-item" cdkMenuItem routerLink="/profile" i18n="@@account.profile">Профиль</a>
-          <button type="button" class="popup-item" cdkMenuItem (cdkMenuItemTriggered)="userStore.toggleTheme()">
-            @if (user.darkTheme) {
+          <button type="button" class="popup-item" cdkMenuItem (cdkMenuItemTriggered)="theme.toggle()">
+            @if (theme.isDark()) {
               <ng-container i18n="@@workspace.lightTheme">Светлая тема</ng-container>
             } @else {
               <ng-container i18n="@@workspace.darkTheme">Тёмная тема</ng-container>

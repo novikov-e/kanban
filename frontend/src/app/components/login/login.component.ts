@@ -1,8 +1,10 @@
 import {HttpErrorResponse, HttpStatusCode} from '@angular/common/http'
 import {ChangeDetectionStrategy, Component, inject, input, signal} from '@angular/core'
 import {NonNullableFormBuilder, ReactiveFormsModule, Validators} from '@angular/forms'
+import {MatIcon} from '@angular/material/icon'
 import {Router} from '@angular/router'
 import {AuthService} from '../../services/auth.service'
+import {ThemeStore} from '../../state/theme.store'
 
 const MIN_PASSWORD_LENGTH = 8
 
@@ -17,11 +19,12 @@ const UNKNOWN_ERROR = $localize`:@@login.failed:Не удалось выполн
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, MatIcon],
 })
 export class LoginComponent {
   private auth = inject(AuthService)
   private router = inject(Router)
+  protected readonly theme = inject(ThemeStore)
 
   /** Куда вернуться после входа: страница, с которой guard перенаправил на вход. */
   readonly returnUrl = input<string>('/')
