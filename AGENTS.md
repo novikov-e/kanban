@@ -65,8 +65,8 @@ Healthcheck бэкенда — `GET /health` (200, если доступна Б�
 ## Соглашения фронтенда
 
 - Standalone-компоненты без `NgModule`, конфигурация приложения — в `src/app/app.config.ts`.
-- Маршруты (`app.routes.ts`): `/login`; `/` — рабочая область (`WorkspaceComponent`), без проекта перенаправляет
-  на последний открытый; `/boards/:boardId` — проект. `authGuard` восстанавливает сессию по refresh-cookie
+- Маршруты (`app.routes.ts`): `/login`; `/` — рабочая область (`WorkspaceComponent`), открывает последний проект,
+  а если его не было — `/boards` со списком досок; `/boards/:boardId` — проект. `authGuard` восстанавливает сессию по refresh-cookie
   и загружает пользователя, без сессии отправляет на `/login?returnUrl=…`. Параметры маршрута приходят
   в компоненты через `input()` (`withComponentInputBinding`).
 - Шаблоны используют `@if` / `@for`, зависимости подключаются через `inject()`.

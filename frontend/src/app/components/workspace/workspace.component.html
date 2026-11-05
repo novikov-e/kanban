@@ -2,6 +2,19 @@
 @let board = boardStore.board();
 <div class="app">
   <header class="topbar">
+    <div class="brand">
+      <mat-icon aria-hidden="true">view_kanban</mat-icon>
+      <span i18n="@@app.name">Канбан</span>
+    </div>
+    <a
+      class="nav-link"
+      routerLink="/boards"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{exact: true}"
+      i18n="@@nav.boards"
+    >
+      Доски
+    </a>
     <div class="spacer"></div>
     <label class="search">
       <mat-icon>search</mat-icon>
@@ -48,9 +61,11 @@
     }
   </header>
 
-  <div class="toolbar">
-    @if (board) {
-      <mat-icon class="board-icon">dashboard</mat-icon>
+  @if (board) {
+    <div class="toolbar">
+      <a class="back" routerLink="/boards" aria-label="Назад" i18n-aria-label="@@board.back">
+        <mat-icon>arrow_back</mat-icon>
+      </a>
       <input
         type="text"
         class="board-name"
@@ -61,102 +76,49 @@
         i18n-aria-label="@@board.name"
         (change)="renameBoard(board.id, boardName.value)"
       />
-    } @else {
-      <span class="projects-label" i18n="@@board.projects">Проекты</span>
-    }
-    @if (user) {
-      <button
-        type="button"
-        class="board-switch"
-        [cdkMenuTriggerFor]="boardsMenu"
-        aria-label="Список проектов"
-        i18n-aria-label="@@board.switch"
-      >
-        <mat-icon>expand_more</mat-icon>
-      </button>
-      <ng-template #boardsMenu>
-        <div class="popup" cdkMenu>
-          @for (userBoard of user.boards; track userBoard.id) {
-            <a
-              class="popup-item"
-              cdkMenuItem
-              [class.current]="userBoard.id === board?.id"
-              [routerLink]="['/boards', userBoard.id]"
-            >
-              {{ userBoard.name }}
-            </a>
-          }
-          <button type="button" class="popup-item popup-create" cdkMenuItem (cdkMenuItemTriggered)="createBoard()">
-            <mat-icon>add</mat-icon>
-            <span i18n="@@workspace.createBoard">Создать проект</span>
+      <div class="toolbar-actions">
+        <button type="button" class="primary" (click)="boardStore.addColumn()">
+          <mat-icon>add</mat-icon>
+          <span i18n="@@board.addColumn">Добавить колонку</span>
+        </button>
+        <div class="filter">
+          <button
+            type="button"
+            class="filter-button"
+            [class.active]="boardStore.colors().length > 0"
+            [attr.aria-expanded]="filtersOpen()"
+            (click)="toggleFilters($event)"
+          >
+            <mat-icon>filter_list</mat-icon>
+            <span i18n="@@board.filters">Фильтры</span>
           </button>
-          @if (board) {
-            <button
-              type="button"
-              class="popup-item"
-              cdkMenuItem
-              (cdkMenuItemTriggered)="closeBoard()"
-              i18n="@@board.close"
+          @if (filtersOpen()) {
+            <div
+              class="color-filter"
+              role="group"
+              aria-label="Цвет"
+              i18n-aria-label="@@board.filterColor"
+              (click)="$event.stopPropagation()"
             >
-              Выйти из проекта
-            </button>
-            <button
-              type="button"
-              class="popup-item danger"
-              cdkMenuItem
-              (cdkMenuItemTriggered)="deleteBoard(board.id)"
-              i18n="@@board.delete"
-            >
-              Удалить проект
-            </button>
+              @for (color of taskColors; track color.value) {
+                <button
+                  type="button"
+                  class="color-filter-item"
+                  [class.selected]="boardStore.colors().includes(color.value)"
+                  [attr.data-color]="color.value"
+                  [attr.aria-pressed]="boardStore.colors().includes(color.value)"
+                  (click)="boardStore.toggleColor(color.value)"
+                >
+                  <span class="swatch"></span>
+                  {{ color.name }}
+                </button>
+              }
+            </div>
           }
         </div>
-      </ng-template>
-    }
-    @if (board) {
-      <span class="divider"></span>
-      <div class="spacer"></div>
-      <button type="button" class="primary" (click)="boardStore.addColumn()">
-        <mat-icon>add</mat-icon>
-        <span i18n="@@board.addColumn">Добавить колонку</span>
-      </button>
-      <div class="filter">
-        <button
-          type="button"
-          class="filter-button"
-          [class.active]="boardStore.colors().length > 0"
-          [attr.aria-expanded]="filtersOpen()"
-          (click)="toggleFilters($event)"
-        >
-          <mat-icon>filter_list</mat-icon>
-          <span i18n="@@board.filters">Фильтры</span>
-        </button>
-        @if (filtersOpen()) {
-          <div
-            class="color-filter"
-            role="group"
-            aria-label="Цвет"
-            i18n-aria-label="@@board.filterColor"
-            (click)="$event.stopPropagation()"
-          >
-            @for (color of taskColors; track color.value) {
-              <button
-                type="button"
-                class="color-filter-item"
-                [class.selected]="boardStore.colors().includes(color.value)"
-                [attr.data-color]="color.value"
-                [attr.aria-pressed]="boardStore.colors().includes(color.value)"
-                (click)="boardStore.toggleColor(color.value)"
-              >
-                <span class="swatch"></span>
-                {{ color.name }}
-              </button>
-            }
-          </div>
-        }
       </div>
-    }
-  </div>
+    </div>
+  }
 
   <div class="workspace">
     <router-outlet />

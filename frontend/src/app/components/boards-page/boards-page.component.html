@@ -1,0 +1,45 @@
+@let boards = userStore.user()?.boards ?? [];
+<div class="boards">
+  <div class="heading">
+    <h1 i18n="@@boards.title">Доски</h1>
+    <button type="button" class="primary" (click)="create()">
+      <mat-icon>add</mat-icon>
+      <span i18n="@@workspace.createBoard">Создать проект</span>
+    </button>
+  </div>
+  @if (boards.length === 0) {
+    <p class="empty" i18n="@@boards.empty">Пока нет проектов</p>
+  } @else {
+    <ul class="grid">
+      @for (board of boards; track board.id) {
+        <li class="card">
+          <input
+            #name
+            type="text"
+            [value]="board.name"
+            aria-label="Название проекта"
+            i18n-aria-label="@@board.name"
+            (change)="rename(board.id, name.value)"
+          />
+          <a
+            class="icon"
+            [routerLink]="['/boards', board.id]"
+            aria-label="Открыть проект"
+            i18n-aria-label="@@boards.open"
+          >
+            <mat-icon>arrow_forward</mat-icon>
+          </a>
+          <button
+            type="button"
+            class="icon danger"
+            aria-label="Удалить проект"
+            i18n-aria-label="@@board.delete"
+            (click)="remove(board.id)"
+          >
+            <mat-icon>delete_outline</mat-icon>
+          </button>
+        </li>
+      }
+    </ul>
+  }
+</div>

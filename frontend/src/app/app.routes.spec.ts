@@ -61,17 +61,14 @@ describe('App routes', () => {
     expect(page(harness).querySelector('app-login form')).not.toBeNull()
   })
 
-  it('restores the session and lists the boards in the project menu', async () => {
+  it('opens the boards page when the user has not opened a project yet', async () => {
     const harness = await startWithSession('/', user)
 
-    ;(page(harness).querySelector('.board-switch') as HTMLButtonElement).click()
-    harness.detectChanges()
-    await settle()
-
-    const menu = document.querySelector('.popup')
-    expect(menu?.textContent).toContain('Первая доска')
-    expect(menu?.textContent).toContain('Вторая доска')
-    expect(menu?.textContent).toContain('Создать проект')
+    expect(TestBed.inject(Router).url).toBe('/boards')
+    const names = [...page(harness).querySelectorAll('.card input')].map(input => (input as HTMLInputElement).value)
+    expect(names).toEqual(['Первая доска', 'Вторая доска'])
+    expect(page(harness).textContent).toContain('Создать проект')
+    expect(page(harness).textContent).toContain('Канбан')
   })
 
   it('opens the last board of the user', async () => {

@@ -14,6 +14,11 @@ export const routes: Routes = [
     children: [
       {path: '', pathMatch: 'full', canActivate: [lastBoardGuard], children: []},
       {
+        path: 'boards',
+        pathMatch: 'full',
+        loadComponent: () => import('./components/boards-page/boards-page.component').then(m => m.BoardsPageComponent),
+      },
+      {
         path: 'boards/:boardId',
         loadComponent: () => import('./components/board-page/board-page.component').then(m => m.BoardPageComponent),
       },

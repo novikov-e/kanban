@@ -9,6 +9,52 @@
           <context context-type="linenumber">2,5</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="boards.title" datatype="html">
+        <source>Доски</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/boards-page/boards-page.component.html</context>
+          <context context-type="linenumber">4,5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="workspace.createBoard" datatype="html">
+        <source>Создать проект</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/boards-page/boards-page.component.html</context>
+          <context context-type="linenumber">7,10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="boards.empty" datatype="html">
+        <source>Пока нет проектов</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/boards-page/boards-page.component.html</context>
+          <context context-type="linenumber">11,13</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="board.name" datatype="html">
+        <source>Название проекта</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/boards-page/boards-page.component.html</context>
+          <context context-type="linenumber">20,21</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/workspace/workspace.component.html</context>
+          <context context-type="linenumber">75,76</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="boards.open" datatype="html">
+        <source>Открыть проект</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/boards-page/boards-page.component.html</context>
+          <context context-type="linenumber">27,28</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="board.delete" datatype="html">
+        <source>Удалить проект</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/boards-page/boards-page.component.html</context>
+          <context context-type="linenumber">35,36</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="column.name" datatype="html">
         <source>Название колонки</source>
         <context-group purpose="location">
@@ -324,120 +370,99 @@
           <context context-type="linenumber">73,74</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="app.name" datatype="html">
+        <source>Канбан</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/workspace/workspace.component.html</context>
+          <context context-type="linenumber">7,9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="nav.boards" datatype="html">
+        <source> Доски </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/workspace/workspace.component.html</context>
+          <context context-type="linenumber">16,18</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="board.search" datatype="html">
         <source>Поиск</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/components/workspace/workspace.component.html</context>
-          <context context-type="linenumber">13</context>
+          <context context-type="linenumber">26</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/components/workspace/workspace.component.html</context>
-          <context context-type="linenumber">15</context>
+          <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
       <trans-unit id="board.searchHint" datatype="html">
         <source>Ctrl K</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/components/workspace/workspace.component.html</context>
-          <context context-type="linenumber">20,23</context>
+          <context context-type="linenumber">33,36</context>
         </context-group>
       </trans-unit>
       <trans-unit id="account.profile" datatype="html">
         <source>Профиль</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/components/workspace/workspace.component.html</context>
-          <context context-type="linenumber">29,30</context>
+          <context context-type="linenumber">42,43</context>
         </context-group>
       </trans-unit>
       <trans-unit id="workspace.lightTheme" datatype="html">
         <source>Светлая тема</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/components/workspace/workspace.component.html</context>
-          <context context-type="linenumber">32,33</context>
+          <context context-type="linenumber">45,46</context>
         </context-group>
       </trans-unit>
       <trans-unit id="workspace.darkTheme" datatype="html">
         <source>Тёмная тема</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/components/workspace/workspace.component.html</context>
-          <context context-type="linenumber">34,36</context>
+          <context context-type="linenumber">47,49</context>
         </context-group>
       </trans-unit>
       <trans-unit id="workspace.logout" datatype="html">
         <source> Выйти </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/components/workspace/workspace.component.html</context>
-          <context context-type="linenumber">44,45</context>
+          <context context-type="linenumber">57,58</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="board.name" datatype="html">
-        <source>Название проекта</source>
+      <trans-unit id="board.back" datatype="html">
+        <source>Назад</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/components/workspace/workspace.component.html</context>
-          <context context-type="linenumber">60,61</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="board.projects" datatype="html">
-        <source>Проекты</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/components/workspace/workspace.component.html</context>
-          <context context-type="linenumber">65,67</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="board.switch" datatype="html">
-        <source>Список проектов</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/components/workspace/workspace.component.html</context>
-          <context context-type="linenumber">72,73</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="workspace.createBoard" datatype="html">
-        <source>Создать проект</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/components/workspace/workspace.component.html</context>
-          <context context-type="linenumber">91,93</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="board.close" datatype="html">
-        <source> Выйти из проекта </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/components/workspace/workspace.component.html</context>
-          <context context-type="linenumber">101,102</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="board.delete" datatype="html">
-        <source> Удалить проект </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/components/workspace/workspace.component.html</context>
-          <context context-type="linenumber">110,111</context>
+          <context context-type="linenumber">66</context>
         </context-group>
       </trans-unit>
       <trans-unit id="board.addColumn" datatype="html">
         <source>Добавить колонку</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/components/workspace/workspace.component.html</context>
-          <context context-type="linenumber">121,123</context>
+          <context context-type="linenumber">82,84</context>
         </context-group>
       </trans-unit>
       <trans-unit id="board.filters" datatype="html">
         <source>Фильтры</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/components/workspace/workspace.component.html</context>
-          <context context-type="linenumber">132,134</context>
+          <context context-type="linenumber">93,95</context>
         </context-group>
       </trans-unit>
       <trans-unit id="board.filterColor" datatype="html">
         <source>Цвет</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/components/workspace/workspace.component.html</context>
-          <context context-type="linenumber">139</context>
+          <context context-type="linenumber">100</context>
         </context-group>
       </trans-unit>
       <trans-unit id="account.menu" datatype="html">
         <source>Аккаунт</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/components/workspace/workspace.component.ts</context>
-          <context context-type="linenumber">43</context>
+          <context context-type="linenumber">42</context>
         </context-group>
       </trans-unit>
       <trans-unit id="error.request" datatype="html">

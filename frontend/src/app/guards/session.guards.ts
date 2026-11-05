@@ -35,7 +35,9 @@ export const guestGuard: CanActivateFn = () => {
     .pipe(map(authenticated => (authenticated ? home : true)))
 }
 
+/** Открывает последний проект, а если его не было — страницу со списком досок. */
 export const lastBoardGuard: CanActivateFn = () => {
+  const router = inject(Router)
   const lastBoard = inject(UserStore).user()?.lastBoard
-  return lastBoard ? inject(Router).createUrlTree(['/boards', lastBoard]) : true
+  return router.createUrlTree(lastBoard ? ['/boards', lastBoard] : ['/boards'])
 }

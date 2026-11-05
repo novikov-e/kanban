@@ -12,12 +12,11 @@ import {
   viewChild,
 } from '@angular/core'
 import {MatIcon} from '@angular/material/icon'
-import {Router, RouterLink, RouterOutlet} from '@angular/router'
+import {Router, RouterLink, RouterLinkActive, RouterOutlet} from '@angular/router'
 import {SelectDirective} from '../../directives/select.directive'
 import {LOGIN_PATH} from '../../guards/session.guards'
 import {TASK_COLORS} from '../../models/task'
 import {User} from '../../models/user'
-import {errorAlreadyReported} from '../../interceptors/http-error.interceptor'
 import {AuthService} from '../../services/auth.service'
 import {BoardStore} from '../../state/board.store'
 import {UserStore} from '../../state/user.store'
@@ -30,7 +29,7 @@ const DARK_THEME_CLASS = 'theme-dark'
   templateUrl: './workspace.component.html',
   styleUrl: './workspace.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [MatIcon, SelectDirective, CdkMenuTrigger, CdkMenu, CdkMenuItem, RouterLink, RouterOutlet],
+  imports: [MatIcon, SelectDirective, CdkMenuTrigger, CdkMenu, CdkMenuItem, RouterLink, RouterLinkActive, RouterOutlet],
 })
 export class WorkspaceComponent {
   private auth = inject(AuthService)
@@ -96,30 +95,8 @@ export class WorkspaceComponent {
     this.auth.logout().subscribe()
   }
 
-  createBoard() {
-    this.userStore.createBoard().subscribe({
-      next: board => {
-        this.boardStore.show({board, etag: null})
-        void this.router.navigate(['/boards', board.id])
-      },
-      error: errorAlreadyReported,
-    })
-  }
-
-  closeBoard() {
-    this.userStore.rememberLastBoard(null)
-    void this.router.navigate(['/'])
-  }
-
   renameBoard(boardId: string, name: string) {
     this.userStore.renameBoard(boardId, name)
     this.boardStore.setName(name)
-  }
-
-  deleteBoard(boardId: string) {
-    this.userStore.deleteBoard(boardId)
-    if (this.boardStore.board()?.id === boardId) {
-      void this.router.navigate(['/'])
-    }
   }
 }

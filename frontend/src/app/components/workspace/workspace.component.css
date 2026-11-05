@@ -22,13 +22,76 @@
 
 .topbar {
   height: 64px;
-  padding: 0 16px 0 8px;
+  padding: 0 16px;
   border-bottom: 1px solid var(--theme-border);
 }
 
+.brand {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 8px;
+  color: var(--theme-text);
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.brand .mat-icon {
+  width: 24px;
+  height: 24px;
+  font-size: 24px;
+}
+
+.nav-link {
+  flex: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+  color: var(--theme-muted);
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.nav-link:hover,
+.nav-link.active {
+  background-color: var(--theme-hover);
+  color: var(--theme-text);
+}
+
 .toolbar {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   height: 56px;
   padding: 0 8px;
+}
+
+.back {
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  color: var(--theme-text);
+  text-decoration: none;
+}
+
+.back:hover {
+  background-color: var(--theme-hover);
+}
+
+.back .mat-icon {
+  width: 22px;
+  height: 22px;
+  font-size: 22px;
+}
+
+.toolbar-actions {
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .spacer {
@@ -42,64 +105,18 @@
   min-height: 0;
 }
 
-.board-icon {
-  flex: none;
-  width: 24px;
-  height: 24px;
-  font-size: 24px;
-  color: var(--theme-muted);
-}
-
-.board-name,
-.projects-label {
+.board-name {
+  justify-self: center;
+  width: min(420px, 40vw);
+  min-width: 0;
+  padding: 0;
   border: none;
+  outline: none;
   background: transparent;
   color: var(--theme-text);
   font-size: 24px;
   font-weight: 500;
-}
-
-.board-name {
-  min-width: 0;
-  max-width: 420px;
-  padding: 0;
-  outline: none;
-}
-
-.projects-label {
-  padding-left: 4px;
-}
-
-.board-switch {
-  display: inline-flex;
-  flex: none;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  padding: 0;
-  border: none;
-  border-radius: 6px;
-  background: transparent;
-  color: var(--theme-text);
-  cursor: pointer;
-}
-
-.board-switch:hover,
-.board-switch[aria-expanded='true'] {
-  background-color: var(--theme-hover);
-}
-
-.board-switch .mat-icon {
-  width: 22px;
-  height: 22px;
-  font-size: 22px;
-}
-
-.divider {
-  width: 1px;
-  height: 20px;
-  background-color: var(--theme-border);
+  text-align: center;
 }
 
 .primary,
