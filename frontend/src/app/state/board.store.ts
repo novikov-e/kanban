@@ -10,6 +10,7 @@ import {BoardService, VersionedBoard} from '../services/board.service'
 import {ColumnService} from '../services/column.service'
 import {SubtaskService} from '../services/subtask.service'
 import {TaskService} from '../services/task.service'
+import {filterBoard} from '../utils/board-filter'
 import * as tree from '../utils/board-tree'
 import {sameItems, subtaskListId, taskListId} from '../utils/drag-drop'
 
@@ -31,6 +32,7 @@ export class BoardStore {
   private subtaskService = inject(SubtaskService)
 
   private readonly state = signal<Board | null>(null)
+  private readonly searchState = signal('')
   private openBoardId: string | null = null
   private etag: string | null = null
   private readonly creating = new Set<string>()
@@ -38,18 +40,31 @@ export class BoardStore {
   private readonly discarded = new Set<string>()
 
   readonly board = this.state.asReadonly()
+  readonly searchQuery = this.searchState.asReadonly()
+  readonly hasSearch = computed(() => this.searchState().trim() !== '')
+
+  /** Доска, которую видит пользователь: при поиске в ней только совпавшие колонки и списки. */
+  readonly visibleBoard = computed(() => {
+    const board = this.state()
+    return board ? filterBoard(board, this.searchState()) : null
+  })
 
   /**
    * id списков, между которыми перетаскиваются задачи и подзадачи. cdkDropListGroup не подходит:
-   * вложенный cdkDropList сбрасывает группу для своих потомков.
+   * вложенный cdkDropList сбрасывает группу для своих потомков. Берутся только видимые списки,
+   * скрытые поиском колонки в разметке отсутствуют.
    */
-  readonly taskListIds = computed(() => this.state()?.columns.map(column => taskListId(column.id)) ?? [], {
+  readonly taskListIds = computed(() => this.visibleBoard()?.columns.map(column => taskListId(column.id)) ?? [], {
     equal: sameItems,
   })
   readonly subtaskListIds = computed(
-    () => this.state()?.columns.flatMap(column => column.tasks.map(task => subtaskListId(task.id))) ?? [],
+    () => this.visibleBoard()?.columns.flatMap(column => column.tasks.map(task => subtaskListId(task.id))) ?? [],
     {equal: sameItems},
   )
+
+  setSearch(query: string): void {
+    this.searchState.set(query)
+  }
 
   open(boardId: string): void {
     if (this.openBoardId === boardId) {
@@ -57,6 +72,7 @@ export class BoardStore {
     }
     this.close()
     this.openBoardId = boardId
+    this.searchState.set('')
     this.load(boardId)
   }
 
@@ -70,6 +86,7 @@ export class BoardStore {
     this.openBoardId = null
     this.state.set(null)
     this.etag = null
+    this.searchState.set('')
   }
 
   /** Подтягивает изменения из других вкладок; доску с несохранёнными элементами не трогает. */

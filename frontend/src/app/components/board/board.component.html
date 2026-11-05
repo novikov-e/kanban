@@ -1,13 +1,17 @@
-<div
-  class="columns"
-  cdkDropList
-  [cdkDropListData]="board().columns"
-  cdkDropListOrientation="horizontal"
-  (cdkDropListDropped)="onColumnDrop($event)"
->
-  @for (column of board().columns; track column.id) {
-    <div class="column_item" cdkDrag [cdkDragData]="column">
-      <app-column [column]="column"></app-column>
-    </div>
-  }
-</div>
+@if (board().columns.length === 0 && store.hasSearch()) {
+  <p class="search-empty" i18n="@@board.searchEmpty">Ничего не найдено</p>
+} @else {
+  <div
+    class="columns"
+    cdkDropList
+    [cdkDropListData]="board().columns"
+    cdkDropListOrientation="horizontal"
+    (cdkDropListDropped)="onColumnDrop($event)"
+  >
+    @for (column of board().columns; track column.id) {
+      <div class="column_item" cdkDrag [cdkDragData]="column">
+        <app-column [column]="column"></app-column>
+      </div>
+    }
+  </div>
+}

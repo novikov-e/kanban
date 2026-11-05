@@ -1,6 +1,15 @@
 import {CdkDrag, CdkDragDrop, CdkDropList} from '@angular/cdk/drag-drop'
 import {DOCUMENT} from '@angular/common'
-import {ChangeDetectionStrategy, Component, DestroyRef, effect, inject} from '@angular/core'
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  effect,
+  ElementRef,
+  HostListener,
+  inject,
+  viewChild,
+} from '@angular/core'
 import {MatIcon} from '@angular/material/icon'
 import {MatInput} from '@angular/material/input'
 import {MatDrawer, MatDrawerContainer} from '@angular/material/sidenav'
@@ -39,6 +48,7 @@ export class WorkspaceComponent {
   private router = inject(Router)
   protected readonly userStore = inject(UserStore)
   protected readonly boardStore = inject(BoardStore)
+  private readonly searchInput = viewChild<ElementRef<HTMLInputElement>>('search')
 
   constructor() {
     effect(() => {
@@ -52,6 +62,22 @@ export class WorkspaceComponent {
       root.classList.remove(DARK_THEME_CLASS)
       this.userStore.clear()
     })
+  }
+
+  @HostListener('document:keydown', ['$event'])
+  onSearchShortcut(event: KeyboardEvent) {
+    if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') {
+      event.preventDefault()
+      const search = this.searchInput()?.nativeElement
+      search?.focus()
+      search?.select()
+    }
+  }
+
+  clearSearch(input: HTMLInputElement) {
+    input.value = ''
+    this.boardStore.setSearch('')
+    input.blur()
   }
 
   logout() {

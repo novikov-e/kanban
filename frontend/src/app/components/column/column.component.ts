@@ -7,7 +7,7 @@ import {FocusDirective} from '../../directives/focus.directive'
 import {Column} from '../../models/column'
 import {Task} from '../../models/task'
 import {BoardStore} from '../../state/board.store'
-import {isNoopDrop, taskListId} from '../../utils/drag-drop'
+import {dropIndex, isNoopDrop, taskListId} from '../../utils/drag-drop'
 import {TaskComponent} from '../task/task.component'
 
 @Component({
@@ -37,9 +37,18 @@ export class ColumnComponent {
   }
 
   onTaskDrop(event: CdkDragDrop<readonly Task[]>) {
-    if (!isNoopDrop(event)) {
-      this.store.moveTask(event.item.data.id, this.column().id, event.currentIndex)
+    if (isNoopDrop(event)) {
+      return
     }
+    const columnId = this.column().id
+    const tasks = this.store.board()?.columns.find(column => column.id === columnId)?.tasks ?? []
+    const index = dropIndex(
+      tasks,
+      this.column().tasks.map(task => task.id),
+      event.item.data.id,
+      event.currentIndex,
+    )
+    this.store.moveTask(event.item.data.id, columnId, index)
   }
 
   onKeydown(input: HTMLTextAreaElement, event: KeyboardEvent) {

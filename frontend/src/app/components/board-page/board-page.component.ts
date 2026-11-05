@@ -16,7 +16,7 @@ import {BoardComponent} from '../board/board.component'
 @Component({
   selector: 'app-board-page',
   template: `
-    @if (boardStore.board(); as board) {
+    @if (boardStore.visibleBoard(); as board) {
       <app-board [board]="board"></app-board>
     }
   `,

@@ -15,6 +15,7 @@
   --theme-danger: #d76363;
   --theme-danger-hover: #b64e4e;
   --theme-hover: rgba(48, 52, 56, 0.06);
+  --theme-search: #f8f9fb;
   --subtask-text: #252a34;
   --checkbox-checked: #4059bb;
   --checkbox-checked-border: #4059bb;
@@ -56,6 +57,7 @@
   --theme-danger: #d88d8d;
   --theme-danger-hover: #e6afaf;
   --theme-hover: rgba(255, 255, 255, 0.08);
+  --theme-search: #242933;
   --subtask-text: #e5ebf2;
   --checkbox-checked: #5468b7;
   --checkbox-checked-border: #8080bb;

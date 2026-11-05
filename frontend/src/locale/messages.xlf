@@ -2,6 +2,13 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
   <file source-language="ru" datatype="plaintext" original="ng2.template">
     <body>
+      <trans-unit id="board.searchEmpty" datatype="html">
+        <source>Ничего не найдено</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/board/board.component.html</context>
+          <context context-type="linenumber">2,5</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="column.name" datatype="html">
         <source>Название колонки</source>
         <context-group purpose="location">
@@ -191,60 +198,78 @@
           <context context-type="linenumber">21,22</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="board.search" datatype="html">
+        <source>Поиск</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/workspace/workspace.component.html</context>
+          <context context-type="linenumber">34</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/workspace/workspace.component.html</context>
+          <context context-type="linenumber">36</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="board.searchHint" datatype="html">
+        <source>Ctrl K</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/workspace/workspace.component.html</context>
+          <context context-type="linenumber">41,43</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="board.addColumn" datatype="html">
         <source>Добавить колонку</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/components/workspace/workspace.component.html</context>
-          <context context-type="linenumber">30,32</context>
+          <context context-type="linenumber">48,50</context>
         </context-group>
       </trans-unit>
       <trans-unit id="board.close" datatype="html">
         <source>Выйти из проекта</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/components/workspace/workspace.component.html</context>
-          <context context-type="linenumber">34,36</context>
+          <context context-type="linenumber">52,54</context>
         </context-group>
       </trans-unit>
       <trans-unit id="board.delete" datatype="html">
         <source>Удалить проект</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/components/workspace/workspace.component.html</context>
-          <context context-type="linenumber">38,40</context>
+          <context context-type="linenumber">56,58</context>
         </context-group>
       </trans-unit>
       <trans-unit id="workspace.createBoard" datatype="html">
         <source>Создать проект</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/components/workspace/workspace.component.html</context>
-          <context context-type="linenumber">51,54</context>
+          <context context-type="linenumber">69,72</context>
         </context-group>
       </trans-unit>
       <trans-unit id="workspace.settings" datatype="html">
         <source>Настройки</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/components/workspace/workspace.component.html</context>
-          <context context-type="linenumber">72,75</context>
+          <context context-type="linenumber">90,93</context>
         </context-group>
       </trans-unit>
       <trans-unit id="workspace.lightTheme" datatype="html">
         <source>Светлая тема</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/components/workspace/workspace.component.html</context>
-          <context context-type="linenumber">79,80</context>
+          <context context-type="linenumber">97,98</context>
         </context-group>
       </trans-unit>
       <trans-unit id="workspace.darkTheme" datatype="html">
         <source>Тёмная тема</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/components/workspace/workspace.component.html</context>
-          <context context-type="linenumber">81,83</context>
+          <context context-type="linenumber">99,101</context>
         </context-group>
       </trans-unit>
       <trans-unit id="workspace.logout" datatype="html">
         <source>Выйти</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/components/workspace/workspace.component.html</context>
-          <context context-type="linenumber">88,90</context>
+          <context context-type="linenumber">106,108</context>
         </context-group>
       </trans-unit>
       <trans-unit id="error.request" datatype="html">
