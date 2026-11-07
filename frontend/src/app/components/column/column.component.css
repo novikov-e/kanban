@@ -22,7 +22,7 @@
   align-items: flex-start;
   gap: 8px;
   flex: none;
-  min-height: 32px;
+  min-height: 22px;
   padding: 6px 4px;
   border-bottom: 1px solid var(--theme-border);
 }
@@ -45,7 +45,7 @@
   color: var(--theme-text);
   font-size: 15px;
   font-weight: 500;
-  line-height: 1.2;
+  line-height: 22px;
 }
 
 .count {

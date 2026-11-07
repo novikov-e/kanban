@@ -13,7 +13,7 @@
   display: flex;
   align-items: flex-start;
   gap: 5px;
-  min-height: 32px;
+  min-height: 22px;
   padding: 4px 6px 4px 10px;
   background-color: var(--task-header);
 }
@@ -36,7 +36,7 @@
   color: var(--task-title);
   font-size: 13px;
   font-weight: 600;
-  line-height: 18px;
+  line-height: 22px;
 }
 
 .count {
