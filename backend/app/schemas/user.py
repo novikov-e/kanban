@@ -20,7 +20,6 @@ class UserUpdateRequest(ApiRequest):
     lastname: str | None = Field(default=None, max_length=50, description="Фамилия")
     date_of_birth: date | None = Field(default=None, description="Дата рождения")
     sex: Literal["M", "F"] | None = Field(default=None, description="Пол: M или F")
-    image: str | None = Field(default=None, max_length=150, description="Ссылка на аватар")
     email: EmailStr | None = Field(default=None, description="Email")
     current_password: str | None = Field(default=None, description="Текущий пароль, обязателен при смене пароля")
     new_password: str | None = Field(default=None, min_length=8, max_length=128, description="Новый пароль")
@@ -34,7 +33,6 @@ class UserResponse(BaseModel):
     lastname: str | None
     date_of_birth: date | None
     sex: str | None = Field(description="Пол: M или F")
-    image: str | None = Field(description="Ссылка на аватар")
     email: EmailStr
     dark_theme: bool
     last_board: UUID | None = Field(description="Доска, открытая при последнем входе")

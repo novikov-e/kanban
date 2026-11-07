@@ -259,7 +259,6 @@ def upgrade() -> None:
         sa.Column("lastname", sa.String(length=50), nullable=True),
         sa.Column("date_of_birth", sa.Date(), nullable=True),
         sa.Column("sex", sa.String(length=1), nullable=True),
-        sa.Column("image", sa.String(length=150), nullable=True),
         sa.Column("email", sa.String(length=100), nullable=False),
         sa.Column("password", sa.String(length=255), nullable=False),
         sa.Column("dark_theme", sa.Boolean(), server_default=sa.text("false"), nullable=False),

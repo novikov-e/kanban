@@ -6,7 +6,6 @@ export interface User {
   readonly lastname: string | null
   readonly dateOfBirth: string | null
   readonly sex: string | null
-  readonly image: string | null
   readonly email: string
   readonly lastBoard: string | null
   readonly boards: readonly BoardSummary[]
@@ -17,6 +16,5 @@ export interface ProfileUpdate {
   readonly lastname: string | null
   readonly dateOfBirth: string | null
   readonly sex: string | null
-  readonly image: string | null
   readonly email: string
 }

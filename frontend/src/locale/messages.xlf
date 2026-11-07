@@ -256,67 +256,60 @@
           <context context-type="linenumber">20,22</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="profile.image" datatype="html">
-        <source>Ссылка на аватар</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/components/profile/profile.component.html</context>
-          <context context-type="linenumber">24,25</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="profile.email" datatype="html">
         <source>Email</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/components/profile/profile.component.html</context>
-          <context context-type="linenumber">28,29</context>
+          <context context-type="linenumber">24,25</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profile.save" datatype="html">
         <source> Сохранить </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/components/profile/profile.component.html</context>
-          <context context-type="linenumber">35,39</context>
+          <context context-type="linenumber">31,35</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profile.password" datatype="html">
         <source>Пароль</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/components/profile/profile.component.html</context>
-          <context context-type="linenumber">40,42</context>
+          <context context-type="linenumber">36,38</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profile.currentPassword" datatype="html">
         <source>Текущий пароль</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/components/profile/profile.component.html</context>
-          <context context-type="linenumber">42,43</context>
+          <context context-type="linenumber">38,39</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profile.newPassword" datatype="html">
         <source>Новый пароль</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/components/profile/profile.component.html</context>
-          <context context-type="linenumber">46,47</context>
+          <context context-type="linenumber">42,43</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profile.confirmPassword" datatype="html">
         <source>Повторите пароль</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/components/profile/profile.component.html</context>
-          <context context-type="linenumber">50,51</context>
+          <context context-type="linenumber">46,47</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profile.passwordMismatch" datatype="html">
         <source>Пароли не совпадают</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/components/profile/profile.component.html</context>
-          <context context-type="linenumber">54,57</context>
+          <context context-type="linenumber">50,53</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profile.savePassword" datatype="html">
         <source> Сменить пароль </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/components/profile/profile.component.html</context>
-          <context context-type="linenumber">65,68</context>
+          <context context-type="linenumber">61,64</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profile.emailTaken" datatype="html">
@@ -495,56 +488,56 @@
         <source>Основной</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/models/task.ts</context>
-          <context context-type="linenumber">8</context>
+          <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
       <trans-unit id="color.red" datatype="html">
         <source>Красный</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/models/task.ts</context>
-          <context context-type="linenumber">9</context>
+          <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
       <trans-unit id="color.pink" datatype="html">
         <source>Розовый</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/models/task.ts</context>
-          <context context-type="linenumber">10</context>
+          <context context-type="linenumber">9</context>
         </context-group>
       </trans-unit>
       <trans-unit id="color.orange" datatype="html">
         <source>Оранжевый</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/models/task.ts</context>
-          <context context-type="linenumber">11</context>
+          <context context-type="linenumber">10</context>
         </context-group>
       </trans-unit>
       <trans-unit id="color.green" datatype="html">
         <source>Зелёный</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/models/task.ts</context>
-          <context context-type="linenumber">12</context>
+          <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
       <trans-unit id="color.teal" datatype="html">
         <source>Сине-зелёный</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/models/task.ts</context>
-          <context context-type="linenumber">13</context>
+          <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
       <trans-unit id="color.blue" datatype="html">
         <source>Синий</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/models/task.ts</context>
-          <context context-type="linenumber">14</context>
+          <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
       <trans-unit id="color.purple" datatype="html">
         <source>Фиолетовый</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/models/task.ts</context>
-          <context context-type="linenumber">15</context>
+          <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
     </body>

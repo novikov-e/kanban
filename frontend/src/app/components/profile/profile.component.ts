@@ -35,7 +35,6 @@ export class ProfileComponent {
     lastname: [this.userStore.user()?.lastname ?? ''],
     dateOfBirth: [this.userStore.user()?.dateOfBirth ?? ''],
     sex: [this.userStore.user()?.sex ?? ''],
-    image: [this.userStore.user()?.image ?? ''],
     email: [this.userStore.user()?.email ?? '', [Validators.required, Validators.email]],
   })
 
@@ -63,7 +62,6 @@ export class ProfileComponent {
         lastname: value.lastname.trim() || null,
         dateOfBirth: value.dateOfBirth || null,
         sex: value.sex || null,
-        image: value.image.trim() || null,
         email: value.email.trim(),
       })
       .subscribe({

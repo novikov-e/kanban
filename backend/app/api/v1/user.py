@@ -7,7 +7,7 @@ from app.services import user_service
 
 router = APIRouter(prefix="/users", tags=["User"], responses=UNAUTHORIZED)
 
-PROFILE_FIELDS = ("firstname", "lastname", "date_of_birth", "sex", "image")
+PROFILE_FIELDS = ("firstname", "lastname", "date_of_birth", "sex")
 
 
 @router.get("/me", response_model=UserResponse, summary="Текущий пользователь", responses=not_found("пользователь"))

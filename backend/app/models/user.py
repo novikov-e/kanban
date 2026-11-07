@@ -21,7 +21,6 @@ class User(Base):
     lastname: Mapped[str | None] = mapped_column(String(50))
     date_of_birth: Mapped[date | None] = mapped_column(Date)
     sex: Mapped[str | None] = mapped_column(String(1))
-    image: Mapped[str | None] = mapped_column(String(150))
     email: Mapped[str] = mapped_column(String(100), unique=True, nullable=False)
     password: Mapped[str] = mapped_column(String(255), nullable=False)
     dark_theme: Mapped[bool] = mapped_column(Boolean, server_default=text("false"))
