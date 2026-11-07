@@ -4,8 +4,8 @@
 
 ## Запуск
 
-Два режима, подробности — в `README.md`. Файлы compose не смешивать: у обоих контейнер `postgresql`
-и один том. Перед сменой режима остановить текущий стек без `-v`.
+Два режима, подробности — в `README.md`. Их можно запускать одновременно: development поднимает
+контейнер `postgresql-dev` с томом `kanban-dev-postgresql`, production-контейнер `postgresql` и его том не меняются.
 
 Production (`docker-compose.yml`): `docker compose -f docker-compose.yml up -d --build`, приложение —
 http://localhost:8080. В `.env` рядом с compose обязательны `POSTGRES_PASSWORD` и `JWT_SECRET`.
@@ -18,7 +18,7 @@ http://localhost:8080. В `.env` рядом с compose обязательны `P
 Healthcheck бэкенда — `GET /health` (200, если доступна БД, иначе 503); наружу он не проксируется,
 `frontend` ждёт здорового `backend`.
 
-Development (`docker-compose.dev.yml`): в Docker только Postgres на `127.0.0.1:5432`.
+Development (`docker-compose.dev.yml`, проект `kanban-dev`): в Docker только Postgres на `127.0.0.1:5432`.
 Бэкенд и фронтенд — на хосте. В `backend/.env` хост базы — `127.0.0.1` (шаблон: `backend/.env.example`).
 
 - БД: `docker compose -f docker-compose.dev.yml up -d`.
