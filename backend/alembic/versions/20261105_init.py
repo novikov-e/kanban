@@ -364,7 +364,7 @@ def upgrade() -> None:
         sa.text(
             """
             insert into users (id, firstname, lastname, date_of_birth, sex, email, password)
-            values (:id, 'Егор', 'Новиков', '1990-01-31', 'M', 'test@app.ru', :password)
+            values (:id, 'Иван', 'Петров', '2000-01-01', 'M', 'test@app.ru', :password)
             """
         ).bindparams(id=UUID(DEMO_USER_ID), password=hash_password("password"))
     )
