@@ -24,7 +24,6 @@ export const httpErrorInterceptor: HttpInterceptorFn = (request, next) => {
   )
 }
 
-/** Снекбар Material загружается при первой ошибке, чтобы не попасть в начальный бандл. */
 function showError(injector: Injector): void {
   void import('@angular/material/snack-bar').then(({MatSnackBar}) =>
     injector.get(MatSnackBar).open(ERROR_MESSAGE, CLOSE_ACTION, {horizontalPosition: 'end', verticalPosition: 'top'}),

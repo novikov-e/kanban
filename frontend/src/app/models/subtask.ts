@@ -3,7 +3,6 @@ import {newLocalId} from './entity'
 export interface Subtask {
   readonly id: string
   readonly name: string
-  /** Выполнена ли подзадача. */
   readonly state: boolean
 }
 

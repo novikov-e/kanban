@@ -17,7 +17,6 @@ export class BoardService {
     return this.request(boardId, new HttpHeaders())
   }
 
-  /** Доска, если она изменилась с версии `etag`; иначе null. */
   getIfChanged(boardId: string, etag: string): Observable<VersionedBoard | null> {
     return this.request(boardId, new HttpHeaders({'If-None-Match': etag})).pipe(
       catchError(error =>

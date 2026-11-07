@@ -3,7 +3,6 @@ import {Subtask} from './subtask'
 
 export const DEFAULT_TASK_COLOR = 1
 
-/** Цвета задач; значение — номер цвета палитры (--task-color-N в styles.css). */
 export const TASK_COLORS: readonly {value: number; name: string}[] = [
   {value: 1, name: $localize`:@@color.main:Основной`},
   {value: 2, name: $localize`:@@color.red:Красный`},
@@ -18,7 +17,6 @@ export const TASK_COLORS: readonly {value: number; name: string}[] = [
 export interface Task {
   readonly id: string
   readonly name: string
-  /** Индекс цвета в палитре темы. */
   readonly color: number
   readonly subtasks: readonly Subtask[]
 }

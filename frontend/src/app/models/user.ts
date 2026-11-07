@@ -12,7 +12,6 @@ export interface User {
   readonly boards: readonly BoardSummary[]
 }
 
-/** Поля профиля, которые принимает `PATCH /users/me`. Пустая строка на сервер не уходит: необязательные поля — null. */
 export interface ProfileUpdate {
   readonly firstname: string | null
   readonly lastname: string | null

@@ -4,7 +4,6 @@ export interface Entity {
 
 const LOCAL_ID_PREFIX = 'local-'
 
-/** Временный id элемента, который ещё не сохранён на сервере. */
 export function newLocalId(): string {
   return `${LOCAL_ID_PREFIX}${crypto.randomUUID()}`
 }

@@ -18,7 +18,6 @@ export const AUTH_URL = `${API_URL}/auth`
 export class AuthService {
   private http = inject(HttpClient)
   private token = signal<string | null>(null)
-  /** Сервер уже ответил, что сессии нет: до следующего входа refresh не повторяется. */
   private sessionEnded = false
   private refreshing$: Observable<string> | null = null
 
@@ -33,7 +32,6 @@ export class AuthService {
     return this.authenticate(`${AUTH_URL}/register`, credentials)
   }
 
-  /** true, если сессия есть или её удалось восстановить по refresh-cookie. */
   restoreSession(): Observable<boolean> {
     if (this.isAuthenticated() || this.sessionEnded) {
       return of(this.isAuthenticated())
@@ -54,7 +52,6 @@ export class AuthService {
     return this.refreshing$
   }
 
-  /** Сессия завершается локально, даже если сервер недоступен. */
   logout(): Observable<void> {
     return this.http.post<void>(`${AUTH_URL}/logout`, null).pipe(
       catchError(() => EMPTY),

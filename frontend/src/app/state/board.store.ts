@@ -14,9 +14,7 @@ import {filterBoard} from '../utils/board-filter'
 import * as tree from '../utils/board-tree'
 import {sameItems, subtaskListId, taskListId} from '../utils/drag-drop'
 
-/** Как сохранять название элемента одного уровня доски. */
 interface NamedItems {
-  /** null — родитель ещё не сохранён, создавать элемент рано. */
   create(localId: string, name: string): Observable<Entity> | null
   rename(id: string, name: string): Observable<void>
   remove(id: string): Observable<void>
@@ -44,8 +42,6 @@ export class BoardStore {
   readonly searchQuery = this.searchState.asReadonly()
   readonly colors = this.colorState.asReadonly()
   readonly filtering = computed(() => this.searchState().trim() !== '' || this.colorState().length > 0)
-
-  /** Доска, которую видит пользователь: поиск и фильтр цвета оставляют только совпавшие колонки и списки. */
   readonly visibleBoard = computed(() => {
     const board = this.state()
     return board ? filterBoard(board, this.searchState(), this.colorState()) : null
