@@ -9,7 +9,7 @@ from app.models import Board, Column, Subtask, Task, User
 from app.services import crud, ordering
 from app.services.ownership import board_owned_by
 
-DEFAULT_BOARD_NAME = "Новый проект"
+DEFAULT_BOARD_NAME = "Новая доска"
 
 BOARD_ORDER = ordering.OrderedChildren(
     entity="Board",

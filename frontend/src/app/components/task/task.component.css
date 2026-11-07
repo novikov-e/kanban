@@ -11,7 +11,7 @@
 
 .task-header {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 5px;
   min-height: 32px;
   padding: 4px 6px 4px 10px;
@@ -50,7 +50,8 @@
 .actions {
   display: flex;
   flex: none;
-  align-items: center;
+  align-items: flex-start;
+  align-self: flex-start;
   gap: 2px;
   opacity: 0;
   pointer-events: none;

@@ -30,7 +30,7 @@ insert into boards (board_id, user_id, board_name, board_position) values ('c418
 insert into columns (column_id, board_id, column_name, column_position) values ('2e9a967e-d457-4c90-8c5f-afd96fbe4218','c4188f60-018c-4038-8feb-3773e543bd8c','Возможности',0);
 insert into tasks (task_id, column_id, task_name, task_position, color) values ('5d6df5bb-9280-46b9-94c9-cecf57ddf5b4','2e9a967e-d457-4c90-8c5f-afd96fbe4218','Перемещение элементов',1,1);
 insert into subtasks (subtask_id, task_id, subtask_name, subtask_state, subtask_position) values ('7733aeda-7275-4371-9aeb-d5667c85fb7a','5d6df5bb-9280-46b9-94c9-cecf57ddf5b4','Перемещение задач между списками',true,2);
-insert into subtasks (subtask_id, task_id, subtask_name, subtask_state, subtask_position) values ('925ce72f-ab1b-4400-a4d9-66cd26566fed','5d6df5bb-9280-46b9-94c9-cecf57ddf5b4','Перемещение  колонок внутри проекта',true,0);
+insert into subtasks (subtask_id, task_id, subtask_name, subtask_state, subtask_position) values ('925ce72f-ab1b-4400-a4d9-66cd26566fed','5d6df5bb-9280-46b9-94c9-cecf57ddf5b4','Перемещение  колонок внутри доски',true,0);
 insert into subtasks (subtask_id, task_id, subtask_name, subtask_state, subtask_position) values ('8d2c2624-7d9a-4db7-bee7-0a3fe8d36518','5d6df5bb-9280-46b9-94c9-cecf57ddf5b4','Перемещение списков между колонками',true,1);
 insert into tasks (task_id, column_id, task_name, task_position, color) values ('ecfa1757-40c1-47b2-988b-be13dfa34a7b','2e9a967e-d457-4c90-8c5f-afd96fbe4218','Горячие клавиши',2,1);
 insert into subtasks (subtask_id, task_id, subtask_name, subtask_state, subtask_position) values ('1e26c335-b27d-4ab6-8671-7f74e43adac8','ecfa1757-40c1-47b2-988b-be13dfa34a7b','По нажатию на Esc выход из режима редактирования',true,1);

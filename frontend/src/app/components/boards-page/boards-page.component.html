@@ -4,11 +4,11 @@
     <h1 i18n="@@boards.title">Доски</h1>
     <button type="button" class="primary" (click)="create()">
       <mat-icon>add</mat-icon>
-      <span i18n="@@workspace.createBoard">Создать проект</span>
+      <span i18n="@@workspace.createBoard">Создать доску</span>
     </button>
   </div>
   @if (boards.length === 0) {
-    <p class="empty" i18n="@@boards.empty">Пока нет проектов</p>
+    <p class="empty" i18n="@@boards.empty">Пока нет досок</p>
   } @else {
     <ul class="grid">
       @for (board of boards; track board.id) {
@@ -17,14 +17,14 @@
             #name
             type="text"
             [value]="board.name"
-            aria-label="Название проекта"
+            aria-label="Название доски"
             i18n-aria-label="@@board.name"
             (change)="rename(board.id, name.value)"
           />
           <a
             class="icon"
             [routerLink]="['/boards', board.id]"
-            aria-label="Открыть проект"
+            aria-label="Открыть доску"
             i18n-aria-label="@@boards.open"
           >
             <mat-icon>arrow_forward</mat-icon>
@@ -32,7 +32,7 @@
           <button
             type="button"
             class="icon danger"
-            aria-label="Удалить проект"
+            aria-label="Удалить доску"
             i18n-aria-label="@@board.delete"
             (click)="remove(board.id)"
           >

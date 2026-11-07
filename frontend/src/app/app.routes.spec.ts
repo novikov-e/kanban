@@ -66,7 +66,7 @@ describe('App routes', () => {
     expect(TestBed.inject(Router).url).toBe('/boards')
     const names = [...page(harness).querySelectorAll('.card input')].map(input => (input as HTMLInputElement).value)
     expect(names).toEqual(['Первая доска', 'Вторая доска'])
-    expect(page(harness).textContent).toContain('Создать проект')
+    expect(page(harness).textContent).toContain('Создать доску')
     expect(page(harness).textContent).toContain('Канбан')
   })
 

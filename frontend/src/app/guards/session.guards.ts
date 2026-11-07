@@ -35,7 +35,7 @@ export const guestGuard: CanActivateFn = () => {
     .pipe(map(authenticated => (authenticated ? home : true)))
 }
 
-/** Открывает последний проект, а если его не было — страницу со списком досок. */
+/** Открывает последнюю доску, а если её не было — страницу со списком досок. */
 export const lastBoardGuard: CanActivateFn = () => {
   const router = inject(Router)
   const lastBoard = inject(UserStore).user()?.lastBoard

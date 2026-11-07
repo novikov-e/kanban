@@ -21,7 +21,7 @@ API канбан-доски. Иерархия: **Board → Column → Task → S
 TAGS = [
     {"name": "Auth", "description": "Регистрация, вход и обновление токенов"},
     {"name": "User", "description": "Текущий пользователь и его настройки"},
-    {"name": "Board", "description": "Доски (в интерфейсе — проекты)"},
+    {"name": "Board", "description": "Доски"},
     {"name": "Column", "description": "Колонки доски"},
     {"name": "Task", "description": "Задачи в колонках"},
     {"name": "Subtask", "description": "Подзадачи задачи"},

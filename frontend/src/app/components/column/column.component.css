@@ -19,7 +19,7 @@
 
 .column-header {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 8px;
   flex: none;
   min-height: 32px;
@@ -63,7 +63,8 @@
 .actions {
   display: flex;
   flex: none;
-  align-items: center;
+  align-items: flex-start;
+  align-self: flex-start;
   gap: 2px;
   opacity: 0;
   pointer-events: none;

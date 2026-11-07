@@ -8,7 +8,7 @@ async def test_new_board_appears_in_the_user_list(api: Api) -> None:
 
     me = await api.ok("GET", "/users/me")
 
-    assert board["name"] == "Новый проект"
+    assert board["name"] == "Новая доска"
     assert board["columns"] == []
     assert [item["id"] for item in me["boards"]] == [board["id"]]
 
